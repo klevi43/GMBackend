@@ -18,16 +18,7 @@ public class WorkoutController {
     private WorkoutService workoutService;
     @GetMapping("/workouts")
     public List<Workout> retrieveAllWorkouts() {
-//        List<Workout> workouts = new ArrayList<>();
-//        Workout test = new Workout(1L, "Chest Day", new Date(2025));
-//        workouts.add(test );
-//        workouts.add(test );
-//        workouts.add(test );
-//        workouts.add(test );
-//        workouts.add(test );
-//
-//        System.out.println(workouts.get(0));
-//        return workouts;
+
         return workoutService.retrieveAllWorkouts();
     }
 }
