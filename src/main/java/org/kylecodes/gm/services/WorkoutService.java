@@ -1,6 +1,5 @@
 package org.kylecodes.gm.services;
 
-import lombok.RequiredArgsConstructor;
 import org.kylecodes.gm.entities.Workout;
 import org.kylecodes.gm.repositories.WorkoutRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,15 +7,23 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
-public class WorkoutService {
+public class WorkoutService implements ApiService<Workout> {
 
     @Autowired
     private WorkoutRepository workoutRepository;
 
-    public List<Workout> retrieveAllWorkouts() {
+
+
+    @Override
+    public List<Workout> findAll() {
         return workoutRepository.findAll();
+    }
+
+    @Override
+    public Optional<Workout> findById(Long id) {
+        return workoutRepository.findById(id);
     }
 }
