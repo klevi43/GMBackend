@@ -25,10 +25,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.Date;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @TestPropertySource("classpath:application-test.properties")
 @AutoConfigureMockMvc
@@ -80,9 +79,16 @@ public class WorkoutControllerTest {
 
     @Test
     public void getWorkoutsHttpRequest() throws Exception {
+        workout.setName("Chest Day");
+        workout.setDate(new Date());
+
+        entityManager.persist(workout);
+        entityManager.flush();
+
         mockMvc.perform(MockMvcRequestBuilders.get("/workouts"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(APPLICATION_JSON_UTF8));
+                .andExpect(content().contentType(APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$", hasSize(2)));
     }
 
     @AfterEach
