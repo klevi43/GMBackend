@@ -14,8 +14,13 @@ import java.util.Optional;
 
 @RestController()
 public class WorkoutController {
-    @Autowired
-    private WorkoutService workoutService;
+
+    private final WorkoutService workoutService;
+    // 더 이상 @Autowired 쓰지 말자. 유닛테스트에 부작용을 미칠 수 있다
+    public WorkoutController(WorkoutService workoutService) {
+        this.workoutService = workoutService;
+    }
+
     @GetMapping("/workouts")
     public List<Workout> getAll() {
         return workoutService.findAll();
