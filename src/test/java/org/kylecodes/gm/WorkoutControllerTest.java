@@ -21,8 +21,14 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.Date;
+
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @TestPropertySource("classpath:application-test.properties")
 @AutoConfigureMockMvc
@@ -46,7 +52,7 @@ public class WorkoutControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    public static final MediaType APPLICATION_JSON_UTF8 = MediaType.APPLICATION_JSON;
+    public static final MediaType APPLICATION_JSON_UTF8 = APPLICATION_JSON;
 
 
 
@@ -70,6 +76,13 @@ public class WorkoutControllerTest {
     @Test
     public void placeholder() {
 
+    }
+
+    @Test
+    public void getWorkoutsHttpRequest() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/workouts"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(APPLICATION_JSON_UTF8));
     }
 
     @AfterEach
