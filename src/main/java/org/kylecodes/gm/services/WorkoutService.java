@@ -3,7 +3,6 @@ package org.kylecodes.gm.services;
 import org.kylecodes.gm.entities.Workout;
 import org.kylecodes.gm.repositories.WorkoutRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,5 +29,10 @@ public class WorkoutService implements ApiService<Workout> {
     @Override
     public Workout create(Workout workout) {
         return workoutRepository.save(workout);
+    }
+
+    @Override
+    public void delete(Long id) {
+        workoutRepository.deleteById(id);
     }
 }
