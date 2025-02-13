@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface WorkoutRepository extends JpaRepository<Workout, Long> {
     Optional<Workout> findById(Long id);
     void deleteById(Long id);
+    Optional<Workout> findByName(String name);
 }

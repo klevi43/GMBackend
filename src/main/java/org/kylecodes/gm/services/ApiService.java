@@ -15,4 +15,5 @@ public interface ApiService<T> {
     T create(@RequestBody T obj);
 
     void delete(@PathVariable Long id);
+
 }

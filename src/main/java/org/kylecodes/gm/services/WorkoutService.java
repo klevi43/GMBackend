@@ -26,6 +26,7 @@ public class WorkoutService implements ApiService<Workout> {
         return workoutRepository.findById(id);
     }
 
+
     @Override
     public Workout create(Workout workout) {
         return workoutRepository.save(workout);

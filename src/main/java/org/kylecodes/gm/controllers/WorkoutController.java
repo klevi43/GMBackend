@@ -33,14 +33,14 @@ public class WorkoutController {
     }
 
     @DeleteMapping("/workouts/{id}")
-    public ResponseEntity<String> delete(@PathVariable Long id) {
+    public ResponseEntity<Workout> delete(@PathVariable Long id) {
         Optional<Workout> workout = workoutService.findById(id);
         if (workout.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
         else {
             workoutService.delete(id);
-            return ResponseEntity.ok().build();
+            return new ResponseEntity(workout, HttpStatus.OK);
         }
     }
 }
