@@ -31,6 +31,10 @@ public class WorkoutController {
         return workoutService.findById(workoutId);
     }
 
+    @GetMapping("/workouts/current")
+    public List<Workout> getAllRecent() {
+        return workoutService.findAllMostRecent();
+    }
     @PostMapping("/workouts")
     public ResponseEntity<Workout> create(@Validated @RequestBody Workout workout) {
 
