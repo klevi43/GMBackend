@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.TestPropertySource;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -25,16 +26,57 @@ public class WorkoutRepositoryTest {
         workout1.setName("Chest Day");
         workout1.setDate(LocalDateTime.now());
 
-        Workout workout2 = new Workout();
-        workout2.setName("Chest Day");
-        workout2.setDate(LocalDateTime.now());
 
         //Act
         Workout savedWorkout1 = workoutRepository.save(workout1);
-        Workout savedWorkout2 = workoutRepository.save(workout2);
 
         // Assert
         assertThat(savedWorkout1).isNotNull();
-        assertThat(savedWorkout2).isNotNull();
+
+    }
+
+    @Test
+    public void WorkoutRepository_FindAll_ReturnMoreThanOneWorkout() {
+
+        // Arrange
+        Workout workout1 = new Workout();
+        workout1.setName("Chest Day");
+        workout1.setDate(LocalDateTime.now());
+
+        Workout workout2 = new Workout();
+        workout2.setName("Back Day");
+        workout2.setDate(LocalDateTime.now());
+
+        int expectedSize = 2;
+
+        workoutRepository.save(workout1);
+        workoutRepository.save(workout2);
+
+        // Act
+        List<Workout> workoutList = workoutRepository.findAll();
+
+        // Assert
+        assertThat(workoutList).isNotNull();
+        assertThat(workoutList.size()).isEqualTo(expectedSize);
+    }
+
+
+
+    @Test
+    public void WorkoutRepository_FindById_ReturnWorkout() {
+        // Arrange
+        Workout workout1 = new Workout();
+        workout1.setName("Chest Day");
+        workout1.setDate(LocalDateTime.now());
+
+        Workout savedWorkout = workoutRepository.save(workout1);
+
+        // Act
+        Workout foundWorkout = workoutRepository.findById(workout1.getId()).get();
+
+        // Assert
+        assertThat(foundWorkout).isNotNull();
+        assertThat(foundWorkout.getId()).isEqualTo(savedWorkout.getId());
+
     }
 }
