@@ -9,6 +9,7 @@ import org.springframework.test.context.TestPropertySource;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -65,18 +66,59 @@ public class WorkoutRepositoryTest {
     @Test
     public void WorkoutRepository_FindById_ReturnWorkout() {
         // Arrange
-        Workout workout1 = new Workout();
-        workout1.setName("Chest Day");
-        workout1.setDate(LocalDateTime.now());
+        Workout workout = new Workout();
+        workout.setName("Chest Day");
+        workout.setDate(LocalDateTime.now());
 
-        Workout savedWorkout = workoutRepository.save(workout1);
+        Workout savedWorkout = workoutRepository.save(workout);
 
         // Act
-        Workout foundWorkout = workoutRepository.findById(workout1.getId()).get();
+        Workout foundWorkout = workoutRepository.findById(workout.getId()).get();
 
         // Assert
         assertThat(foundWorkout).isNotNull();
         assertThat(foundWorkout.getId()).isEqualTo(savedWorkout.getId());
+
+    }
+
+    @Test
+    public void WorkoutRepository_UpdateWorkoutName_ReturnUpdatedWorkout() {
+        // Arrange
+        Workout workout = new Workout();
+        workout.setName("Chest Day");
+        workout.setDate(LocalDateTime.now());
+
+        Workout inputWorkout = workoutRepository.save(workout);
+        Workout workoutSave = workoutRepository.findById(inputWorkout.getId()).get();
+        workoutSave.setName("Shoulder Day");
+
+        // Act
+        Workout savedWorkout = workoutRepository.save(workoutSave);
+
+        // Assert
+        assertThat(workoutSave.getId()).isEqualTo(inputWorkout.getId());
+        assertThat(savedWorkout).isNotNull();
+        assertThat(savedWorkout.getId()).isEqualTo(workoutSave.getId());
+        assertThat(savedWorkout.getName()).isEqualTo(workoutSave.getName());
+        assertThat(savedWorkout.getDate()).isEqualTo(workoutSave.getDate());
+
+    }
+
+
+    @Test
+    public void WorkoutRepository_DeleteWorkout_ReturnWorkoutIsEmpty() {
+        // Arrange
+        Workout workout = new Workout();
+        workout.setName("Chest Day");
+        workout.setDate(LocalDateTime.now());
+        Workout inputWorkout = workoutRepository.save(workout);
+
+        // Act
+        workoutRepository.deleteById(inputWorkout.getId());
+        Optional<Workout> workoutReturn = workoutRepository.findById(inputWorkout.getId());
+
+        // Assert
+        assertThat(workoutReturn).isEmpty();
 
     }
 }
