@@ -1,4 +1,4 @@
-package org.kylecodes.gm;
+package org.kylecodes.gm.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
