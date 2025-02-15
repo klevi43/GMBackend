@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -34,6 +35,7 @@ public class WorkoutServiceTest {
 
     @Test
     public void WorkoutService_CreateWorkout_ReturnWorkout() {
+        // Arrange
         Workout workout = new Workout();
         workout.setName("Chest Day");
         workout.setDate(LocalDate.now());
@@ -44,8 +46,11 @@ public class WorkoutServiceTest {
 
         when(workoutRepository.save(Mockito.any(Workout.class))).thenReturn(workout);
 
-
+        // Act
         WorkoutDto savedWorkout = workoutService.create(workoutDto);
+
+        // Assert
+        assertThat(savedWorkout).isNotNull();
 
     }
 }
