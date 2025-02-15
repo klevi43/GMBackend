@@ -7,7 +7,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.TestPropertySource;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,7 +25,7 @@ public class WorkoutRepositoryTest {
         // Arrange
         Workout workout1 = new Workout();
         workout1.setName("Chest Day");
-        workout1.setDate(LocalDateTime.now());
+        workout1.setDate(LocalDate.now());
 
 
         //Act
@@ -42,11 +42,11 @@ public class WorkoutRepositoryTest {
         // Arrange
         Workout workout1 = new Workout();
         workout1.setName("Chest Day");
-        workout1.setDate(LocalDateTime.now());
+        workout1.setDate(LocalDate.now());
 
         Workout workout2 = new Workout();
         workout2.setName("Back Day");
-        workout2.setDate(LocalDateTime.now());
+        workout2.setDate(LocalDate.now());
 
         int expectedSize = 2;
 
@@ -68,7 +68,7 @@ public class WorkoutRepositoryTest {
         // Arrange
         Workout workout = new Workout();
         workout.setName("Chest Day");
-        workout.setDate(LocalDateTime.now());
+        workout.setDate(LocalDate.now());
 
         Workout savedWorkout = workoutRepository.save(workout);
 
@@ -86,7 +86,7 @@ public class WorkoutRepositoryTest {
         // Arrange
         Workout workout = new Workout();
         workout.setName("Chest Day");
-        workout.setDate(LocalDateTime.now());
+        workout.setDate(LocalDate.now());
 
         Workout inputWorkout = workoutRepository.save(workout);
         Workout workoutSave = workoutRepository.findById(inputWorkout.getId()).get();
@@ -110,7 +110,7 @@ public class WorkoutRepositoryTest {
         // Arrange
         Workout workout = new Workout();
         workout.setName("Chest Day");
-        workout.setDate(LocalDateTime.now());
+        workout.setDate(LocalDate.now());
         Workout inputWorkout = workoutRepository.save(workout);
 
         // Act

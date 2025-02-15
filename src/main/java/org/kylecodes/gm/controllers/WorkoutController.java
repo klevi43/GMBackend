@@ -1,16 +1,17 @@
 package org.kylecodes.gm.controllers;
 
+import org.kylecodes.gm.dtos.WorkoutDto;
 import org.kylecodes.gm.entities.Workout;
 import org.kylecodes.gm.services.WorkoutService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 @RestController()
 public class WorkoutController {
@@ -27,8 +28,14 @@ public class WorkoutController {
     }
 
     @GetMapping("/workouts/{workoutId}")
-    public Optional<Workout> getOne(@PathVariable Long workoutId) {
-        return workoutService.findById(workoutId);
+    public ResponseEntity<WorkoutDto> getOne(@PathVariable Long workoutId) {
+        WorkoutDto workoutDto;
+        try {
+           workoutDto = workoutService.findById(workoutId);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Failed to find workout");
+        }
+        return new ResponseEntity(workoutDto, HttpStatus.OK );
     }
 
     @GetMapping("/workouts/current")
@@ -36,9 +43,9 @@ public class WorkoutController {
         return workoutService.findAllMostRecent();
     }
     @PostMapping("/workouts")
-    public ResponseEntity<Workout> create(@Validated @RequestBody Workout workout) {
+    public ResponseEntity<WorkoutDto> create(@Validated @RequestBody WorkoutDto workout) {
 
-            Workout newWorkout = workoutService.create(workout);
+            WorkoutDto newWorkout = workoutService.create(workout);
             URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                     .path("/{id}")
                     .buildAndExpand(newWorkout.getId())
@@ -48,14 +55,9 @@ public class WorkoutController {
     }
 
     @DeleteMapping("/workouts/{id}")
-    public ResponseEntity<Workout> delete(@PathVariable Long id) {
-        Optional<Workout> workout = workoutService.findById(id);
-        if (workout.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        else {
-            workoutService.delete(id);
-            return new ResponseEntity(workout, HttpStatus.OK);
-        }
+    public ResponseEntity<WorkoutDto> delete(@PathVariable Long id) {
+        workoutService.delete(id);
+        return new ResponseEntity("Workout deleted", HttpStatus.OK);
+
     }
 }
