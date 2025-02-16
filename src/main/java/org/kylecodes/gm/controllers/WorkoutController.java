@@ -23,7 +23,7 @@ public class WorkoutController {
     }
 
     @GetMapping("/workouts")
-    public ResponseEntity<WorkoutResponse> getAll(@RequestParam(value = "pageNo", defaultValue = "1", required = false) int pageNo,
+    public ResponseEntity<WorkoutResponse> getAll(@RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
                                                  @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize) {
         return new ResponseEntity<>(workoutService.getAllWorkouts(pageNo, pageSize), HttpStatus.OK);
     }

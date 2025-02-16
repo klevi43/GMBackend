@@ -3,12 +3,15 @@ package org.kylecodes.gm.services;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.kylecodes.gm.dtos.WorkoutDto;
+import org.kylecodes.gm.dtos.WorkoutResponse;
 import org.kylecodes.gm.entities.Workout;
 import org.kylecodes.gm.repositories.WorkoutRepository;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 
@@ -51,6 +54,19 @@ public class WorkoutServiceTest {
 
         // Assert
         assertThat(savedWorkout).isNotNull();
+
+    }
+
+
+    @Test
+    public void WorkoutService_GetAllWorkouts_ReturnResponseDto() {
+        Page workouts = Mockito.mock(Page.class);
+
+        when(workoutRepository.findAll(Mockito.any(Pageable.class))).thenReturn(workouts);
+
+        WorkoutResponse saveWorkout = workoutServiceImpl.getAllWorkouts(1, 10);
+
+        assertThat(saveWorkout).isNotNull();
 
     }
     

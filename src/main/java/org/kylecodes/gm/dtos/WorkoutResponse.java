@@ -36,7 +36,7 @@ public class WorkoutResponse {
     }
 
     public void setPageNo(int pageNo) {
-        if (pageNo < 1) {
+        if (pageNo < 0) {
             throw new IllegalArgumentException("The page number must be positive");
         }
         this.pageNo = pageNo;
