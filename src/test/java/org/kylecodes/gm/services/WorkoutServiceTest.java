@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -69,5 +70,20 @@ public class WorkoutServiceTest {
         assertThat(saveWorkout).isNotNull();
 
     }
-    
+    @Test
+    public void WorkoutService_GetById_ReturnWorkoutDto() {
+        Workout workout = new Workout();
+        workout.setName("Chest Day");
+        workout.setDate(LocalDate.now());
+        WorkoutDto workoutDto = new WorkoutDto();
+        workoutDto.setName("Chest Day");
+        workoutDto.setDate(LocalDate.now());
+
+        when(workoutRepository.findById(1L)).thenReturn(Optional.ofNullable(workout));
+
+        WorkoutDto saveWorkout = workoutServiceImpl.getWorkoutById(1L);
+
+
+        assertThat(saveWorkout).isNotNull();
+    }
 }
