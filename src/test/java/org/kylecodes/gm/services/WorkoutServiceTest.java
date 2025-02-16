@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -85,5 +86,19 @@ public class WorkoutServiceTest {
 
 
         assertThat(saveWorkout).isNotNull();
+    }
+
+    @Test
+    public void WorkoutService_DeleteWorkoutById_ReturnNothing() {
+        // Arrange
+        Workout workout = new Workout();
+        workout.setName("Chest Day");
+        workout.setDate(LocalDate.now());
+
+
+
+        when(workoutRepository.findById(1L)).thenReturn(Optional.ofNullable(workout));
+
+       assertAll(() -> workoutServiceImpl.deleteWorkoutById(1L));
     }
 }
