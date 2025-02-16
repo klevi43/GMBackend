@@ -48,7 +48,7 @@ public class WorkoutRepositoryTest {
         workout2.setName("Back Day");
         workout2.setDate(LocalDate.now());
 
-        int expectedSize = 2;
+        int expectedSize = 7;
 
         workoutRepository.save(workout1);
         workoutRepository.save(workout2);

@@ -31,7 +31,7 @@ public class WorkoutServiceTest {
     private WorkoutRepository workoutRepository;
 
     @InjectMocks
-    private WorkoutService workoutService;
+    private WorkoutServiceImpl workoutServiceImpl;
 
     @Test
     public void WorkoutService_CreateWorkout_ReturnWorkout() {
@@ -47,7 +47,7 @@ public class WorkoutServiceTest {
         when(workoutRepository.save(Mockito.any(Workout.class))).thenReturn(workout);
 
         // Act
-        WorkoutDto savedWorkout = workoutService.create(workoutDto);
+        WorkoutDto savedWorkout = workoutServiceImpl.createWorkout(workoutDto);
 
         // Assert
         assertThat(savedWorkout).isNotNull();
