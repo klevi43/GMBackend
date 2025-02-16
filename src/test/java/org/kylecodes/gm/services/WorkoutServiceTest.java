@@ -53,4 +53,5 @@ public class WorkoutServiceTest {
         assertThat(savedWorkout).isNotNull();
 
     }
+    
 }
