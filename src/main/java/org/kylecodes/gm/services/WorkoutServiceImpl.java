@@ -59,7 +59,27 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Override
     public WorkoutDto updateWorkout(WorkoutDto workoutDto, Long id) {
-        return null;
+
+        Optional<Workout> workout = workoutRepository.findById(id);
+        if (workout.isEmpty()) {
+            throw new IllegalArgumentException("Workout does not exist");
+        }
+
+        Workout updatedWorkout = workout.get();
+        if (workoutDto.getName() != null) {
+            updatedWorkout.setName(workoutDto.getName());
+        }
+        if (workoutDto.getDate() != null) {
+            updatedWorkout.setDate(workoutDto.getDate());
+        }
+        Workout newWorkout = workoutRepository.save(updatedWorkout);
+
+        WorkoutDto workoutResponse = new WorkoutDto();
+        workoutResponse.setId(newWorkout.getId());
+        workoutResponse.setName(newWorkout.getName());
+        workoutResponse.setDate(newWorkout.getDate());
+
+        return workoutResponse;
     }
 
 

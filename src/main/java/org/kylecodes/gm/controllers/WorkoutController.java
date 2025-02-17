@@ -55,6 +55,17 @@ public class WorkoutController {
 
     }
 
+    @PutMapping("/workouts/{workoutId}")
+    public ResponseEntity<WorkoutDto> updateById(@PathVariable Long workoutId, @Validated @RequestBody WorkoutDto workoutDto) {
+        WorkoutDto updatedWorkout;
+        try {
+            updatedWorkout = workoutService.updateWorkout(workoutDto, workoutId);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Failed to update workout. It may not exist");
+        }
+        return new ResponseEntity(updatedWorkout, HttpStatus.OK );
+    }
+
     @DeleteMapping("/workouts/{id}")
     public ResponseEntity<WorkoutDto> delete(@PathVariable Long id) {
         workoutService.deleteWorkoutById(id);
