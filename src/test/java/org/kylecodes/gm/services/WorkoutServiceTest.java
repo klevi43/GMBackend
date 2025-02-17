@@ -18,6 +18,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -86,6 +87,28 @@ public class WorkoutServiceTest {
 
 
         assertThat(saveWorkout).isNotNull();
+    }
+
+    @Test
+    public void WorkoutService_UpdateWorkoutById_ReturnsUpdatedWorkout() {
+
+        Workout workout = new Workout();
+        workout.setName("Chest Day");
+        workout.setDate(LocalDate.now());
+        WorkoutDto workoutDto = new WorkoutDto();
+        workoutDto.setName("Chest Day");
+        workoutDto.setDate(LocalDate.now());
+
+        when(workoutRepository.findById(1L)).thenReturn(Optional.ofNullable(workout));
+        when(workoutRepository.save(Mockito.any(Workout.class))).thenReturn(workout);
+
+        // Act
+        WorkoutDto savedWorkout = workoutServiceImpl.updateWorkout(workoutDto, 1L);
+
+        // Assert
+        assertThat(savedWorkout).isNotNull();
+        assertEquals(savedWorkout.getName(), "Chest Day");
+        assertEquals(savedWorkout.getDate(), LocalDate.of(2025, 02,17));
     }
 
     @Test
