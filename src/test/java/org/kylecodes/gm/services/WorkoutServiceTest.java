@@ -14,11 +14,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -73,7 +73,7 @@ public class WorkoutServiceTest {
 
     }
     @Test
-    public void WorkoutService_GetById_ReturnWorkoutDto() {
+    public void WorkoutService_GetWorkoutById_ReturnWorkoutDto() {
         Workout workout = new Workout();
         workout.setName("Chest Day");
         workout.setDate(LocalDate.now());
@@ -87,6 +87,15 @@ public class WorkoutServiceTest {
 
 
         assertThat(saveWorkout).isNotNull();
+    }
+
+    @Test
+    public void WorkoutService_GetWorkoutById_ThrowsNoSuchElementException() {
+        when(workoutRepository.findById(1L)).thenThrow(new NoSuchElementException());
+
+        assertThrows(NoSuchElementException.class,
+                () -> workoutServiceImpl.getWorkoutById(1L));
+
     }
 
     @Test
@@ -108,7 +117,7 @@ public class WorkoutServiceTest {
         // Assert
         assertThat(savedWorkout).isNotNull();
         assertEquals(savedWorkout.getName(), "Chest Day");
-        assertEquals(savedWorkout.getDate(), LocalDate.of(2025, 02,17));
+        assertEquals(savedWorkout.getDate(), LocalDate.of(2025, 02,18));
     }
 
     @Test
@@ -118,10 +127,9 @@ public class WorkoutServiceTest {
         workout.setName("Chest Day");
         workout.setDate(LocalDate.now());
 
-
-
         when(workoutRepository.findById(1L)).thenReturn(Optional.ofNullable(workout));
 
        assertAll(() -> workoutServiceImpl.deleteWorkoutById(1L));
     }
+
 }
