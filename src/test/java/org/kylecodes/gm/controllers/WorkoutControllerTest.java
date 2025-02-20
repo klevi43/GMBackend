@@ -31,7 +31,6 @@ import java.time.LocalDate;
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.aMapWithSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -84,18 +83,19 @@ public class WorkoutControllerTest {
         workout.setName("Chest Day");
         workout.setDate(LocalDate.now());
 
+        // We post these two dtos to the database and add them to the
+        // responseDto.content field to compare that their size is
+        // the same
         workoutDto = new WorkoutDto();
         workoutDto.setName("Chest Day");
         workoutDto.setDate(LocalDate.now());
-        //workoutService.createWorkout(workoutDto);
+
 
         workoutDto2 = new WorkoutDto();
         workoutDto2.setName("Back Day");
         workoutDto2.setDate(LocalDate.now());
-        //workoutService.createWorkout(workoutDto2);
-
-
-        // this is not doing anything in the getAll method
+        // We got this working, but we don't need this for now.
+        // Pagination
         responseDto = new WorkoutResponse();
         responseDto.setPageSize(10);
         responseDto.setLast(true);
@@ -110,7 +110,7 @@ public class WorkoutControllerTest {
     }
     @Test
     public void WorkoutController_CreateWorkout_ReturnCreated() throws Exception {
-        //given(workoutServiceMock.createWorkout(ArgumentMatchers.any())).willAnswer(invocationOnMock -> invocationOnMock.getArgument());
+
 
         ResultActions response = mockMvc.perform(post("/workouts")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -144,11 +144,12 @@ public class WorkoutControllerTest {
          *
          */
 //
-
+        workoutService.createWorkout(workoutDto);
+        workoutService.createWorkout(workoutDto2);
         mockMvc.perform(MockMvcRequestBuilders.get("/workouts"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$", aMapWithSize(5)));
+                .andExpect(jsonPath("$.content.size()", CoreMatchers.is(responseDto.getContent().size())));
     }
 
     @AfterEach
