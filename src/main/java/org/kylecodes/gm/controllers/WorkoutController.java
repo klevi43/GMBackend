@@ -1,7 +1,6 @@
 package org.kylecodes.gm.controllers;
 
 import org.kylecodes.gm.dtos.WorkoutDto;
-import org.kylecodes.gm.dtos.WorkoutResponse;
 import org.kylecodes.gm.services.WorkoutService;
 import org.kylecodes.gm.services.WorkoutServiceImpl;
 import org.springframework.http.HttpStatus;
@@ -12,6 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController()
 public class WorkoutController {
@@ -23,9 +23,8 @@ public class WorkoutController {
     }
 
     @GetMapping("/workouts")
-    public ResponseEntity<WorkoutResponse> getAll(@RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
-                                                 @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize) {
-        return new ResponseEntity<>(workoutService.getAllWorkouts(pageNo, pageSize), HttpStatus.OK);
+    public ResponseEntity<List<WorkoutDto>> getAllWorkouts() {
+        return new ResponseEntity<>(workoutService.getAllWorkouts(), HttpStatus.OK);
     }
 
     @GetMapping("/workouts/{workoutId}")

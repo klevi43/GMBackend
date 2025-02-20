@@ -1,15 +1,12 @@
 package org.kylecodes.gm.services;
 
 import org.kylecodes.gm.dtos.WorkoutDto;
-import org.kylecodes.gm.dtos.WorkoutResponse;
 import org.kylecodes.gm.entities.Workout;
 import org.kylecodes.gm.repositories.WorkoutRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -24,27 +21,36 @@ public class WorkoutServiceImpl implements WorkoutService {
         return workoutRepository.findAllMostRecent();
 
     }
-    @Override
-    public WorkoutResponse getAllWorkouts(int pageNo, int pageSize) {
-        // Build pageable obj
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
-        // do more research on how this works
-        Page<Workout> workouts = workoutRepository.findAll(pageable);
-        List<Workout> listOfWorkouts = workouts.getContent();
-        List<WorkoutDto> content = listOfWorkouts.stream()
-                // map(workout -> maptoDto(workout)).collect(Collectors.toList)
-                .map(this::mapToDt0).toList();
 
-        // Build the response
-        WorkoutResponse workoutResponse = new WorkoutResponse();
-        workoutResponse.setContent(content);
-        workoutResponse.setPageNo(workouts.getNumber());
-        workoutResponse.setPageSize(workouts.getSize());
-        workoutResponse.setTotalElements(workouts.getTotalElements());
-        workoutResponse.setTotalPages(workouts.getTotalPages());
-        workoutResponse.setLast(workouts.isLast());
-        return workoutResponse;
+    @Override
+    public List<WorkoutDto> getAllWorkouts() {
+        List<Workout> workoutList = workoutRepository.findAll();
+        if (workoutList.isEmpty()) {
+            return new ArrayList<WorkoutDto>();
+        }
+        return workoutList.stream().map(this::mapToDt0).toList();
     }
+//    @Override
+//    public WorkoutResponse getAllWorkouts(int pageNo, int pageSize) {
+//        // Build pageable obj
+//        Pageable pageable = PageRequest.of(pageNo, pageSize);
+//        // do more research on how this works
+//        Page<Workout> workouts = workoutRepository.findAll(pageable);
+//        List<Workout> listOfWorkouts = workouts.getContent();
+//        List<WorkoutDto> content = listOfWorkouts.stream()
+//                // map(workout -> maptoDto(workout)).collect(Collectors.toList)
+//                .map(this::mapToDt0).toList();
+//
+//        // Build the response
+//        WorkoutResponse workoutResponse = new WorkoutResponse();
+//        workoutResponse.setContent(content);
+//        workoutResponse.setPageNo(workouts.getNumber());
+//        workoutResponse.setPageSize(workouts.getSize());
+//        workoutResponse.setTotalElements(workouts.getTotalElements());
+//        workoutResponse.setTotalPages(workouts.getTotalPages());
+//        workoutResponse.setLast(workouts.isLast());
+//        return workoutResponse;
+//    }
 
 
     @Override
