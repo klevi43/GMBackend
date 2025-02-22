@@ -12,6 +12,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController()
 public class WorkoutController {
@@ -23,52 +24,56 @@ public class WorkoutController {
     }
 
     @GetMapping("/workouts")
-    public ResponseEntity<List<WorkoutDto>> getAllWorkouts() {
-        return new ResponseEntity<>(workoutService.getAllWorkouts(), HttpStatus.OK);
+    public List<WorkoutDto>getAllWorkouts() {
+        return workoutService.getAllWorkouts();
     }
 
-    @GetMapping("/workouts/{workoutId}")
-    public ResponseEntity<WorkoutDto> getOne(@PathVariable Long workoutId) {
+    @GetMapping("/workout")
+    public WorkoutDto getWorkout(@RequestParam Long workoutId) {
         WorkoutDto workoutDto;
         try {
            workoutDto = workoutService.getWorkoutById(workoutId);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Failed to find workout");
         }
-        return new ResponseEntity(workoutDto, HttpStatus.OK );
+        return workoutDto;
     }
 
 //    @GetMapping("/workouts/current")
 //    public List<Workout> getAllRecent() {
 //        return workoutService.findAllMostRecent();
 //    }
-    @PostMapping("/workouts")
+    @PostMapping("/workout")
     public ResponseEntity<WorkoutDto> create(@Validated @RequestBody WorkoutDto workout) {
 
             WorkoutDto newWorkout = workoutService.createWorkout(workout);
             URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                    .path("/{id}")
+                    .queryParam("workoutId={id}")
                     .buildAndExpand(newWorkout.getId())
                     .toUri();
             return ResponseEntity.created(location).body(newWorkout);
 
     }
 
-    @PutMapping("/workouts/{workoutId}")
-    public ResponseEntity<WorkoutDto> updateById(@PathVariable Long workoutId, @Validated @RequestBody WorkoutDto workoutDto) {
+    @PutMapping("/workout")
+    public WorkoutDto updateById(@RequestParam Long workoutId, @Validated @RequestBody WorkoutDto workoutDto) {
         WorkoutDto updatedWorkout;
         try {
             updatedWorkout = workoutService.updateWorkout(workoutDto, workoutId);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Failed to update workout. It may not exist");
         }
-        return new ResponseEntity(updatedWorkout, HttpStatus.OK );
+        return updatedWorkout;
     }
 
-    @DeleteMapping("/workouts/{id}")
-    public ResponseEntity<WorkoutDto> delete(@PathVariable Long id) {
-        workoutService.deleteWorkoutById(id);
-        return new ResponseEntity("Workout deleted", HttpStatus.OK);
+    @DeleteMapping("/workout")
+    public void delete(@RequestParam Long workoutId) {
+        try {
+            workoutService.deleteWorkoutById(workoutId);
+        }
+        catch (Exception e) {
+            throw new NoSuchElementException("Workout does not exist");
+        }
 
     }
 }
