@@ -70,6 +70,8 @@ public class WorkoutController {
     public void delete(@RequestParam Long workoutId) {
         try {
             workoutService.deleteWorkoutById(workoutId);
+
+
         }
         catch (Exception e) {
             throw new NoSuchElementException("Workout does not exist");

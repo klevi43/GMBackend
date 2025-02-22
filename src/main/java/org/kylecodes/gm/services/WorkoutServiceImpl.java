@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -57,35 +56,31 @@ public class WorkoutServiceImpl implements WorkoutService {
     public WorkoutDto getWorkoutById(Long id) {
         Optional<Workout> workout = workoutRepository.findById(id);
 
-        if (workout.isEmpty()) {
-            throw new NoSuchElementException("Workout does not exist");
-        }
-        return mapToDt0(workout.get());
+        return workout.map(this::mapToDt0).orElse(null);
     }
 
     @Override
     public WorkoutDto updateWorkout(WorkoutDto workoutDto, Long id) {
 
         Optional<Workout> workout = workoutRepository.findById(id);
-        if (workout.isEmpty()) {
-            throw new IllegalArgumentException("Workout does not exist");
-        }
+        if (!workout.isEmpty()) {
 
-        Workout updatedWorkout = workout.get();
-        if (workoutDto.getName() != null) {
-            updatedWorkout.setName(workoutDto.getName());
-        }
-        if (workoutDto.getDate() != null) {
-            updatedWorkout.setDate(workoutDto.getDate());
-        }
-        Workout newWorkout = workoutRepository.save(updatedWorkout);
 
-        WorkoutDto workoutResponse = new WorkoutDto();
-        workoutResponse.setId(newWorkout.getId());
-        workoutResponse.setName(newWorkout.getName());
-        workoutResponse.setDate(newWorkout.getDate());
 
-        return workoutResponse;
+            Workout updatedWorkout = workout.get();
+            if (workoutDto.getName() != null) {
+                updatedWorkout.setName(workoutDto.getName());
+            }
+            if (workoutDto.getDate() != null) {
+                updatedWorkout.setDate(workoutDto.getDate());
+            }
+            Workout newWorkout = workoutRepository.save(updatedWorkout);
+
+            WorkoutDto workoutResponse = mapToDt0(newWorkout);
+
+            return workoutResponse;
+        }
+        return null;
     }
 
 
@@ -106,12 +101,13 @@ public class WorkoutServiceImpl implements WorkoutService {
     }
 
     @Override
-    public void deleteWorkoutById(Long id) {
+    public boolean deleteWorkoutById(Long id) {
         Optional<Workout> workout = workoutRepository.findById(id);
         if (workout.isEmpty()) {
-            throw new NoSuchElementException("Workout does not exist");
+            return false;
         }
         workoutRepository.deleteById(id);
+        return true;
     }
 
 
