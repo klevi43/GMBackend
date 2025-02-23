@@ -44,7 +44,7 @@ public class WorkoutController {
 //        return workoutService.findAllMostRecent();
 //    }
     @PostMapping("/workout")
-    public ResponseEntity<WorkoutDto> create(@Validated @RequestBody WorkoutDto workout) {
+    public ResponseEntity<WorkoutDto> createWorkout(@Validated @RequestBody WorkoutDto workout) {
 
             WorkoutDto newWorkout = workoutService.createWorkout(workout);
             URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -56,7 +56,7 @@ public class WorkoutController {
     }
 
     @PutMapping("/workout")
-    public WorkoutDto updateById(@RequestParam Long workoutId, @Validated @RequestBody WorkoutDto workoutDto) {
+    public WorkoutDto updateWorkoutById(@RequestParam Long workoutId, @Validated @RequestBody WorkoutDto workoutDto) {
         WorkoutDto updatedWorkout;
         try {
             updatedWorkout = workoutService.updateWorkout(workoutDto, workoutId);
@@ -67,14 +67,10 @@ public class WorkoutController {
     }
 
     @DeleteMapping("/workout")
-    public void delete(@RequestParam Long workoutId) {
-        try {
-            workoutService.deleteWorkoutById(workoutId);
+    public void deleteWorkoutById(@RequestParam Long workoutId) {
 
-
-        }
-        catch (Exception e) {
-            throw new NoSuchElementException("Workout does not exist");
+        if(!workoutService.deleteWorkoutById(workoutId)) {
+            throw new NoSuchElementException("Delete unsuccessful. Workout does not exist");
         }
 
     }

@@ -161,7 +161,7 @@ public class WorkoutControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.delete("/workout?workoutId={id}", "-1"))
                 .andExpect(status().is4xxClientError())
                 .andExpect(jsonPath("$.status", Matchers.is(404)))
-                .andExpect(jsonPath("$.message", Matchers.is("Workout does not exist")));
+                .andExpect(jsonPath("$.message", Matchers.is("Delete unsuccessful. Workout does not exist")));
     }
 
     @AfterEach
