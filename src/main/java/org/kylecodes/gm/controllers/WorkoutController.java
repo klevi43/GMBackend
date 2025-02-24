@@ -12,7 +12,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @RestController()
 public class WorkoutController {
@@ -57,21 +56,15 @@ public class WorkoutController {
 
     @PutMapping("/workout")
     public WorkoutDto updateWorkoutById(@RequestParam Long workoutId, @Validated @RequestBody WorkoutDto workoutDto) {
-        WorkoutDto updatedWorkout;
-        try {
-            updatedWorkout = workoutService.updateWorkout(workoutDto, workoutId);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Failed to update workout. It may not exist");
-        }
+        WorkoutDto updatedWorkout = workoutService.updateWorkout(workoutDto, workoutId);
+
         return updatedWorkout;
     }
 
     @DeleteMapping("/workout")
     public void deleteWorkoutById(@RequestParam Long workoutId) {
-
-        if(!workoutService.deleteWorkoutById(workoutId)) {
-            throw new NoSuchElementException("Delete unsuccessful. Workout does not exist");
-        }
-
+        workoutService.deleteWorkoutById(workoutId);
     }
+
+
 }

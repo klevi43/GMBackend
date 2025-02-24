@@ -2,6 +2,7 @@ package org.kylecodes.gm.services;
 
 import org.kylecodes.gm.dtos.WorkoutDto;
 import org.kylecodes.gm.entities.Workout;
+import org.kylecodes.gm.exceptions.WorkoutNotFoundException;
 import org.kylecodes.gm.repositories.WorkoutRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,7 +55,8 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Override
     public WorkoutDto getWorkoutById(Long id) {
-        Optional<Workout> workout = workoutRepository.findById(id);
+        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findById(id)
+                .orElseThrow(WorkoutNotFoundException::new));
 
         return workout.map(this::mapToDt0).orElse(null);
     }
@@ -62,25 +64,19 @@ public class WorkoutServiceImpl implements WorkoutService {
     @Override
     public WorkoutDto updateWorkout(WorkoutDto workoutDto, Long id) {
 
-        Optional<Workout> workout = workoutRepository.findById(id);
-        if (!workout.isEmpty()) {
+        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findById(id)
+                .orElseThrow(() ->new WorkoutNotFoundException("Update unsuccessful. ")));
 
-
-
-            Workout updatedWorkout = workout.get();
-            if (workoutDto.getName() != null) {
-                updatedWorkout.setName(workoutDto.getName());
-            }
-            if (workoutDto.getDate() != null) {
-                updatedWorkout.setDate(workoutDto.getDate());
-            }
-            Workout newWorkout = workoutRepository.save(updatedWorkout);
-
-            WorkoutDto workoutResponse = mapToDt0(newWorkout);
-
-            return workoutResponse;
+        Workout updatedWorkout = workout.get();
+        if (workoutDto.getName() != null) {
+            updatedWorkout.setName(workoutDto.getName());
         }
-        return null;
+        if (workoutDto.getDate() != null) {
+            updatedWorkout.setDate(workoutDto.getDate());
+        }
+        Workout newWorkout = workoutRepository.save(updatedWorkout);
+        WorkoutDto workoutResponse = mapToDt0(newWorkout);
+        return workoutResponse;
     }
 
 
@@ -102,7 +98,8 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Override
     public boolean deleteWorkoutById(Long id) {
-        Optional<Workout> workout = workoutRepository.findById(id);
+        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findById(id)
+                .orElseThrow(() -> new WorkoutNotFoundException("Delete unsuccessful. ")));
         if (workout.isEmpty()) {
             return false;
         }
