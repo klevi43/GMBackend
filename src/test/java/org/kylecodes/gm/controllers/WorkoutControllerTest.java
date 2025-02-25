@@ -116,6 +116,8 @@ public class WorkoutControllerTest {
     public void WorkoutController_ContextLoads_ReturnVoid() {
         assertThat(workoutController).isNotNull();
     }
+
+
     @Test
     public void WorkoutController_CreateWorkout_ReturnCreated() throws Exception {
 
@@ -141,8 +143,60 @@ public class WorkoutControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(3)));
     }
+    @Test
+    public void WorkoutController_GetWorkoutById_ReturnWorkoutDto() throws Exception {
+
+        assertThat(workoutRepository.findById(1L)).isNotNull();
+        mockMvc.perform(MockMvcRequestBuilders.get("/workout?workoutId={id}", "1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", CoreMatchers.is("Leg Day")))
+                .andExpect(jsonPath("$.date", CoreMatchers.is(LocalDate.of(2025, 02, 18).toString())));
+    }
 
 
+
+    @Test
+    public void WorkoutController_GetWorkoutById_ThrowWorkoutNotFoundException() throws Exception {
+
+        assertThat(workoutRepository.findById(100L)).isEmpty();
+        mockMvc.perform(MockMvcRequestBuilders.get("/workout?workoutId={id}", "100"))
+                .andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.status", Matchers.is(404)))
+                .andExpect(jsonPath("$.message",
+                        Matchers.is("Get unsuccessful. No workout found with given id.")));
+    }
+
+    @Test
+    public void WorkoutController_UpdateWorkoutById_ReturnUpdateWorkout() throws Exception {
+        assertThat(workoutRepository.findById(1L)).isNotEmpty();
+
+        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.put("/workout?workoutId={id}", "1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(workoutDto2)));
+
+        response.andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("$.name", CoreMatchers.is(workoutDto2.getName())))
+                .andExpect(jsonPath("$.date", CoreMatchers.is(workoutDto2.getDate().toString())));
+
+        assertThat(workoutRepository.findById(1L)).isNotEmpty();
+        assertThat(workoutRepository.findById(1L).get().getName()).isEqualTo("Back Day");
+        assertThat(workoutRepository.findById(1L).get().getDate()).isNotEqualTo(LocalDate.of(2025, 2, 18));
+    }
+
+
+    @Test
+    public void WorkoutController_UpdateWorkoutById_ThrowWorkoutNotFoundException() throws Exception {
+        assertThat(workoutRepository.findById(100L)).isEmpty();
+
+        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.put("/workout?workoutId={id}", "100")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(workout2)));
+
+        response.andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.status", Matchers.is(404)))
+                .andExpect(jsonPath("$.message",
+                        Matchers.is("Update unsuccessful. No workout found with given id.")));
+    }
     @Test
     public void WorkoutController_DeleteWorkoutById_ReturnVoid() throws Exception {
         assertThat(workoutRepository.findById(1L)).isNotNull();
@@ -155,13 +209,13 @@ public class WorkoutControllerTest {
 
     // need to rework this
     @Test
-    public void WorkoutController_DeleteWorkoutById_ThrowException() throws Exception {
+    public void WorkoutController_DeleteWorkoutById_ThrowsWorkoutNotFoundException() throws Exception {
         assertThat(workoutRepository.findById(-1L)).isEmpty();
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/workout?workoutId={id}", "-1"))
                 .andExpect(status().is4xxClientError())
                 .andExpect(jsonPath("$.status", Matchers.is(404)))
-                .andExpect(jsonPath("$.message", Matchers.is("No workout found with given id.")));
+                .andExpect(jsonPath("$.message", Matchers.is("Delete unsuccessful. No workout found with given id.")));
     }
 
     @AfterEach

@@ -56,16 +56,16 @@ public class WorkoutServiceImpl implements WorkoutService {
     @Override
     public WorkoutDto getWorkoutById(Long id) {
         Optional<Workout> workout = Optional.ofNullable(workoutRepository.findById(id)
-                .orElseThrow(WorkoutNotFoundException::new));
+                .orElseThrow(() -> new WorkoutNotFoundException("Get unsuccessful. ")));
 
         return workout.map(this::mapToDt0).orElse(null);
     }
 
     @Override
-    public WorkoutDto updateWorkout(WorkoutDto workoutDto, Long id) {
+    public WorkoutDto updateWorkoutById(WorkoutDto workoutDto, Long id) {
 
         Optional<Workout> workout = Optional.ofNullable(workoutRepository.findById(id)
-                .orElseThrow(() ->new WorkoutNotFoundException("Update unsuccessful. ")));
+                .orElseThrow(() -> new WorkoutNotFoundException("Update unsuccessful. ")));
 
         Workout updatedWorkout = workout.get();
         if (workoutDto.getName() != null) {

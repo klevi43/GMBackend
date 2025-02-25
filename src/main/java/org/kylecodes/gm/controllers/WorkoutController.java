@@ -3,11 +3,9 @@ package org.kylecodes.gm.controllers;
 import org.kylecodes.gm.dtos.WorkoutDto;
 import org.kylecodes.gm.services.WorkoutService;
 import org.kylecodes.gm.services.WorkoutServiceImpl;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -29,12 +27,8 @@ public class WorkoutController {
 
     @GetMapping("/workout")
     public WorkoutDto getWorkout(@RequestParam Long workoutId) {
-        WorkoutDto workoutDto;
-        try {
-           workoutDto = workoutService.getWorkoutById(workoutId);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Failed to find workout");
-        }
+        WorkoutDto workoutDto = workoutService.getWorkoutById(workoutId);
+
         return workoutDto;
     }
 
@@ -56,7 +50,7 @@ public class WorkoutController {
 
     @PutMapping("/workout")
     public WorkoutDto updateWorkoutById(@RequestParam Long workoutId, @Validated @RequestBody WorkoutDto workoutDto) {
-        WorkoutDto updatedWorkout = workoutService.updateWorkout(workoutDto, workoutId);
+        WorkoutDto updatedWorkout = workoutService.updateWorkoutById(workoutDto, workoutId);
 
         return updatedWorkout;
     }

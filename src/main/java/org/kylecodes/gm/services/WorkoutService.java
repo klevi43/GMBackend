@@ -10,6 +10,6 @@ public interface WorkoutService {
 //    WorkoutResponse getAllWorkouts(int pageNo, int pageSize);
     List<WorkoutDto> getAllWorkouts();
     WorkoutDto getWorkoutById(Long id);
-    WorkoutDto updateWorkout(WorkoutDto workoutDto, Long id);
+    WorkoutDto updateWorkoutById(WorkoutDto workoutDto, Long id);
     boolean deleteWorkoutById(Long id);
 }
