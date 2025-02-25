@@ -4,16 +4,16 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
-import java.util.Date;
+import java.time.LocalDate;
 @Entity
 public class Exercise {
     @Id
     @GeneratedValue
     private Long id;
     private String name;
-    private Date date;
+    private LocalDate date;
 
-    public Exercise(Long id, String name, Date date) {
+    public Exercise(Long id, String name, LocalDate date) {
         this.id = id;
         this.name = name;
         this.date = date;
@@ -21,11 +21,11 @@ public class Exercise {
     public Exercise() {
 
     }
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

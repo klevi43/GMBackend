@@ -140,7 +140,7 @@ public class WorkoutServiceTest {
         when(workoutRepository.save(Mockito.any(Workout.class))).thenReturn(workout);
 
         // Act
-        WorkoutDto savedWorkout = workoutServiceImpl.updateWorkout(workoutDto, 1L);
+        WorkoutDto savedWorkout = workoutServiceImpl.updateWorkoutById(workoutDto, 1L);
 
         // Assert
         assertThat(savedWorkout).isNotNull();

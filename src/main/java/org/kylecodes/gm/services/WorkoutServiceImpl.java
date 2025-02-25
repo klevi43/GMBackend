@@ -88,10 +88,7 @@ public class WorkoutServiceImpl implements WorkoutService {
 
         Workout newWorkout = workoutRepository.save(workout);
 
-        WorkoutDto workoutResponse = new WorkoutDto();
-        workoutResponse.setId(newWorkout.getId());
-        workoutResponse.setName(newWorkout.getName());
-        workoutResponse.setDate(newWorkout.getDate());
+        WorkoutDto workoutResponse = mapToDt0(newWorkout);
 
         return workoutResponse;
     }
