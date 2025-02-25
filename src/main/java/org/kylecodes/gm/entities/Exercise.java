@@ -3,12 +3,14 @@ package org.kylecodes.gm.entities;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Min;
 
 import java.time.LocalDate;
 @Entity
 public class Exercise {
     @Id
     @GeneratedValue
+    @Min(0)
     private Long id;
     private String name;
     private LocalDate date;
