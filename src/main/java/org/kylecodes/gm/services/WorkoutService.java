@@ -11,5 +11,5 @@ public interface WorkoutService {
     List<WorkoutDto> getAllWorkouts();
     WorkoutDto getWorkoutById(Long id);
     WorkoutDto updateWorkoutById(WorkoutDto workoutDto, Long id);
-    boolean deleteWorkoutById(Long id);
+    void deleteWorkoutById(Long id);
 }

@@ -59,7 +59,17 @@ public class ExerciseServiceImpl implements ExerciseService{
         return exerciseMapper.mapToDto(savedExercise);
     }
 
-    public List<Exercise> getExercises() {
+    @Override
+    public void deleteExerciseInWorkoutById(Long workoutId, Long exerciseId) {
+        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findById(workoutId)
+                .orElseThrow(() -> new WorkoutNotFoundException("Delete unsuccessful. ")));
+
+        Optional<Exercise> exercise = Optional.ofNullable(exerciseRepository.findById(exerciseId))
+                .orElseThrow(() -> new WorkoutNotFoundException("Delete unsuccessful. "));
+        exerciseRepository.deleteById(exerciseId);
+    }
+
+    public List<Exercise> getExercisesInWorkout() {
         return exerciseRepository.findAll();
     }
 

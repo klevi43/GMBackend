@@ -114,14 +114,12 @@ public class WorkoutServiceImpl implements WorkoutService {
     }
 
     @Override
-    public boolean deleteWorkoutById(Long id) {
+    public void deleteWorkoutById(Long id) {
         Optional<Workout> workout = Optional.ofNullable(workoutRepository.findById(id)
                 .orElseThrow(() -> new WorkoutNotFoundException("Delete unsuccessful. ")));
-        if (workout.isEmpty()) {
-            return false;
-        }
+
         workoutRepository.deleteById(id);
-        return true;
+
     }
 
 
