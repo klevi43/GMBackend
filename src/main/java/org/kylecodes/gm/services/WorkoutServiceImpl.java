@@ -1,9 +1,14 @@
 package org.kylecodes.gm.services;
 
+import org.kylecodes.gm.dtos.ExerciseDto;
 import org.kylecodes.gm.dtos.WorkoutDto;
+import org.kylecodes.gm.entities.Exercise;
 import org.kylecodes.gm.entities.Workout;
 import org.kylecodes.gm.exceptions.WorkoutNotFoundException;
 import org.kylecodes.gm.repositories.WorkoutRepository;
+import org.kylecodes.gm.services.mappers.EntityToDtoMapper;
+import org.kylecodes.gm.services.mappers.ExerciseToExerciseDtoMapper;
+import org.kylecodes.gm.services.mappers.WorkoutToWorkoutDtoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +22,9 @@ public class WorkoutServiceImpl implements WorkoutService {
     @Autowired
     private WorkoutRepository workoutRepository;
 
+    EntityToDtoMapper<Workout, WorkoutDto> workoutMapper = new WorkoutToWorkoutDtoMapper();
+    EntityToDtoMapper<Exercise, ExerciseDto> exerciseMapper = new ExerciseToExerciseDtoMapper();
+
     public List<Workout> findAllMostRecent() {
         return workoutRepository.findAllMostRecent();
 
@@ -28,7 +36,15 @@ public class WorkoutServiceImpl implements WorkoutService {
         if (workoutList.isEmpty()) {
             return new ArrayList<WorkoutDto>();
         }
-        return workoutList.stream().map(this::mapToDt0).toList();
+        List<WorkoutDto> workoutDtoList = new ArrayList<>();
+        for (Workout workout : workoutList) {
+            List<ExerciseDto> exerciseDtoList = workout.getExercises().stream()
+                    .map((exercise -> exerciseMapper.mapToDto(exercise))).toList();
+            WorkoutDto workoutDto = workoutMapper.mapToDto(workout);
+            workoutDto.setExerciseDtos(exerciseDtoList);
+            workoutDtoList.add(workoutDto);
+        }
+        return workoutDtoList;
     }
 //    @Override
 //    public WorkoutResponse getAllWorkouts(int pageNo, int pageSize) {
@@ -58,7 +74,12 @@ public class WorkoutServiceImpl implements WorkoutService {
         Optional<Workout> workout = Optional.ofNullable(workoutRepository.findById(id)
                 .orElseThrow(() -> new WorkoutNotFoundException("Get unsuccessful. ")));
 
-        return workout.map(this::mapToDt0).orElse(null);
+        WorkoutDto workoutDto = workoutMapper.mapToDto(workout.get());
+        workoutDto.setExerciseDtos(workout.get().getExercises().stream().map((exercise -> exerciseMapper.mapToDto(exercise))).toList());
+        System.out.println(workout.get().getExercises().isEmpty());
+
+        return workoutDto;
+
     }
 
     @Override
@@ -88,7 +109,7 @@ public class WorkoutServiceImpl implements WorkoutService {
 
         Workout newWorkout = workoutRepository.save(workout);
 
-        WorkoutDto workoutResponse = mapToDt0(newWorkout);
+        WorkoutDto workoutResponse = workoutMapper.mapToDto(newWorkout);
 
         return workoutResponse;
     }

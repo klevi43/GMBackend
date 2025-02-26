@@ -30,6 +30,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -82,7 +83,7 @@ public class WorkoutControllerTest {
     @BeforeEach
     public void init() {
 
-        jdbc.execute("INSERT INTO workout (id, name, date) VALUES (1, 'Leg Day', '2025-02-18')");
+        jdbc.execute("INSERT INTO workout (id, name, date) VALUES (20, 'Leg Day', '2025-02-18')");
         request = new MockHttpServletRequest();
 
         request.setParameter("name", "Back Day");
@@ -91,10 +92,13 @@ public class WorkoutControllerTest {
         workout = new Workout();
         workout.setName("Chest Day");
         workout.setDate(LocalDate.now());
+        workout.setExercises(new ArrayList<>());
 
         workout2 = new Workout();
         workout2.setName("Back Day");
         workout2.setDate(LocalDate.now());
+
+        workout2.setExercises(new ArrayList<>());
 
 
 
@@ -104,11 +108,12 @@ public class WorkoutControllerTest {
         workoutDto = new WorkoutDto();
         workoutDto.setName("Chest Day");
         workoutDto.setDate(LocalDate.now());
+        workoutDto.setExerciseDtos(new ArrayList<>());
 
         workoutDto2 = new WorkoutDto();
         workoutDto2.setName("Back Day");
         workoutDto2.setDate(LocalDate.now());
-
+        workoutDto2.setExerciseDtos(new ArrayList<>());
     }
 
 
@@ -122,7 +127,7 @@ public class WorkoutControllerTest {
     public void WorkoutController_CreateWorkout_ReturnCreated() throws Exception {
 
 
-        ResultActions response = mockMvc.perform(post("/workout")
+        ResultActions response = mockMvc.perform(post("/workouts/create")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(workoutDto)));
 
@@ -147,7 +152,7 @@ public class WorkoutControllerTest {
     public void WorkoutController_GetWorkoutById_ReturnWorkoutDto() throws Exception {
 
         assertThat(workoutRepository.findById(1L)).isNotNull();
-        mockMvc.perform(MockMvcRequestBuilders.get("/workout?workoutId={id}", "1"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/workouts/workout?workoutId={id}", "20"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", CoreMatchers.is("Leg Day")))
                 .andExpect(jsonPath("$.date", CoreMatchers.is(LocalDate.of(2025, 02, 18).toString())));
@@ -159,7 +164,7 @@ public class WorkoutControllerTest {
     public void WorkoutController_GetWorkoutById_ThrowWorkoutNotFoundException() throws Exception {
 
         assertThat(workoutRepository.findById(100L)).isEmpty();
-        mockMvc.perform(MockMvcRequestBuilders.get("/workout?workoutId={id}", "100"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/workouts/workout?workoutId={id}", "-20"))
                 .andExpect(status().is4xxClientError())
                 .andExpect(jsonPath("$.status", Matchers.is(404)))
                 .andExpect(jsonPath("$.message",
@@ -168,9 +173,9 @@ public class WorkoutControllerTest {
 
     @Test
     public void WorkoutController_UpdateWorkoutById_ReturnUpdateWorkout() throws Exception {
-        assertThat(workoutRepository.findById(1L)).isNotEmpty();
+        assertThat(workoutRepository.findById(20L)).isNotEmpty();
 
-        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.put("/workout?workoutId={id}", "1")
+        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.put("/workouts/update?workoutId={id}", "20")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(workoutDto2)));
 
@@ -178,9 +183,9 @@ public class WorkoutControllerTest {
                 .andExpect(jsonPath("$.name", CoreMatchers.is(workoutDto2.getName())))
                 .andExpect(jsonPath("$.date", CoreMatchers.is(workoutDto2.getDate().toString())));
 
-        assertThat(workoutRepository.findById(1L)).isNotEmpty();
-        assertThat(workoutRepository.findById(1L).get().getName()).isEqualTo("Back Day");
-        assertThat(workoutRepository.findById(1L).get().getDate()).isNotEqualTo(LocalDate.of(2025, 2, 18));
+        assertThat(workoutRepository.findById(20L)).isNotEmpty();
+        assertThat(workoutRepository.findById(20L).get().getName()).isEqualTo("Back Day");
+        assertThat(workoutRepository.findById(20L).get().getDate()).isNotEqualTo(LocalDate.of(2025, 2, 18));
     }
 
 
@@ -188,7 +193,7 @@ public class WorkoutControllerTest {
     public void WorkoutController_UpdateWorkoutById_ThrowWorkoutNotFoundException() throws Exception {
         assertThat(workoutRepository.findById(100L)).isEmpty();
 
-        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.put("/workout?workoutId={id}", "100")
+        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.put("/workouts/update?workoutId={id}", "-20")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(workout2)));
 
@@ -201,7 +206,7 @@ public class WorkoutControllerTest {
     public void WorkoutController_DeleteWorkoutById_ReturnVoid() throws Exception {
         assertThat(workoutRepository.findById(1L)).isNotNull();
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/workout?workoutId={id}", "1"))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/workouts/delete?workoutId={id}", "20"))
                 .andExpect(status().isOk());
 
         assertThat(workoutRepository.findById(1L)).isEmpty();
@@ -212,7 +217,7 @@ public class WorkoutControllerTest {
     public void WorkoutController_DeleteWorkoutById_ThrowsWorkoutNotFoundException() throws Exception {
         assertThat(workoutRepository.findById(-1L)).isEmpty();
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/workout?workoutId={id}", "-1"))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/workouts/delete?workoutId={id}", "-20"))
                 .andExpect(status().is4xxClientError())
                 .andExpect(jsonPath("$.status", Matchers.is(404)))
                 .andExpect(jsonPath("$.message", Matchers.is("Delete unsuccessful. No workout found with given id.")));

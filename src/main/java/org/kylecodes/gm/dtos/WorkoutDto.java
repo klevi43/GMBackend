@@ -1,19 +1,28 @@
 package org.kylecodes.gm.dtos;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Size;
+
 import java.time.LocalDate;
+import java.util.List;
 
 
 public class WorkoutDto {
 
     private Long id;
+    @Size(min = 2, max = 200)
     private String name;
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @PastOrPresent
     private LocalDate date;
-
-    public WorkoutDto(Long id, String name, LocalDate date) {
+    private List<ExerciseDto> exerciseDtos;
+    public WorkoutDto(Long id, String name, LocalDate date, List<ExerciseDto> exerciseDtos) {
         this.id = id;
         this.name = name;
         this.date = date;
+        this.exerciseDtos = exerciseDtos;
     }
 
     public WorkoutDto() {
@@ -42,5 +51,13 @@ public class WorkoutDto {
 
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    public List<ExerciseDto> getExerciseDtos() {
+        return exerciseDtos;
+    }
+
+    public void setExerciseDtos(List<ExerciseDto> exerciseDtos) {
+        this.exerciseDtos = exerciseDtos;
     }
 }

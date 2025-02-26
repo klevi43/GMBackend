@@ -1,10 +1,17 @@
 package org.kylecodes.gm.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Size;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 import java.time.LocalDate;
+import java.util.List;
+
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 public class Workout {
@@ -14,15 +21,24 @@ public class Workout {
     private Long id;
 
     @Column(nullable = false, length = 50)
+
+    @Size(min = 2, max = 200)
     private String name;
+
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @PastOrPresent
     private LocalDate date;
 
+    @OneToMany( fetch = FetchType.LAZY, mappedBy = "workout")
+    @JsonIgnore
+    @Cascade(CascadeType.ALL)
+    List<Exercise> exercises;
 
-    public Workout(Long id, String name, LocalDate date) {
+    public Workout(Long id, String name, LocalDate date, List<Exercise> exercises) {
         this.id = id;
         this.name = name;
         this.date = date;
+        this.exercises = exercises;
     }
 
     public Workout() {
@@ -50,5 +66,13 @@ public class Workout {
 
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    public List<Exercise> getExercises() {
+        return exercises;
+    }
+
+    public void setExercises(List<Exercise> exercises) {
+        this.exercises = exercises;
     }
 }

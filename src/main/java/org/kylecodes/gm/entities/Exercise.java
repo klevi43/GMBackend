@@ -1,9 +1,10 @@
 package org.kylecodes.gm.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 @Entity
@@ -12,13 +13,23 @@ public class Exercise {
     @GeneratedValue
     @Min(0)
     private Long id;
+
+    @Size(min = 2, max = 200)
     private String name;
+
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @PastOrPresent
     private LocalDate date;
 
-    public Exercise(Long id, String name, LocalDate date) {
+    @ManyToOne
+    @JoinColumn
+    Workout workout;
+
+    public Exercise(Long id, String name, LocalDate date, Workout workout) {
         this.id = id;
         this.name = name;
         this.date = date;
+        this.workout = workout;
     }
     public Exercise() {
 
@@ -45,5 +56,13 @@ public class Exercise {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Workout getWorkout() {
+        return workout;
+    }
+
+    public void setWorkout(Workout workout) {
+        this.workout = workout;
     }
 }

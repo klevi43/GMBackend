@@ -25,7 +25,7 @@ public class WorkoutController {
         return workoutService.getAllWorkouts();
     }
 
-    @GetMapping("/workout")
+    @GetMapping("/workouts/workout")
     public WorkoutDto getWorkout(@RequestParam Long workoutId) {
         WorkoutDto workoutDto = workoutService.getWorkoutById(workoutId);
 
@@ -36,7 +36,7 @@ public class WorkoutController {
 //    public List<Workout> getAllRecent() {
 //        return workoutService.findAllMostRecent();
 //    }
-    @PostMapping("/workout")
+    @PostMapping("/workouts/create")
     public ResponseEntity<WorkoutDto> createWorkout(@Validated @RequestBody WorkoutDto workout) {
 
             WorkoutDto newWorkout = workoutService.createWorkout(workout);
@@ -48,14 +48,14 @@ public class WorkoutController {
 
     }
 
-    @PutMapping("/workout")
+    @PutMapping("/workouts/update")
     public WorkoutDto updateWorkoutById(@RequestParam Long workoutId, @Validated @RequestBody WorkoutDto workoutDto) {
         WorkoutDto updatedWorkout = workoutService.updateWorkoutById(workoutDto, workoutId);
 
         return updatedWorkout;
     }
 
-    @DeleteMapping("/workout")
+    @DeleteMapping("/workouts/delete")
     public void deleteWorkoutById(@RequestParam Long workoutId) {
         workoutService.deleteWorkoutById(workoutId);
     }
