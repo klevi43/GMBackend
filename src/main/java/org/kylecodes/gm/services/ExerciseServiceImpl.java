@@ -32,7 +32,7 @@ public class ExerciseServiceImpl implements ExerciseService{
 
         Exercise exercise = new Exercise();
         exercise.setName(exerciseDto.getName());
-        exercise.setDate(exerciseDto.getDate());
+        exercise.setDate(workout.get().getDate());
         exercise.setWorkout(workout.get());
 
         Exercise newExercise = exerciseRepository.save(exercise);
@@ -41,9 +41,28 @@ public class ExerciseServiceImpl implements ExerciseService{
 
         return exerciseResponse;
     }
+
+    @Override
+    public ExerciseDto updateExerciseInWorkoutById(ExerciseDto exerciseDto) {
+        Optional.ofNullable(workoutRepository.findById(exerciseDto.getWorkoutId())
+                .orElseThrow(() -> new WorkoutNotFoundException("Update unsuccessful. ")));
+
+        Optional<Exercise> exercise = Optional.ofNullable(exerciseRepository.findById(exerciseDto.getId())
+                .orElseThrow(() -> new WorkoutNotFoundException("Update unsuccessful. ")));
+
+        Exercise updateExercise = exercise.get();
+        if (exerciseDto.getName() != null) {
+            updateExercise.setName(exerciseDto.getName());
+        }
+
+        Exercise savedExercise = exerciseRepository.save(updateExercise);
+        return exerciseMapper.mapToDto(savedExercise);
+    }
+
     public List<Exercise> getExercises() {
         return exerciseRepository.findAll();
     }
+
 
 
 

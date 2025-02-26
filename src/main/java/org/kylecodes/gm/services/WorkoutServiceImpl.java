@@ -88,16 +88,15 @@ public class WorkoutServiceImpl implements WorkoutService {
         Optional<Workout> workout = Optional.ofNullable(workoutRepository.findById(id)
                 .orElseThrow(() -> new WorkoutNotFoundException("Update unsuccessful. ")));
 
-        Workout updatedWorkout = workout.get();
+        Workout updateWorkout = workout.get();
         if (workoutDto.getName() != null) {
-            updatedWorkout.setName(workoutDto.getName());
+            updateWorkout.setName(workoutDto.getName());
         }
         if (workoutDto.getDate() != null) {
-            updatedWorkout.setDate(workoutDto.getDate());
+            updateWorkout.setDate(workoutDto.getDate());
         }
-        Workout newWorkout = workoutRepository.save(updatedWorkout);
-        WorkoutDto workoutResponse = mapToDt0(newWorkout);
-        return workoutResponse;
+        Workout savedWorkout = workoutRepository.save(updateWorkout);
+        return workoutMapper.mapToDto(savedWorkout);
     }
 
 
