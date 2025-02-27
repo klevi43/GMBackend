@@ -3,6 +3,7 @@ package org.kylecodes.gm.services;
 import org.kylecodes.gm.dtos.ExerciseDto;
 import org.kylecodes.gm.entities.Exercise;
 import org.kylecodes.gm.entities.Workout;
+import org.kylecodes.gm.exceptions.ExerciseNotFoundException;
 import org.kylecodes.gm.exceptions.WorkoutNotFoundException;
 import org.kylecodes.gm.repositories.ExerciseRepository;
 import org.kylecodes.gm.repositories.WorkoutRepository;
@@ -48,7 +49,7 @@ public class ExerciseServiceImpl implements ExerciseService{
                 .orElseThrow(() -> new WorkoutNotFoundException("Update unsuccessful. ")));
 
         Optional<Exercise> exercise = Optional.ofNullable(exerciseRepository.findById(exerciseDto.getId())
-                .orElseThrow(() -> new WorkoutNotFoundException("Update unsuccessful. ")));
+                .orElseThrow(() -> new ExerciseNotFoundException("Update unsuccessful. ")));
 
         Exercise updateExercise = exercise.get();
         if (exerciseDto.getName() != null) {
@@ -65,7 +66,7 @@ public class ExerciseServiceImpl implements ExerciseService{
                 .orElseThrow(() -> new WorkoutNotFoundException("Delete unsuccessful. ")));
 
         Optional<Exercise> exercise = Optional.ofNullable(exerciseRepository.findById(exerciseId))
-                .orElseThrow(() -> new WorkoutNotFoundException("Delete unsuccessful. "));
+                .orElseThrow(() -> new ExerciseNotFoundException("Delete unsuccessful. "));
         exerciseRepository.deleteById(exerciseId);
     }
 
