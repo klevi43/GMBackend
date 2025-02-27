@@ -17,10 +17,6 @@ public class ExerciseController {
     @Autowired
     private ExerciseServiceImpl exerciseService;
 
-    @GetMapping("/workout/exercises")
-    public List<Exercise> getAllExercisesInWorkout() {
-        return exerciseService.getExercisesInWorkout();
-    }
 //
 //    @PostMapping("/exercises")
 //    public ExerciseDto createExercise(@RequestBody ExerciseDto exerciseDto) {
