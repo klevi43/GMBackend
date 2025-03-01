@@ -86,6 +86,15 @@ public class ExerciseServiceTest {
         assertThat(savedExerciseDto.getWorkoutId()).isEqualTo(exerciseDto.getWorkoutId());
 
     }
+    @Test
+    public void ExerciseService_CreateExercise_ThrowsWorkoutNotFoundException() {
+
+
+        mockService = mock(ExerciseServiceImpl.class);
+        when(mockService.createExercise(exerciseDto)).thenThrow(WorkoutNotFoundException.class);
+
+        assertThrows(WorkoutNotFoundException.class, () -> mockService.createExercise(exerciseDto));
+    }
 
     @Test
     public void ExerciseList_GetAllExercises_ReturnExerciseList() {
