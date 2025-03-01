@@ -2,7 +2,6 @@ package org.kylecodes.gm.controllers;
 
 import jakarta.validation.Valid;
 import org.kylecodes.gm.dtos.ExerciseDto;
-import org.kylecodes.gm.entities.Exercise;
 import org.kylecodes.gm.services.ExerciseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,13 +16,19 @@ public class ExerciseController {
     @Autowired
     private ExerciseServiceImpl exerciseService;
 
-//
-//    @PostMapping("/exercises")
-//    public ExerciseDto createExercise(@RequestBody ExerciseDto exerciseDto) {
-//        return exerciseService.createExercise(exerciseDto);
-//    }
+    @GetMapping("/workouts/exercises")
+    public List<ExerciseDto> getAllExercises() {
+        List<ExerciseDto> allExercises = exerciseService.getAllExercises();
+        return allExercises;
+    }
 
-    @PostMapping("/workout/exercise/create")
+    @GetMapping("/workouts/exercises/in-workout")
+    public List<ExerciseDto> getAllExercisesInWorkout(@Valid @RequestParam Long workoutId) {
+        List<ExerciseDto> allExercisesInWorkout = exerciseService.getAllExercisesInWorkout(workoutId);
+
+        return allExercisesInWorkout;
+    }
+    @PostMapping("/workouts/exercises/create")
     public ResponseEntity<ExerciseDto> createExerciseForWorkout(@Valid @RequestBody ExerciseDto exerciseDto) {
         ExerciseDto newExercise = exerciseService.createExercise(exerciseDto);
 
@@ -36,14 +41,14 @@ public class ExerciseController {
 
     }
 
-    @PutMapping("/workout/exercise/update")
-    public ExerciseDto updateExerciseInWorkout(@Valid @RequestBody ExerciseDto exerciseDto) {
-        ExerciseDto updatedExercise = exerciseService.updateExerciseInWorkoutById(exerciseDto);
+    @PutMapping("/workouts/exercises/update")
+    public ExerciseDto updateExerciseInWorkout(@Valid @RequestBody ExerciseDto exerciseDto, @Valid @RequestParam Long workoutId) {
+        ExerciseDto updatedExercise = exerciseService.updateExerciseInWorkoutById(exerciseDto, workoutId);
 
         return updatedExercise;
     }
 
-    @DeleteMapping("/workout/exercise/delete")
+    @DeleteMapping("/workouts/exercises/delete")
     public void deleteExerciseInWorkout(@RequestParam Long workoutId, @RequestParam Long exerciseId) {
         exerciseService.deleteExerciseInWorkoutById(workoutId, exerciseId);
     }

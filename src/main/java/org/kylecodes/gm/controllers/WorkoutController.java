@@ -1,5 +1,6 @@
 package org.kylecodes.gm.controllers;
 
+import jakarta.transaction.Transactional;
 import org.kylecodes.gm.dtos.WorkoutDto;
 import org.kylecodes.gm.services.WorkoutService;
 import org.kylecodes.gm.services.WorkoutServiceImpl;
@@ -55,6 +56,7 @@ public class WorkoutController {
         return updatedWorkout;
     }
 
+    @Transactional
     @DeleteMapping("/workouts/delete")
     public void deleteWorkoutById(@RequestParam Long workoutId) {
         workoutService.deleteWorkoutById(workoutId);

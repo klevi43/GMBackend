@@ -6,8 +6,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -29,9 +27,8 @@ public class Workout {
     @PastOrPresent
     private LocalDate date;
 
-    @OneToMany( fetch = FetchType.LAZY, mappedBy = "workout")
+    @OneToMany( fetch = FetchType.LAZY, mappedBy = "workout", cascade = {CascadeType.ALL})
     @JsonIgnore
-    @Cascade(CascadeType.ALL)
     List<Exercise> exercises;
 
     public Workout(Long id, String name, LocalDate date, List<Exercise> exercises) {

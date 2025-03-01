@@ -225,8 +225,8 @@ public class WorkoutControllerTest {
 
     @AfterEach
     public void teardown() {
-
-        jdbc.execute("DELETE FROM workout");
+        jdbc.execute("DELETE FROM exercise");
+        jdbc.execute("DELETE FROM workout WHERE name = 'Chest Day' OR name = 'Back Day' OR name = 'Leg Day'");
         jdbc.execute("ALTER TABLE workout AUTO_INCREMENT = 1");
 
     }

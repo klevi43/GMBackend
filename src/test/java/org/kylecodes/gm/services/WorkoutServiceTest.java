@@ -38,8 +38,8 @@ public class WorkoutServiceTest {
 
     @InjectMocks
     private WorkoutServiceImpl workoutServiceImpl;
-    Workout workout1;
-    Workout workout2;
+    private Workout workout1;
+    private Workout workout2;
     @BeforeEach
     public void init() {
         workout1 = new Workout();

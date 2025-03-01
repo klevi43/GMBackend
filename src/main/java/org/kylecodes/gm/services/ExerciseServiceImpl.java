@@ -26,6 +26,21 @@ public class ExerciseServiceImpl implements ExerciseService{
     EntityToDtoMapper<Exercise, ExerciseDto> exerciseMapper = new ExerciseToExerciseDtoMapper();
 
     @Override
+    public List<ExerciseDto> getAllExercises() {
+        List<Exercise> exercises = exerciseRepository.findAll();
+
+        return exercises.stream().map((exercise) -> exerciseMapper.mapToDto(exercise)).toList();
+    }
+
+    @Override
+    public List<ExerciseDto> getAllExercisesInWorkout(Long workoutId) {
+        Workout workout = workoutRepository.findById(workoutId).orElseThrow(() -> new WorkoutNotFoundException("Get unsuccessful. "));
+
+        List<Exercise> exercisesInWorkout = exerciseRepository.findAllByWorkout(workout);
+        return exercisesInWorkout.stream().map((exercise) -> exerciseMapper.mapToDto(exercise)).toList();
+    }
+
+    @Override
     public ExerciseDto createExercise(ExerciseDto exerciseDto) {
 
         Optional<Workout> workout = Optional.ofNullable(workoutRepository.findById(exerciseDto.getWorkoutId())
@@ -44,8 +59,8 @@ public class ExerciseServiceImpl implements ExerciseService{
     }
 
     @Override
-    public ExerciseDto updateExerciseInWorkoutById(ExerciseDto exerciseDto) {
-        Optional.ofNullable(workoutRepository.findById(exerciseDto.getWorkoutId())
+    public ExerciseDto updateExerciseInWorkoutById(ExerciseDto exerciseDto, Long workoutId) {
+        Optional.ofNullable(workoutRepository.findById(workoutId)
                 .orElseThrow(() -> new WorkoutNotFoundException("Update unsuccessful. ")));
 
         Optional<Exercise> exercise = Optional.ofNullable(exerciseRepository.findById(exerciseDto.getId())
@@ -70,9 +85,7 @@ public class ExerciseServiceImpl implements ExerciseService{
         exerciseRepository.deleteById(exerciseId);
     }
 
-    public List<Exercise> getExercisesInWorkout() {
-        return exerciseRepository.findAll();
-    }
+
 
 
 
