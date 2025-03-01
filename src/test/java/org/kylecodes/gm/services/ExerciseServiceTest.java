@@ -6,6 +6,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.kylecodes.gm.dtos.ExerciseDto;
 import org.kylecodes.gm.entities.Exercise;
 import org.kylecodes.gm.entities.Workout;
+import org.kylecodes.gm.exceptions.ExerciseNotFoundException;
+import org.kylecodes.gm.exceptions.WorkoutNotFoundException;
 import org.kylecodes.gm.repositories.ExerciseRepository;
 import org.kylecodes.gm.repositories.WorkoutRepository;
 import org.kylecodes.gm.services.mappers.EntityToDtoMapper;
@@ -23,7 +25,8 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class ExerciseServiceTest {
@@ -45,6 +48,8 @@ public class ExerciseServiceTest {
     private ExerciseDto exerciseDto;
     private Optional<Exercise> optionalExercise;
     EntityToDtoMapper<Exercise, ExerciseDto> exerciseMapper = new ExerciseToExerciseDtoMapper();
+
+    private final Long INVALID_ID = -1L;
     @BeforeEach
     public void init() {
         workout = new Workout();
@@ -138,6 +143,29 @@ public class ExerciseServiceTest {
 
         assertAll(() -> exerciseService.deleteExerciseInWorkoutById(workout.getId(), exercise.getId()));
 
+
+    }
+
+
+    @Test
+    public void ExerciseService_DeleteExerciseById_ThrowsWorkoutNotFoundException() {
+
+        ExerciseService mockService = mock(ExerciseServiceImpl.class);
+        doThrow(new WorkoutNotFoundException("Delete unsuccessful.")).when(mockService).deleteExerciseInWorkoutById(INVALID_ID, exercise.getId());
+        assertThrows(WorkoutNotFoundException.class,
+                () -> mockService.deleteExerciseInWorkoutById(INVALID_ID, exercise.getId()));
+
+    }
+
+
+
+    @Test
+    public void ExerciseService_DeleteExerciseById_ThrowsExerciseNotFoundException() {
+
+        ExerciseService mockService = mock(ExerciseServiceImpl.class);
+        doThrow(new ExerciseNotFoundException("Delete unsuccessful.")).when(mockService).deleteExerciseInWorkoutById(workout.getId(), INVALID_ID);
+        assertThrows(ExerciseNotFoundException.class,
+                () -> mockService.deleteExerciseInWorkoutById(workout.getId(), INVALID_ID));
 
     }
 }
