@@ -10,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.kylecodes.gm.dtos.ExerciseDto;
 import org.kylecodes.gm.dtos.WorkoutDto;
 import org.kylecodes.gm.entities.Workout;
+import org.kylecodes.gm.exceptions.WorkoutNotFoundException;
 import org.kylecodes.gm.repositories.WorkoutRepository;
 import org.kylecodes.gm.services.ExerciseService;
 import org.kylecodes.gm.services.ExerciseServiceImpl;
@@ -22,6 +23,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.LocalDate;
@@ -109,19 +111,22 @@ public class ExerciseControllerTest {
                 .andExpect(jsonPath("$.name", CoreMatchers.is("Test Dto")))
                 .andExpect(jsonPath("$.date", CoreMatchers.is(LocalDate.now().toString())))
                 .andExpect(jsonPath("$.workoutId", CoreMatchers.is(1)));
+        response.andDo(MockMvcResultHandlers.print());
     }
 
-//    @Test
-//    public void ExerciseController_CreateExerciseInWorkout_ThrowsWorkoutNotFoundExeception() throws Exception {
-//
-//        ResultActions response = mockMvc
-//                .perform(MockMvcRequestBuilders.post("/workouts/exercises/create?workoutId={workoutId}", INVALID_ID.toString())
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsString(exerciseDto)));
-//
-//
-//        response.andExpect(status().is4xxClientError());
-//    }
+    @Test
+    public void ExerciseController_CreateExerciseInWorkout_ThrowsWorkoutNotFoundExeception() throws Exception {
+        when(workoutRepository.findById(INVALID_ID)).thenThrow(WorkoutNotFoundException.class);
+        when(exerciseService.createExercise(exerciseDto, INVALID_ID)).thenThrow(WorkoutNotFoundException.class);
+
+        ResultActions response = mockMvc
+                .perform(MockMvcRequestBuilders.post("/workouts/exercises/create?workoutId={workoutId}", INVALID_ID.toString())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(exerciseDto)));
+
+
+        response.andExpect(status().is4xxClientError());
+    }
 
     @Test
     public void ExerciseController_GetAllExercises_ReturnEmptyExerciseList() throws Exception {
@@ -151,4 +156,25 @@ public class ExerciseControllerTest {
                 .andExpect(jsonPath("$", hasSize(3)));
     }
 
+    @Test
+    public void ExerciseController_UpdateExerciseInWorkout_ReturnUpdatedExercise() throws Exception {
+        ExerciseDto updatedExerciseDto = new ExerciseDto();
+        updatedExerciseDto.setWorkoutId(WORKOUT_ID);
+        updatedExerciseDto.setId(exerciseDto.getId());
+        updatedExerciseDto.setDate(workout.getDate());
+        updatedExerciseDto.setName("Updated Test Dto");
+
+        given(exerciseService.updateExerciseInWorkoutById(ArgumentMatchers.any(), ArgumentMatchers.anyLong())).willAnswer((invocationOnMock -> invocationOnMock.getArgument(0)));
+
+
+        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.put("/workouts/exercises/update?workoutId={workoutId}", WORKOUT_ID.toString())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updatedExerciseDto)));
+
+        response.andExpect(status().isOk())
+                        .andExpect(jsonPath("$.name", CoreMatchers.is(updatedExerciseDto.getName())));
+        response.andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
 }
