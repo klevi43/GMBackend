@@ -78,7 +78,7 @@ public class ExerciseServiceTest {
         when(workoutRepository.findById(workout.getId())).thenReturn(Optional.ofNullable(workout));
         when(exerciseRepository.save(Mockito.any(Exercise.class))).thenReturn(exercise);
 
-        ExerciseDto savedExerciseDto = exerciseService.createExercise(exerciseDto);
+        ExerciseDto savedExerciseDto = exerciseService.createExercise(exerciseDto, workout.getId());
 
         assertThat(savedExerciseDto).isNotNull();
         assertThat(savedExerciseDto.getName()).isEqualTo(exerciseDto.getName());
@@ -91,9 +91,9 @@ public class ExerciseServiceTest {
 
 
         mockService = mock(ExerciseServiceImpl.class);
-        when(mockService.createExercise(exerciseDto)).thenThrow(WorkoutNotFoundException.class);
+        when(mockService.createExercise(exerciseDto, workout.getId())).thenThrow(WorkoutNotFoundException.class);
 
-        assertThrows(WorkoutNotFoundException.class, () -> mockService.createExercise(exerciseDto));
+        assertThrows(WorkoutNotFoundException.class, () -> mockService.createExercise(exerciseDto, workout.getId()));
     }
 
     @Test

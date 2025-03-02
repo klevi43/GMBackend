@@ -9,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.kylecodes.gm.dtos.ExerciseDto;
 import org.kylecodes.gm.entities.Workout;
 import org.kylecodes.gm.services.ExerciseServiceImpl;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -20,7 +21,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.LocalDate;
 
-import static org.mockito.Mockito.when;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 //@TestPropertySource("classpath:application-test.properties")
@@ -75,9 +76,10 @@ public class ExerciseControllerTest {
 
     @Test
     public void ExerciseController_CreateExerciseInWorkout_ReturnCreatedExercise() throws Exception {
-        when(exerciseService.createExercise(exerciseDto)).thenReturn(exerciseDto);
+        given(exerciseService.createExercise(ArgumentMatchers.any(), ArgumentMatchers.anyLong())).willAnswer((invocationOnMock -> invocationOnMock.getArgument(0)));
+
         ResultActions response = mockMvc
-                .perform(MockMvcRequestBuilders.post("/workouts/exercises/create")
+                .perform(MockMvcRequestBuilders.post("/workouts/exercises/create?workoutId={workoutId}", WORKOUT_ID.toString())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(exerciseDto)));
 
