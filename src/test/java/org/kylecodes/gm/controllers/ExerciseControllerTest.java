@@ -3,15 +3,20 @@ package org.kylecodes.gm.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.kylecodes.gm.dtos.ExerciseDto;
+import org.kylecodes.gm.dtos.WorkoutDto;
 import org.kylecodes.gm.entities.Workout;
+import org.kylecodes.gm.repositories.WorkoutRepository;
+import org.kylecodes.gm.services.ExerciseService;
 import org.kylecodes.gm.services.ExerciseServiceImpl;
 import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -20,8 +25,13 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 //@TestPropertySource("classpath:application-test.properties")
@@ -33,8 +43,10 @@ public class ExerciseControllerTest {
     @InjectMocks
     private ExerciseController exerciseController;
 
+
+    private final ExerciseService exerciseService = Mockito.mock(ExerciseServiceImpl.class);
     @Mock
-    private ExerciseServiceImpl exerciseService;
+    private WorkoutRepository workoutRepository;
     @Mock
     private MockMvc mockMvc;
 
@@ -44,6 +56,7 @@ public class ExerciseControllerTest {
     private Workout workout;
     private final Long WORKOUT_ID = 1L;
     private final Long INVALID_ID = -1L;
+    private List<ExerciseDto> exerciseDtoList = new ArrayList<>();
 
 
 
@@ -58,15 +71,24 @@ public class ExerciseControllerTest {
         objectMapper.registerModule(new JavaTimeModule());
 
         workout = new Workout();
-        workout.setId(20L);
+        workout.setId(WORKOUT_ID);
         workout.setName("Test Workout");
         workout.setDate(LocalDate.now());
 
+
         exerciseDto = new ExerciseDto();
-        exerciseDto.setId(20L);
+        exerciseDto.setId(WORKOUT_ID);
         exerciseDto.setName("Test Dto");
         exerciseDto.setDate(workout.getDate());
         exerciseDto.setWorkoutId(workout.getId());
+        exerciseDtoList.add(exerciseDto);
+        exerciseDtoList.add(exerciseDto);
+        exerciseDtoList.add(exerciseDto);
+        WorkoutDto workoutDto = new WorkoutDto();
+        workoutDto.setId(40L);
+        workoutDto.setName("Test WorkoutDto");
+        workoutDto.setDate(LocalDate.now());
+        workoutDto.setExerciseDtos(exerciseDtoList);
     }
 
     @Test
@@ -83,7 +105,50 @@ public class ExerciseControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(exerciseDto)));
 
-        response.andExpect(status().isCreated());
+        response.andExpect(status().isCreated())
+                .andExpect(jsonPath("$.name", CoreMatchers.is("Test Dto")))
+                .andExpect(jsonPath("$.date", CoreMatchers.is(LocalDate.now().toString())))
+                .andExpect(jsonPath("$.workoutId", CoreMatchers.is(1)));
+    }
+
+//    @Test
+//    public void ExerciseController_CreateExerciseInWorkout_ThrowsWorkoutNotFoundExeception() throws Exception {
+//
+//        ResultActions response = mockMvc
+//                .perform(MockMvcRequestBuilders.post("/workouts/exercises/create?workoutId={workoutId}", INVALID_ID.toString())
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(objectMapper.writeValueAsString(exerciseDto)));
+//
+//
+//        response.andExpect(status().is4xxClientError());
+//    }
+
+    @Test
+    public void ExerciseController_GetAllExercises_ReturnEmptyExerciseList() throws Exception {
+        when(exerciseService.getAllExercises()).thenReturn(new ArrayList<>());
+        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.get("/workouts/exercises"));
+
+        response.andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
+    }
+
+    @Test
+    public void ExerciseController_GetAllExercises_ReturnExerciseList() throws Exception {
+        when(exerciseService.getAllExercises()).thenReturn(exerciseDtoList);
+        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.get("/workouts/exercises"));
+
+        response.andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(3)));
+    }
+
+
+    @Test
+    public void ExerciseController_GetAllExercisesInWorkout_ReturnExerciseList() throws Exception {
+        when(exerciseService.getAllExercises()).thenReturn(exerciseDtoList);
+        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.get("/workouts/exercises?workoutId={workoutId}", WORKOUT_ID));
+
+        response.andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(3)));
     }
 
 }

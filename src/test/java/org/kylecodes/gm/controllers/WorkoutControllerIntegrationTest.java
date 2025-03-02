@@ -163,7 +163,7 @@ public class WorkoutControllerIntegrationTest {
     @Test
     public void WorkoutController_GetWorkoutById_ThrowWorkoutNotFoundException() throws Exception {
 
-        assertThat(workoutRepository.findById(100L)).isEmpty();
+        assertThat(workoutRepository.findById(-20L)).isEmpty();
         mockMvc.perform(MockMvcRequestBuilders.get("/workouts/workout?workoutId={id}", "-20"))
                 .andExpect(status().is4xxClientError())
                 .andExpect(jsonPath("$.status", Matchers.is(404)))
@@ -191,7 +191,7 @@ public class WorkoutControllerIntegrationTest {
 
     @Test
     public void WorkoutController_UpdateWorkoutById_ThrowWorkoutNotFoundException() throws Exception {
-        assertThat(workoutRepository.findById(100L)).isEmpty();
+        assertThat(workoutRepository.findById(-20L)).isEmpty();
 
         ResultActions response = mockMvc.perform(MockMvcRequestBuilders.put("/workouts/update?workoutId={id}", "-20")
                 .contentType(MediaType.APPLICATION_JSON)
