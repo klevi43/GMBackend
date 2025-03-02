@@ -9,7 +9,7 @@ public interface ExerciseService {
 
     List<ExerciseDto> getAllExercisesInWorkout(Long workoutId);
 
-    ExerciseDto createExercise(ExerciseDto exerciseDto);
+    ExerciseDto createExercise(ExerciseDto exerciseDto, Long workoutId);
 
     ExerciseDto updateExerciseInWorkoutById(ExerciseDto exerciseDto, Long workoutId);
 

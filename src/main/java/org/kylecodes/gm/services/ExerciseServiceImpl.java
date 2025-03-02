@@ -41,9 +41,9 @@ public class ExerciseServiceImpl implements ExerciseService{
     }
 
     @Override
-    public ExerciseDto createExercise(ExerciseDto exerciseDto) {
+    public ExerciseDto createExercise(ExerciseDto exerciseDto, Long workoutId) {
 
-        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findById(exerciseDto.getWorkoutId())
+        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findById(workoutId)
                 .orElseThrow(() -> new WorkoutNotFoundException("Get unsuccessful. ")));
 
         Exercise exercise = new Exercise();

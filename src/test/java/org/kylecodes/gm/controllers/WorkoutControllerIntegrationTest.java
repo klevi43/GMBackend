@@ -43,14 +43,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false) // circumvent spring sec so that we don't have to add tokens
 @Transactional
-public class WorkoutControllerTest {
+public class WorkoutControllerIntegrationTest {
 
     private static MockHttpServletRequest request;
 
     @PersistenceContext
     private EntityManager em;
 
-    @Autowired
+    @Mock
     private MockMvc mockMvc;
 
     @Mock
