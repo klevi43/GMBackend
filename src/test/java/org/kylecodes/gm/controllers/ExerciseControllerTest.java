@@ -32,6 +32,7 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -177,4 +178,17 @@ public class ExerciseControllerTest {
     }
 
     @Test
+    public void ExerciseController_DeleteExerciseInWorkoutById_ReturnNothing() throws Exception {
+
+        doNothing().when(exerciseService).deleteExerciseInWorkoutById(WORKOUT_ID, exerciseDto.getId());
+        ResultActions response = mockMvc.perform(MockMvcRequestBuilders
+                        .delete("/workouts/exercises/delete?workoutId={workoutId}&exerciseId={exerciseId}",
+                                WORKOUT_ID, exerciseDto.getId())
+                        .contentType(MediaType.APPLICATION_JSON));
+
+                response.andDo(MockMvcResultHandlers.print())
+                        .andExpect(status().isOk());
+
+
+    }
 }

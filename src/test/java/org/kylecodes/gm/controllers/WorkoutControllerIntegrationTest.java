@@ -204,7 +204,7 @@ public class WorkoutControllerIntegrationTest {
     }
     @Test
     public void WorkoutController_DeleteWorkoutById_ReturnVoid() throws Exception {
-        assertThat(workoutRepository.findById(1L)).isNotNull();
+        assertThat(workoutRepository.findById(20L)).isNotNull();
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/workouts/delete?workoutId={id}", "20"))
                 .andExpect(status().isOk());
@@ -215,7 +215,7 @@ public class WorkoutControllerIntegrationTest {
     // need to rework this
     @Test
     public void WorkoutController_DeleteWorkoutById_ThrowsWorkoutNotFoundException() throws Exception {
-        assertThat(workoutRepository.findById(-1L)).isEmpty();
+        assertThat(workoutRepository.findById(-20L)).isEmpty();
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/workouts/delete?workoutId={id}", "-20"))
                 .andExpect(status().is4xxClientError())
