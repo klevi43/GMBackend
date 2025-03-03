@@ -11,9 +11,11 @@ public class Set {
     private Long id;
     private int weight;
     private int reps;
+
     @ManyToOne
     @JoinColumn
     private Exercise exercise;
+
     public Set(Long id, int weight, int reps) {
         this.id = id;
         this.weight = weight;
