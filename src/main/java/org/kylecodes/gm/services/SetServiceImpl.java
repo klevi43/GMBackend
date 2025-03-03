@@ -82,6 +82,14 @@ public class SetServiceImpl implements SetService {
 
     @Override
     public void deleteSetForExerciseInWorkout(Long workoutId, Long exerciseId, Long setId) {
+        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findById(workoutId)
+                .orElseThrow(() -> new WorkoutNotFoundException("Delete unsuccessful. ")));
 
+        Optional<Exercise> exercise = Optional.ofNullable(exerciseRepository.findById(exerciseId)
+                .orElseThrow(() -> new ExerciseNotFoundException("Delete unsuccessful. ")));
+
+        Optional<Set> set = Optional.ofNullable(setRepository.findById(setId)
+                .orElseThrow(() -> new SetNotFoundException("Delete unsuccessful. ")));
+        setRepository.deleteById(setId);
     }
 }

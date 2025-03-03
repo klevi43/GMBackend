@@ -42,4 +42,10 @@ public class SetContoller {
         return ResponseEntity.created(location).body(newSet);
 
     }
+
+    @DeleteMapping("/workouts/exercises/sets/delete")
+    public void deleteSetForExerciseInWorkout(@RequestParam Long workoutId, @RequestParam Long exerciseId,
+                                              @RequestParam Long setId) {
+        setService.deleteSetForExerciseInWorkout(workoutId, exerciseId, setId);
+    }
 }
