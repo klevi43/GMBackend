@@ -46,7 +46,7 @@ public class ExerciseRespositoryIntegrationTest {
     }
 
     @Test
-    public void ExerciseRepository_Save_ReturnSavedExercise() {
+    public void ExerciseRepository_SaveExercise_ReturnSavedExercise() {
         exercise2 = new Exercise();
 
         exercise2.setName("Test Exercise 2");
@@ -58,7 +58,7 @@ public class ExerciseRespositoryIntegrationTest {
     }
 
     @Test
-    public void ExerciseRepository_SaveToWorkout_ReturnSavedExercise() {
+    public void ExerciseRepository_SaveExerciseToWorkout_ReturnSavedExercise() {
         Workout workout = workoutRepository.findById(1L).get();
         assertThat(workout).isNotNull();
 

@@ -3,18 +3,50 @@ package org.kylecodes.gm.repositories.integrationTests;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.kylecodes.gm.entities.Exercise;
+import org.kylecodes.gm.entities.Set;
+import org.kylecodes.gm.entities.Workout;
+import org.kylecodes.gm.repositories.ExerciseRepository;
+import org.kylecodes.gm.repositories.SetRepository;
+import org.kylecodes.gm.repositories.WorkoutRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
 
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 @DataJpaTest
 @AutoConfigureTestDatabase(replace =AutoConfigureTestDatabase.Replace.NONE )
 @TestPropertySource("classpath:application-test.properties")
 public class SetRepositoryIntegrationTest {
+
     @Autowired
-    JdbcTemplate jdbc;
+    private WorkoutRepository workoutRepository;
+
+    @Autowired
+    private ExerciseRepository exerciseRepository;
+
+    @Autowired
+    private JdbcTemplate jdbc;
+    private Optional<Workout> workout;
+    private Optional<Exercise> exercise;
+    private List<Set> setList;
+    private Set set;
+    private Set savedSet;
+    private final Long WORKOUT_ID = 1L;
+    private final Long EXERCISE_ID = 1L;
+    private final Long EXERCISE_ID_2 = 2L;
+    private final Long SET_ID = 1L;
+    private final int EXPECTED_WEIGHT = 15;
+    private final int EXPECTED_REPS = 20;
+    @Autowired
+    private SetRepository setRepository;
+
     @BeforeEach
     public void init() {
         jdbc.execute("INSERT INTO workout (id, name, date) VALUES (1, 'Test Workout', current_date)");
@@ -27,6 +59,25 @@ public class SetRepositoryIntegrationTest {
     public void placeholder() {
 
     }
+
+    @Test
+    public void SetRepository_CreateSetForExerciseInWorkout_ReturnSavedSet() {
+
+        exercise = exerciseRepository.findById(EXERCISE_ID);
+
+        set = new Set();
+
+        set.setWeight(15);
+        set.setReps(20);
+        set.setExercise(exercise.get());
+        Set savedSet = setRepository.save(set);
+
+        assertThat(savedSet).isNotNull();
+        assertThat(savedSet.getWeight()).isEqualTo(EXPECTED_WEIGHT);
+        assertThat(savedSet.getReps()).isEqualTo(EXPECTED_REPS);
+        assertThat(savedSet.getExercise()).isNotNull();
+    }
+
 
     @AfterEach
     public void teardown() {
