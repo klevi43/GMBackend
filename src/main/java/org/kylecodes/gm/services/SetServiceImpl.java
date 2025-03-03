@@ -5,6 +5,7 @@ import org.kylecodes.gm.entities.Exercise;
 import org.kylecodes.gm.entities.Set;
 import org.kylecodes.gm.entities.Workout;
 import org.kylecodes.gm.exceptions.ExerciseNotFoundException;
+import org.kylecodes.gm.exceptions.SetNotFoundException;
 import org.kylecodes.gm.exceptions.WorkoutNotFoundException;
 import org.kylecodes.gm.repositories.ExerciseRepository;
 import org.kylecodes.gm.repositories.SetRepository;
@@ -50,9 +51,10 @@ public class SetServiceImpl implements SetService {
         Optional<Exercise> exercise = Optional.ofNullable(exerciseRepository.findById(exerciseId)
                 .orElseThrow(() -> new ExerciseNotFoundException("Get unsuccessful. ")));
 
-        Optional<Set> set = Optional.ofNullable(setRepository.findById(setId)).orElseThrow(() -> new SetNotFoundException("Get unsuccessful."));
-
-        return null;
+        Optional<Set> set = Optional.ofNullable(setRepository.findById(setId)
+                .orElseThrow(() -> new SetNotFoundException("Get unsuccessful. ")));
+        SetDto setDto = setMapper.mapToDto(set.get());
+        return setDto;
     }
 
     @Override
