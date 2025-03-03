@@ -36,7 +36,7 @@ public class ExerciseController {
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .queryParam("workoutId={workoutId}")
                 .queryParam("exerciseId={id}")
-                .buildAndExpand(newExercise.getWorkoutId(), newExercise.getId())
+                .buildAndExpand(workoutId, newExercise.getId())
                 .toUri();
         return ResponseEntity.created(location).body(newExercise);
 

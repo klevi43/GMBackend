@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+
 @Service
 public class SetServiceImpl implements SetService {
 
@@ -43,6 +44,14 @@ public class SetServiceImpl implements SetService {
 
     @Override
     public SetDto getSetForExerciseInWorkout(Long workoutId, Long exerciseId, Long setId) {
+        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findById(workoutId)
+                .orElseThrow(() -> new WorkoutNotFoundException("Get unsuccessful. ")));
+
+        Optional<Exercise> exercise = Optional.ofNullable(exerciseRepository.findById(exerciseId)
+                .orElseThrow(() -> new ExerciseNotFoundException("Get unsuccessful. ")));
+
+        Optional<Set> set = Optional.ofNullable(setRepository.findById(setId)).orElseThrow(() -> new SetNotFoundException("Get unsuccessful."));
+
         return null;
     }
 
