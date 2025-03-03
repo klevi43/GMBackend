@@ -3,6 +3,7 @@ package org.kylecodes.gm.services;
 import org.kylecodes.gm.dtos.SetDto;
 import org.kylecodes.gm.entities.Exercise;
 import org.kylecodes.gm.entities.Set;
+import org.kylecodes.gm.entities.Workout;
 import org.kylecodes.gm.exceptions.ExerciseNotFoundException;
 import org.kylecodes.gm.exceptions.WorkoutNotFoundException;
 import org.kylecodes.gm.repositories.ExerciseRepository;
@@ -30,7 +31,14 @@ public class SetServiceImpl implements SetService {
 
     @Override
     public List<SetDto> getAllSetsForExerciseInWorkout(Long workoutId, Long exerciseId) {
-        return List.of();
+        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findById(workoutId)
+                .orElseThrow(() -> new WorkoutNotFoundException("Get unsuccessful. ")));
+
+        Optional<Exercise> exercise = Optional.ofNullable(exerciseRepository.findById(exerciseId)
+                .orElseThrow(() -> new ExerciseNotFoundException("Get unsuccessful. ")));
+
+        List<Set> sets = setRepository.findAllByExercise_Id(exerciseId);
+        return sets.stream().map((set) -> setMapper.mapToDto(set)).toList();
     }
 
     @Override
