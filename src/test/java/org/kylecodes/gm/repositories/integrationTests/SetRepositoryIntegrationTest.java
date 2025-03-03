@@ -69,8 +69,8 @@ public class SetRepositoryIntegrationTest {
     public void SetRepository_CreateSetForExerciseInWorkout_ReturnSavedSet() {
         workout = workoutRepository.findById(WORKOUT_ID);
         exercise = exerciseRepository.findById(EXERCISE_ID);
-        assertThat(workout).isNotNull();
-        assertThat(exercise).isNotNull();
+        assertThat(workout).isNotEmpty();
+        assertThat(exercise).isNotEmpty();
 
         set = new Set();
 
@@ -88,7 +88,7 @@ public class SetRepositoryIntegrationTest {
     @Test
     public void SetRepository_GetAllSetsForExerciseInWorkout_ReturnSetList() {
         exercise = exerciseRepository.findById(EXERCISE_ID);
-        assertThat(exercise).isNotNull();
+        assertThat(exercise).isNotEmpty();
 
         setList = setRepository.findAllByExercise_Id(EXERCISE_ID);
 
@@ -100,8 +100,8 @@ public class SetRepositoryIntegrationTest {
     public void SetRepository_GetSetForExerciseInWorkoutById_ReturnSet() {
         workout = workoutRepository.findById(WORKOUT_ID);
         exercise = exerciseRepository.findById(EXERCISE_ID);
-        assertThat(workout).isNotNull();
-        assertThat(exercise).isNotNull();
+        assertThat(workout).isNotEmpty();
+        assertThat(exercise).isNotEmpty();
 
         optSet = setRepository.findById(SET_ID);
         assertThat(optSet).isNotEmpty();
@@ -115,28 +115,46 @@ public class SetRepositoryIntegrationTest {
         workout = workoutRepository.findById(WORKOUT_ID);
         exercise = exerciseRepository.findById(EXERCISE_ID);
         optSet = setRepository.findById(SET_ID);
-        assertThat(workout).isNotNull();
-        assertThat(exercise).isNotNull();
-        assertThat(optSet).isNotNull();
+        assertThat(workout).isNotEmpty();
+        assertThat(exercise).isNotEmpty();
+        assertThat(optSet).isNotEmpty();
 
         set = optSet.get();
 
         set.setWeight(45);
         set.setReps(45);
         set.setExercise(exercise.get());
-        Set savedSet = setRepository.save(set);
+        Set updatedSet = setRepository.save(set);
 
-        assertThat(savedSet).isNotNull();
-        assertThat(savedSet.getWeight()).isEqualTo(EXPECTED_UPDATE_WEIGHT);
-        assertThat(savedSet.getReps()).isEqualTo(EXPECTED_UPDATE_REPS);
-        assertThat(savedSet.getExercise()).isNotNull();
+        assertThat(updatedSet).isNotNull();
+        assertThat(updatedSet.getWeight()).isEqualTo(EXPECTED_UPDATE_WEIGHT);
+        assertThat(updatedSet.getReps()).isEqualTo(EXPECTED_UPDATE_REPS);
+        assertThat(updatedSet.getExercise()).isNotNull();
     }
+
+
+    @Test
+    public void SetRepository_DeleteSetForExerciseInWorkoutById_ReturnNothing() {
+        workout = workoutRepository.findById(WORKOUT_ID);
+        exercise = exerciseRepository.findById(EXERCISE_ID);
+        optSet = setRepository.findById(SET_ID);
+        assertThat(workout).isNotEmpty();
+        assertThat(exercise).isNotEmpty();
+        assertThat(optSet).isNotEmpty();
+        setRepository.deleteById(SET_ID);
+
+        optSet = setRepository.findById(SET_ID);
+
+        assertThat(optSet).isEmpty();
+
+    }
+
 
     @AfterEach
     public void teardown() {
 
 
-        jdbc.execute("DELETE FROM ex_set WHERE weight = 15");
+        jdbc.execute("DELETE FROM ex_set WHERE weight = 15 OR weight = 45");
         jdbc.execute("DELETE FROM exercise WHERE name ='Test Exercise' OR name = 'Test Exercise 2'");
         jdbc.execute("DELETE FROM workout WHERE name = 'Test Workout'");
     }
