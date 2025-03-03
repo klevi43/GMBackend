@@ -1,12 +1,15 @@
 package org.kylecodes.gm.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
+import java.util.List;
+
 @Entity
 public class Exercise {
     @Id
@@ -24,6 +27,10 @@ public class Exercise {
     @ManyToOne
     @JoinColumn
     Workout workout;
+
+    @OneToMany( fetch = FetchType.LAZY, mappedBy = "exercise", cascade = {CascadeType.ALL})
+    @JsonIgnore
+    List<Set> sets;
 
     public Exercise(Long id, String name, LocalDate date, Workout workout) {
         this.id = id;

@@ -1,11 +1,19 @@
 package org.kylecodes.gm.entities;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+
+@Entity
 public class Set {
-
-    Long id;
-    int weight;
-    int reps;
-
+    @Id
+    @GeneratedValue
+    @Min(0)
+    private Long id;
+    private int weight;
+    private int reps;
+    @ManyToOne
+    @JoinColumn
+    private Exercise exercise;
     public Set(Long id, int weight, int reps) {
         this.id = id;
         this.weight = weight;
