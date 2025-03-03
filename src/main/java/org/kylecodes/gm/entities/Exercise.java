@@ -13,7 +13,7 @@ import java.util.List;
 @Entity
 public class Exercise {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Min(0)
     private Long id;
 
@@ -32,11 +32,12 @@ public class Exercise {
     @JsonIgnore
     List<Set> sets;
 
-    public Exercise(Long id, String name, LocalDate date, Workout workout) {
+    public Exercise(Long id, String name, LocalDate date, Workout workout, List<Set> sets) {
         this.id = id;
         this.name = name;
         this.date = date;
         this.workout = workout;
+        this.sets = sets;
     }
     public Exercise() {
 
@@ -71,5 +72,13 @@ public class Exercise {
 
     public void setWorkout(Workout workout) {
         this.workout = workout;
+    }
+
+    public List<Set> getSets() {
+        return sets;
+    }
+
+    public void setSets(List<Set> sets) {
+        this.sets = sets;
     }
 }

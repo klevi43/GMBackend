@@ -4,22 +4,23 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 
 @Entity
+@Table(name = "ex_set")
 public class Set {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Min(0)
     private Long id;
     private int weight;
     private int reps;
 
     @ManyToOne
-    @JoinColumn
     private Exercise exercise;
 
-    public Set(Long id, int weight, int reps) {
+    public Set(Long id, int weight, int reps, Exercise exercise) {
         this.id = id;
         this.weight = weight;
         this.reps = reps;
+        this.exercise = exercise;
     }
 
     public Set() {
@@ -47,5 +48,13 @@ public class Set {
 
     public void setReps(int reps) {
         this.reps = reps;
+    }
+
+    public Exercise getExercise() {
+        return exercise;
+    }
+
+    public void setExercise(Exercise exercise) {
+        this.exercise = exercise;
     }
 }
