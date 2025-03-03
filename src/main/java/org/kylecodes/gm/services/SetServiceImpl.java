@@ -77,7 +77,29 @@ public class SetServiceImpl implements SetService {
 
     @Override
     public SetDto updateSetForExerciseInWorkout(Long workoutId, Long exerciseId, SetDto setDto) {
-        return null;
+        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findById(workoutId)
+                .orElseThrow(() -> new WorkoutNotFoundException("Update unsuccessful. ")));
+
+        Optional<Exercise> exercise = Optional.ofNullable(exerciseRepository.findById(exerciseId)
+                .orElseThrow(() -> new ExerciseNotFoundException("Update unsuccessful. ")));
+
+        Optional<Set> set = Optional.ofNullable(setRepository.findById(setDto.getId())
+                .orElseThrow(() -> new SetNotFoundException("Update unsuccessful. ")));
+
+        Set updateSet = set.get();
+        if (setDto.getReps() != null) {
+            updateSet.setReps(setDto.getReps());
+        }
+
+        if (setDto.getWeight() != null) {
+            updateSet.setWeight(setDto.getWeight());
+        }
+        if (setDto.getExerciseId() != null) {
+            updateSet.setExercise(exercise.get());
+        }
+
+        Set savedSet = setRepository.save(updateSet);
+        return setMapper.mapToDto(savedSet);
     }
 
     @Override

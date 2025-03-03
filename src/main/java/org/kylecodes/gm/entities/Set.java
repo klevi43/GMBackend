@@ -10,13 +10,13 @@ public class Set {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Min(0)
     private Long id;
-    private int weight;
-    private int reps;
+    private Integer weight;
+    private Integer reps;
 
     @ManyToOne
     private Exercise exercise;
 
-    public Set(Long id, int weight, int reps, Exercise exercise) {
+    public Set(Long id, Integer weight, Integer reps, Exercise exercise) {
         this.id = id;
         this.weight = weight;
         this.reps = reps;
@@ -34,19 +34,19 @@ public class Set {
         this.id = id;
     }
 
-    public int getWeight() {
+    public Integer getWeight() {
         return weight;
     }
 
-    public void setWeight(int weight) {
+    public void setWeight(Integer weight) {
         this.weight = weight;
     }
 
-    public int getReps() {
+    public Integer getReps() {
         return reps;
     }
 
-    public void setReps(int reps) {
+    public void setReps(Integer reps) {
         this.reps = reps;
     }
 

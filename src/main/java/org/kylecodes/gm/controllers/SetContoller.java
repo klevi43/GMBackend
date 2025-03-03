@@ -43,6 +43,14 @@ public class SetContoller {
 
     }
 
+    @PutMapping("/workouts/exercises/sets/update")
+    public SetDto updateSetForExerciseInWorkoutById(@RequestParam Long workoutId, @RequestParam Long exerciseId,
+                                                    @RequestBody SetDto setDto) {
+        SetDto updatedSetDto = setService.updateSetForExerciseInWorkout(workoutId, exerciseId, setDto);
+
+        return updatedSetDto;
+    }
+
     @DeleteMapping("/workouts/exercises/sets/delete")
     public void deleteSetForExerciseInWorkout(@RequestParam Long workoutId, @RequestParam Long exerciseId,
                                               @RequestParam Long setId) {
