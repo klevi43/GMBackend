@@ -1,7 +1,8 @@
-package org.kylecodes.gm.repositories;
+package org.kylecodes.gm.repositories.integrationTests;
 
 import org.junit.jupiter.api.Test;
 import org.kylecodes.gm.entities.Workout;
+import org.kylecodes.gm.repositories.WorkoutRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -16,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace =AutoConfigureTestDatabase.Replace.NONE )
 @TestPropertySource("classpath:application-test.properties")
-public class WorkoutRepositoryTest {
+public class WorkoutRepositoryIntegrationTest {
     @Autowired
     WorkoutRepository workoutRepository;
 

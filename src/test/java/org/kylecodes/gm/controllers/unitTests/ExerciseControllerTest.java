@@ -1,4 +1,4 @@
-package org.kylecodes.gm.controllers;
+package org.kylecodes.gm.controllers.unitTests;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -7,6 +7,7 @@ import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.kylecodes.gm.controllers.ExerciseController;
 import org.kylecodes.gm.dtos.ExerciseDto;
 import org.kylecodes.gm.dtos.WorkoutDto;
 import org.kylecodes.gm.entities.Workout;

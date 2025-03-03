@@ -1,4 +1,4 @@
-package org.kylecodes.gm.controllers;
+package org.kylecodes.gm.controllers.integrationTests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
@@ -9,6 +9,7 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.kylecodes.gm.controllers.WorkoutController;
 import org.kylecodes.gm.dtos.WorkoutDto;
 import org.kylecodes.gm.dtos.WorkoutResponse;
 import org.kylecodes.gm.entities.Workout;
