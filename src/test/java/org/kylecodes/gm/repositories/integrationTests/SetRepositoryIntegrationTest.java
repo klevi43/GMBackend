@@ -35,6 +35,7 @@ public class SetRepositoryIntegrationTest {
     private JdbcTemplate jdbc;
     private Optional<Workout> workout;
     private Optional<Exercise> exercise;
+    private Optional<Set> optSet;
     private List<Set> setList;
     private Set set;
     private Set savedSet;
@@ -52,7 +53,8 @@ public class SetRepositoryIntegrationTest {
         jdbc.execute("INSERT INTO workout (id, name, date) VALUES (1, 'Test Workout', current_date)");
         jdbc.execute("INSERT INTO exercise (id, name, date, workout_id) VALUES (1, 'Test Exercise', current_date, 1)");
         jdbc.execute("INSERT INTO exercise (id, name, date, workout_id) VALUES (2, 'Test Exercise', current_date, 1)");
-        jdbc.execute("INSERT INTO ex_set (id, weight, reps, exercise_id) VALUES (1, 15, 20, 2)");
+        jdbc.execute("INSERT INTO ex_set (id, weight, reps, exercise_id) VALUES (1, 15, 20, 1)");
+        jdbc.execute("INSERT INTO ex_set (id, weight, reps, exercise_id) VALUES (3, 15, 20, 1)");
 
     }
     @Test
@@ -78,7 +80,30 @@ public class SetRepositoryIntegrationTest {
         assertThat(savedSet.getExercise()).isNotNull();
     }
 
+    @Test
+    public void SetRepository_GetAllSetsForExerciseInWorkout_ReturnSetList() {
+        exercise = exerciseRepository.findById(EXERCISE_ID);
+        assertThat(exercise).isNotNull();
 
+        setList = setRepository.findAllByExercise_Id(EXERCISE_ID);
+
+        assertThat(setList).hasSize(2);
+
+    }
+
+    @Test
+    public void SetRepository_GetSetForExerciseInWorkoutById_ReturnSet() {
+        workout = workoutRepository.findById(WORKOUT_ID);
+        exercise = exerciseRepository.findById(EXERCISE_ID);
+        assertThat(workout).isNotNull();
+        assertThat(exercise).isNotNull();
+
+        optSet = setRepository.findById(SET_ID);
+        assertThat(optSet).isNotEmpty();
+        assertThat(optSet.get().getWeight()).isEqualTo(EXPECTED_WEIGHT);
+        assertThat(optSet.get().getReps()).isEqualTo(EXPECTED_REPS);
+        assertThat(optSet.get().getExercise().getId()).isEqualTo(EXERCISE_ID);
+    }
     @AfterEach
     public void teardown() {
 
