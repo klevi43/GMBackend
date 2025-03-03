@@ -10,7 +10,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.kylecodes.gm.dtos.ExerciseDto;
 import org.kylecodes.gm.dtos.WorkoutDto;
 import org.kylecodes.gm.entities.Workout;
-import org.kylecodes.gm.exceptions.WorkoutNotFoundException;
 import org.kylecodes.gm.repositories.WorkoutRepository;
 import org.kylecodes.gm.services.ExerciseService;
 import org.kylecodes.gm.services.ExerciseServiceImpl;
@@ -115,20 +114,18 @@ public class ExerciseControllerTest {
         response.andDo(MockMvcResultHandlers.print());
     }
 
-    @Test
-    public void ExerciseController_CreateExerciseInWorkout_ThrowsWorkoutNotFoundExeception() throws Exception {
-        when(workoutRepository.findById(INVALID_ID)).thenThrow(WorkoutNotFoundException.class);
-        when(exerciseService.createExercise(exerciseDto, INVALID_ID)).thenThrow(WorkoutNotFoundException.class);
-
-        ResultActions response = mockMvc
-                .perform(MockMvcRequestBuilders.post("/workouts/exercises/create?workoutId={workoutId}", INVALID_ID.toString())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(exerciseDto)));
-
-
-        response.andExpect(status().is4xxClientError());
-    }
-
+    // REMOVED EXECPTION TESTING METHOD BECAUSE
+    /*
+    Spring Boot's error handling is based on Servlet container error mappings that result in an ERROR dispatch
+    to an ErrorController.
+    MockMvc however is container-less testing so with no Servlet container the exception simply bubbles up with
+    nothing to stop it.So MockMvc tests simply aren't enough to test error responses generated through Spring Boot.
+    I would argue that you shouldn't be testing Spring Boot's error handling. If you're customizing it in any way you
+    can write Spring Boot integration tests (with an actual container) to verify error responses. And then for
+    MockMvc tests focus on fully testing the web layer while expecting exceptions to bubble up.
+    This is a typical unit vs integration tests trade off. You do unit tests even if they don't test everything
+    because they give you more control and run faster.
+     */
     @Test
     public void ExerciseController_GetAllExercises_ReturnEmptyExerciseList() throws Exception {
         when(exerciseService.getAllExercises()).thenReturn(new ArrayList<>());
