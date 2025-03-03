@@ -45,6 +45,9 @@ public class SetRepositoryIntegrationTest {
     private final Long SET_ID = 1L;
     private final int EXPECTED_WEIGHT = 15;
     private final int EXPECTED_REPS = 20;
+    private final int EXPECTED_UPDATE_WEIGHT = 45;
+    private final int EXPECTED_UPDATE_REPS = 45;
+
     @Autowired
     private SetRepository setRepository;
 
@@ -64,8 +67,10 @@ public class SetRepositoryIntegrationTest {
 
     @Test
     public void SetRepository_CreateSetForExerciseInWorkout_ReturnSavedSet() {
-
+        workout = workoutRepository.findById(WORKOUT_ID);
         exercise = exerciseRepository.findById(EXERCISE_ID);
+        assertThat(workout).isNotNull();
+        assertThat(exercise).isNotNull();
 
         set = new Set();
 
@@ -104,6 +109,29 @@ public class SetRepositoryIntegrationTest {
         assertThat(optSet.get().getReps()).isEqualTo(EXPECTED_REPS);
         assertThat(optSet.get().getExercise().getId()).isEqualTo(EXERCISE_ID);
     }
+
+    @Test
+    public void SetRepository_UpdateSetForExerciseInWorkoutById_ReturnUpdatedSet() {
+        workout = workoutRepository.findById(WORKOUT_ID);
+        exercise = exerciseRepository.findById(EXERCISE_ID);
+        optSet = setRepository.findById(SET_ID);
+        assertThat(workout).isNotNull();
+        assertThat(exercise).isNotNull();
+        assertThat(optSet).isNotNull();
+
+        set = optSet.get();
+
+        set.setWeight(45);
+        set.setReps(45);
+        set.setExercise(exercise.get());
+        Set savedSet = setRepository.save(set);
+
+        assertThat(savedSet).isNotNull();
+        assertThat(savedSet.getWeight()).isEqualTo(EXPECTED_UPDATE_WEIGHT);
+        assertThat(savedSet.getReps()).isEqualTo(EXPECTED_UPDATE_REPS);
+        assertThat(savedSet.getExercise()).isNotNull();
+    }
+
     @AfterEach
     public void teardown() {
 
