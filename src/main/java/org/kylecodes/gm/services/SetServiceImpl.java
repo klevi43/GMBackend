@@ -6,6 +6,7 @@ import org.kylecodes.gm.entities.Set;
 import org.kylecodes.gm.exceptions.ExerciseNotFoundException;
 import org.kylecodes.gm.exceptions.WorkoutNotFoundException;
 import org.kylecodes.gm.repositories.ExerciseRepository;
+import org.kylecodes.gm.repositories.SetRepository;
 import org.kylecodes.gm.repositories.WorkoutRepository;
 import org.kylecodes.gm.services.mappers.EntityToDtoMapper;
 import org.kylecodes.gm.services.mappers.SetToSetDtoMapper;
@@ -21,8 +22,11 @@ public class SetServiceImpl implements SetService {
     WorkoutRepository workoutRepository;
     @Autowired
     ExerciseRepository exerciseRepository;
+    @Autowired
+    private SetRepository setRepository;
 
     EntityToDtoMapper<Set, SetDto> setMapper = new SetToSetDtoMapper();
+
 
     @Override
     public List<SetDto> getAllSetsForExerciseInWorkout(Long workoutId, Long exerciseId) {
@@ -47,7 +51,8 @@ public class SetServiceImpl implements SetService {
         set.setReps(setDto.getReps());
         set.setExercise(exercise.get());
 
-        SetDto response = setMapper.mapToDto(set);
+        Set newSet = setRepository.save(set);
+        SetDto response = setMapper.mapToDto(newSet);
         return response;
     }
 
