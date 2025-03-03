@@ -10,6 +10,7 @@ public class SetToSetDtoMapper implements EntityToDtoMapper<Set, SetDto> {
         setDto.setId(set.getId());
         setDto.setWeight(set.getWeight());
         setDto.setReps(set.getReps());
+        setDto.setExerciseId(set.getExercise().getId());
         return setDto;
     }
 }
