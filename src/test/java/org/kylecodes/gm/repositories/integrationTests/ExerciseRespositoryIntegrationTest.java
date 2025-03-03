@@ -81,7 +81,7 @@ public class ExerciseRespositoryIntegrationTest {
         exerciseList = exerciseRepository.findAll();
 
         assertThat(exerciseList).isNotNull();
-        assertThat(exerciseList).hasSize(2);
+        assertThat(exerciseList).hasSize(3);
     }
 
     @Test
