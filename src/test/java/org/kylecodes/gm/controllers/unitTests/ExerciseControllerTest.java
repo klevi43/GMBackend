@@ -11,6 +11,7 @@ import org.kylecodes.gm.controllers.ExerciseController;
 import org.kylecodes.gm.dtos.ExerciseDto;
 import org.kylecodes.gm.dtos.WorkoutDto;
 import org.kylecodes.gm.entities.Workout;
+import org.kylecodes.gm.exceptions.ErrorResponse;
 import org.kylecodes.gm.repositories.WorkoutRepository;
 import org.kylecodes.gm.services.ExerciseService;
 import org.kylecodes.gm.services.ExerciseServiceImpl;
@@ -23,7 +24,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.LocalDate;
@@ -34,6 +34,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -54,7 +55,7 @@ public class ExerciseControllerTest {
     private MockMvc mockMvc;
 
     private ObjectMapper objectMapper;
-
+    ErrorResponse errorResponse;
     private ExerciseDto exerciseDto;
     private Workout workout;
     private final Long WORKOUT_ID = 1L;
@@ -92,6 +93,7 @@ public class ExerciseControllerTest {
         workoutDto.setName("Test WorkoutDto");
         workoutDto.setDate(LocalDate.now());
         workoutDto.setExerciseDtos(exerciseDtoList);
+
     }
 
     @Test
@@ -112,7 +114,7 @@ public class ExerciseControllerTest {
                 .andExpect(jsonPath("$.name", CoreMatchers.is("Test Dto")))
                 .andExpect(jsonPath("$.date", CoreMatchers.is(LocalDate.now().toString())))
                 .andExpect(jsonPath("$.workoutId", CoreMatchers.is(1)));
-        response.andDo(MockMvcResultHandlers.print());
+        response.andDo(print());
     }
 
     // REMOVED EXECPTION TESTING METHOD BECAUSE
@@ -172,7 +174,7 @@ public class ExerciseControllerTest {
 
         response.andExpect(status().isOk())
                         .andExpect(jsonPath("$.name", CoreMatchers.is(updatedExerciseDto.getName())));
-        response.andDo(MockMvcResultHandlers.print());
+        response.andDo(print());
     }
 
     @Test
@@ -184,7 +186,7 @@ public class ExerciseControllerTest {
                                 WORKOUT_ID, exerciseDto.getId())
                         .contentType(MediaType.APPLICATION_JSON));
 
-                response.andDo(MockMvcResultHandlers.print())
+                response.andDo(print())
                         .andExpect(status().isOk());
 
 

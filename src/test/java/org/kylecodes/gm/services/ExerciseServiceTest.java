@@ -33,17 +33,15 @@ public class ExerciseServiceTest {
     @Mock
     WorkoutRepository workoutRepository;
 
-    @InjectMocks
-    WorkoutService workoutService = new WorkoutServiceImpl();
 
     @Mock
     private ExerciseRepository exerciseRepository;
 
     @InjectMocks
-    ExerciseService exerciseService = new ExerciseServiceImpl();
+    ExerciseService mockExerciseService = new ExerciseServiceImpl();
 
 
-    ExerciseService mockService = mock(ExerciseServiceImpl.class);
+//    ExerciseService mockExerciseService = mock(ExerciseServiceImpl.class);
 
     private Workout workout;
     private Exercise exercise;
@@ -78,7 +76,7 @@ public class ExerciseServiceTest {
         when(workoutRepository.findById(workout.getId())).thenReturn(Optional.ofNullable(workout));
         when(exerciseRepository.save(Mockito.any(Exercise.class))).thenReturn(exercise);
 
-        ExerciseDto savedExerciseDto = exerciseService.createExercise(exerciseDto, workout.getId());
+        ExerciseDto savedExerciseDto = mockExerciseService.createExercise(exerciseDto, workout.getId());
 
         assertThat(savedExerciseDto).isNotNull();
         assertThat(savedExerciseDto.getName()).isEqualTo(exerciseDto.getName());
@@ -90,10 +88,10 @@ public class ExerciseServiceTest {
     public void ExerciseService_CreateExercise_ThrowsWorkoutNotFoundException() {
 
 
-        mockService = mock(ExerciseServiceImpl.class);
-        when(mockService.createExercise(exerciseDto, workout.getId())).thenThrow(WorkoutNotFoundException.class);
+        mockExerciseService = mock(ExerciseServiceImpl.class);
+        when(mockExerciseService.createExercise(exerciseDto, workout.getId())).thenThrow(WorkoutNotFoundException.class);
 
-        assertThrows(WorkoutNotFoundException.class, () -> mockService.createExercise(exerciseDto, workout.getId()));
+        assertThrows(WorkoutNotFoundException.class, () -> mockExerciseService.createExercise(exerciseDto, workout.getId()));
     }
 
     @Test
@@ -101,7 +99,7 @@ public class ExerciseServiceTest {
         List<Exercise> exerciseList = Arrays.asList(exercise);
         when(exerciseRepository.findAll()).thenReturn(exerciseList);
 
-        List<ExerciseDto> saveExerciseList = exerciseService.getAllExercises();
+        List<ExerciseDto> saveExerciseList = mockExerciseService.getAllExercises();
         List<ExerciseDto> convertedList = exerciseList.stream()
                 .map(exercise -> exerciseMapper.mapToDto(exercise)).toList();
 
@@ -114,7 +112,7 @@ public class ExerciseServiceTest {
         List<Exercise> exerciseList = new ArrayList<>();
         when(exerciseRepository.findAll()).thenReturn(exerciseList);
 
-        List<ExerciseDto> saveExerciseList = exerciseService.getAllExercises();
+        List<ExerciseDto> saveExerciseList = mockExerciseService.getAllExercises();
         List<ExerciseDto> convertedList = exerciseList.stream()
                 .map(exercise -> exerciseMapper.mapToDto(exercise)).toList();
 
@@ -137,7 +135,7 @@ public class ExerciseServiceTest {
         when(exerciseRepository.save(Mockito.any(Exercise.class))).thenReturn(exercise);
 
 
-        ExerciseDto savedExercise = exerciseService.updateExerciseInWorkoutById(updateDto, 1L);
+        ExerciseDto savedExercise = mockExerciseService.updateExerciseInWorkoutById(updateDto, 1L);
 
         assertThat(savedExercise).isNotNull();
         assertThat(savedExercise.getName()).isEqualTo(updateDto.getName());
@@ -149,20 +147,20 @@ public class ExerciseServiceTest {
     @Test
     public void ExerciseService_UpdateExerciseById_ThrowsWorkoutNotFoundException() {
 
-        mockService = mock(ExerciseServiceImpl.class);
-        when(mockService.updateExerciseInWorkoutById(exerciseDto, INVALID_ID)).thenThrow(WorkoutNotFoundException.class);
+        mockExerciseService = mock(ExerciseServiceImpl.class);
+        when(mockExerciseService.updateExerciseInWorkoutById(exerciseDto, INVALID_ID)).thenThrow(WorkoutNotFoundException.class);
 
-        assertThrows(WorkoutNotFoundException.class, () -> mockService.updateExerciseInWorkoutById(exerciseDto, INVALID_ID));
+        assertThrows(WorkoutNotFoundException.class, () -> mockExerciseService.updateExerciseInWorkoutById(exerciseDto, INVALID_ID));
     }
 
     @Test
     public void ExerciseService_UpdateExerciseById_ThrowsExerciseNotFoundException() {
         exerciseDto.setId(INVALID_ID);
 
-        mockService = mock(ExerciseServiceImpl.class);
-        when(mockService.updateExerciseInWorkoutById(exerciseDto, workout.getId())).thenThrow(ExerciseNotFoundException.class);
+        mockExerciseService = mock(ExerciseServiceImpl.class);
+        when(mockExerciseService.updateExerciseInWorkoutById(exerciseDto, workout.getId())).thenThrow(ExerciseNotFoundException.class);
 
-        assertThrows(ExerciseNotFoundException.class, () -> mockService.updateExerciseInWorkoutById(exerciseDto, workout.getId()));
+        assertThrows(ExerciseNotFoundException.class, () -> mockExerciseService.updateExerciseInWorkoutById(exerciseDto, workout.getId()));
     }
 
     @Test
@@ -170,7 +168,7 @@ public class ExerciseServiceTest {
         when(workoutRepository.findById(workout.getId())).thenReturn(Optional.ofNullable(workout));
         when(exerciseRepository.findById(1L)).thenReturn(Optional.ofNullable(exercise));
 
-        assertAll(() -> exerciseService.deleteExerciseInWorkoutById(workout.getId(), exercise.getId()));
+        assertAll(() -> mockExerciseService.deleteExerciseInWorkoutById(workout.getId(), exercise.getId()));
 
 
     }
@@ -179,10 +177,10 @@ public class ExerciseServiceTest {
     @Test
     public void ExerciseService_DeleteExerciseById_ThrowsWorkoutNotFoundException() {
 
-        mockService = mock(ExerciseServiceImpl.class);
-        doThrow(new WorkoutNotFoundException("Delete unsuccessful.")).when(mockService).deleteExerciseInWorkoutById(INVALID_ID, exercise.getId());
+        mockExerciseService = mock(ExerciseServiceImpl.class);
+        doThrow(new WorkoutNotFoundException("Delete unsuccessful.")).when(mockExerciseService).deleteExerciseInWorkoutById(INVALID_ID, exercise.getId());
         assertThrows(WorkoutNotFoundException.class,
-                () -> mockService.deleteExerciseInWorkoutById(INVALID_ID, exercise.getId()));
+                () -> mockExerciseService.deleteExerciseInWorkoutById(INVALID_ID, exercise.getId()));
 
     }
 
@@ -191,10 +189,10 @@ public class ExerciseServiceTest {
     @Test
     public void ExerciseService_DeleteExerciseById_ThrowsExerciseNotFoundException() {
 
-        mockService = mock(ExerciseServiceImpl.class);
-        doThrow(new ExerciseNotFoundException("Delete unsuccessful.")).when(mockService).deleteExerciseInWorkoutById(workout.getId(), INVALID_ID);
+        mockExerciseService = mock(ExerciseServiceImpl.class);
+        doThrow(new ExerciseNotFoundException("Delete unsuccessful.")).when(mockExerciseService).deleteExerciseInWorkoutById(workout.getId(), INVALID_ID);
         assertThrows(ExerciseNotFoundException.class,
-                () -> mockService.deleteExerciseInWorkoutById(workout.getId(), INVALID_ID));
+                () -> mockExerciseService.deleteExerciseInWorkoutById(workout.getId(), INVALID_ID));
 
     }
 }
