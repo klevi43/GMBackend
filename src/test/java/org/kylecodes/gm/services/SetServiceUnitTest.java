@@ -102,19 +102,27 @@ public class SetServiceUnitTest {
 //
     }
 
-
     @Test
-    public void placeholder() {
+    public void SetService_GetSetForExerciseInWorkoutById_ReturnSetDto() {
+        when(workoutRepository.findById(Mockito.anyLong())).thenReturn(Optional.ofNullable(workout));
+        when(exerciseRepository.findById(Mockito.anyLong())).thenReturn(Optional.ofNullable(exercise));
+        when(setRepository.findById(Mockito.anyLong())).thenReturn(Optional.ofNullable(set));
 
+        SetDto foundSet = mockSetService.getSetForExerciseInWorkout(workout.getId(), exercise.getId(), set.getId());
+        assertThat(foundSet).isNotNull();
+        assertThat(foundSet.getId()).isEqualTo(VALID_ID);
+        assertThat(foundSet.getWeight()).isEqualTo(WEIGHT);
+        assertThat(foundSet.getReps()).isEqualTo(REPS);
+        assertThat(foundSet.getExerciseId()).isEqualTo(exercise.getId());
     }
 
     @Test
     public void SetService_CreateSetForExerciseInWorkout_ReturnSet() {
-        when(workoutRepository.findById(workout.getId())).thenReturn(Optional.ofNullable(workout));
-        when(exerciseRepository.findById(exercise.getId())).thenReturn(Optional.ofNullable(exercise));
+        when(workoutRepository.findById(Mockito.anyLong())).thenReturn(Optional.ofNullable(workout));
+        when(exerciseRepository.findById(Mockito.anyLong())).thenReturn(Optional.ofNullable(exercise));
         when(setRepository.save(Mockito.any(Set.class))).thenReturn(set);
 
-        SetDto savedSet = mockSetService.createSetForExerciseInWorkout(workout.getId(), exercise.getId(), setDto);
+            SetDto savedSet = mockSetService.createSetForExerciseInWorkout(VALID_ID, VALID_ID, setDto);
 
         assertThat(savedSet).isNotNull();
         assertThat(savedSet.getId()).isEqualTo(VALID_ID);
@@ -140,8 +148,8 @@ public class SetServiceUnitTest {
 
     @Test
     public void SetService_UpdateSetForExerciseInWorkout_ReturnUpdatedSet() {
-        when(workoutRepository.findById(workout.getId())).thenReturn(Optional.ofNullable(workout));
-        when(exerciseRepository.findById(exercise.getId())).thenReturn(Optional.ofNullable(exercise));
+        when(workoutRepository.findById(Mockito.anyLong())).thenReturn(Optional.ofNullable(workout));
+        when(exerciseRepository.findById(Mockito.anyLong())).thenReturn(Optional.ofNullable(exercise));
         when(setRepository.findById(Mockito.anyLong())).thenReturn(Optional.ofNullable(set));
         when(setRepository.save(Mockito.any(Set.class))).thenReturn(set);
 
@@ -149,7 +157,7 @@ public class SetServiceUnitTest {
         setDto.setWeight(WEIGHT_2);
 
 
-        SetDto updatedSet = mockSetService.updateSetForExerciseInWorkout(workout.getId(), exercise.getId(), setDto);
+        SetDto updatedSet = mockSetService.updateSetForExerciseInWorkout(workout.getId(),exercise.getId(), setDto);
 
         assertThat(updatedSet).isNotNull();
         assertThat(updatedSet.getId()).isEqualTo(VALID_ID);
@@ -161,7 +169,7 @@ public class SetServiceUnitTest {
     @Test
     public void SetService_UpdateSetForExerciseInWorkout_ThrowsWorkoutNotFoundException() {
         mockSetService = mock(SetServiceImpl.class);
-        when(mockSetService.updateSetForExerciseInWorkout(INVALID_ID, exercise.getId(), setDto)).thenThrow(ExerciseNotFoundException.class);
+        when(mockSetService.updateSetForExerciseInWorkout(Mockito.anyLong(), Mockito.anyLong(), Mockito.any(SetDto.class))).thenThrow(ExerciseNotFoundException.class);
         assertThrows(ExerciseNotFoundException.class, () -> mockSetService.updateSetForExerciseInWorkout(INVALID_ID, exercise.getId(), setDto));
     }
 
@@ -175,9 +183,9 @@ public class SetServiceUnitTest {
 
     @Test
     public void SetService_DeleteSetForExerciseInWorkoutById_ReturnNothing() {
-        when(workoutRepository.findById(workout.getId())).thenReturn(Optional.ofNullable(workout));
-        when(exerciseRepository.findById(exercise.getId())).thenReturn(Optional.ofNullable(exercise));
-        when(setRepository.findById(set.getId())).thenReturn(Optional.ofNullable(set));
+        when(workoutRepository.findById(Mockito.anyLong())).thenReturn(Optional.ofNullable(workout));
+        when(exerciseRepository.findById(Mockito.anyLong())).thenReturn(Optional.ofNullable(exercise));
+        when(setRepository.findById(Mockito.anyLong())).thenReturn(Optional.ofNullable(set));
 
         assertAll(() -> mockSetService.deleteSetForExerciseInWorkout(workout.getId(), exercise.getId(), set.getId()));
 
