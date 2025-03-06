@@ -22,6 +22,9 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -117,6 +120,49 @@ public class SetServiceUnitTest {
     }
 
     @Test
+    public void SetService_GetAllSetsForExerciseInWorkoutById_ReturnSetDtoList() {
+        when(workoutRepository.findById(Mockito.anyLong())).thenReturn(Optional.ofNullable(workout));
+        when(exerciseRepository.findById(Mockito.anyLong())).thenReturn(Optional.ofNullable(exercise));
+        when(setRepository.findAllByExercise_Id(Mockito.anyLong())).thenReturn(Arrays.asList(set, set));
+
+        List<SetDto> setDtoList = mockSetService.getAllSetsForExerciseInWorkout(workout.getId(), exercise.getId());
+        assertThat(setDtoList).hasSize(2);
+
+    }
+    @Test
+    public void SetService_GetAllSetsForExerciseInWorkoutById_ReturnEmptyList() {
+        when(workoutRepository.findById(Mockito.anyLong())).thenReturn(Optional.ofNullable(workout));
+        when(exerciseRepository.findById(Mockito.anyLong())).thenReturn(Optional.ofNullable(exercise));
+        when(setRepository.findAllByExercise_Id(Mockito.anyLong())).thenReturn(new ArrayList<>());
+
+        List<SetDto> setDtoList = mockSetService.getAllSetsForExerciseInWorkout(workout.getId(), exercise.getId());
+        assertThat(setDtoList).hasSize(0);
+
+    }
+
+
+    @Test
+    public void SetService_GetAllSetsForExerciseInWorkoutById_ThrowsWorkoutNotFoundException() {
+        mockSetService = mock(SetServiceImpl.class);
+        when(mockSetService.getAllSetsForExerciseInWorkout(Mockito.anyLong(), Mockito.anyLong())).thenThrow(WorkoutNotFoundException.class);
+        assertThrows(WorkoutNotFoundException.class, () -> mockSetService.getAllSetsForExerciseInWorkout(INVALID_ID, exercise.getId()));
+
+
+    }
+
+
+    @Test
+    public void SetService_GetAllSetsForExerciseInWorkoutById_ThrowsExerciseNotFoundException() {
+        mockSetService = mock(SetServiceImpl.class);
+        when(mockSetService.getAllSetsForExerciseInWorkout(Mockito.anyLong(), Mockito.anyLong())).thenThrow(WorkoutNotFoundException.class);
+        assertThrows(WorkoutNotFoundException.class, () -> mockSetService.getAllSetsForExerciseInWorkout(workout.getId(), INVALID_ID));
+
+
+    }
+
+
+
+    @Test
     public void SetService_CreateSetForExerciseInWorkout_ReturnSet() {
         when(workoutRepository.findById(Mockito.anyLong())).thenReturn(Optional.ofNullable(workout));
         when(exerciseRepository.findById(Mockito.anyLong())).thenReturn(Optional.ofNullable(exercise));
@@ -135,7 +181,7 @@ public class SetServiceUnitTest {
     @Test
     public void SetService_CreateSetForExerciseInWorkout_ThrowsWorkoutNotFoundException() {
         mockSetService = mock(SetServiceImpl.class);
-        when(mockSetService.createSetForExerciseInWorkout(INVALID_ID, exercise.getId(), setDto)).thenThrow(WorkoutNotFoundException.class);
+        when(mockSetService.createSetForExerciseInWorkout(Mockito.anyLong(), Mockito.anyLong(), Mockito.any(SetDto.class))).thenThrow(WorkoutNotFoundException.class);
         assertThrows(WorkoutNotFoundException.class, () -> mockSetService.createSetForExerciseInWorkout(INVALID_ID, exercise.getId(), setDto));
     }
 
