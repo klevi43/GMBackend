@@ -9,6 +9,7 @@ import org.kylecodes.gm.entities.Exercise;
 import org.kylecodes.gm.entities.Set;
 import org.kylecodes.gm.entities.Workout;
 import org.kylecodes.gm.exceptions.ExerciseNotFoundException;
+import org.kylecodes.gm.exceptions.SetNotFoundException;
 import org.kylecodes.gm.exceptions.WorkoutNotFoundException;
 import org.kylecodes.gm.repositories.ExerciseRepository;
 import org.kylecodes.gm.repositories.SetRepository;
@@ -24,9 +25,9 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class SetServiceUnitTest {
@@ -169,5 +170,46 @@ public class SetServiceUnitTest {
         mockSetService = mock(SetServiceImpl.class);
         when(mockSetService.updateSetForExerciseInWorkout(workout.getId(), INVALID_ID, setDto)).thenThrow(ExerciseNotFoundException.class);
         assertThrows(ExerciseNotFoundException.class, () -> mockSetService.updateSetForExerciseInWorkout(workout.getId(), INVALID_ID, setDto));
+    }
+
+
+    @Test
+    public void SetService_DeleteSetForExerciseInWorkoutById_ReturnNothing() {
+        when(workoutRepository.findById(workout.getId())).thenReturn(Optional.ofNullable(workout));
+        when(exerciseRepository.findById(exercise.getId())).thenReturn(Optional.ofNullable(exercise));
+        when(setRepository.findById(set.getId())).thenReturn(Optional.ofNullable(set));
+
+        assertAll(() -> mockSetService.deleteSetForExerciseInWorkout(workout.getId(), exercise.getId(), set.getId()));
+
+    }
+
+    @Test
+    public void SetService_DeleteSetForExerciseInWorkoutById_ThrowsWorkoutNotFoundException() {
+        mockSetService = mock(SetServiceImpl.class);
+        doThrow(new WorkoutNotFoundException("Delete unsuccessful.")).when(mockSetService).deleteSetForExerciseInWorkout(INVALID_ID, exercise.getId(), set.getId());
+        assertThrows(WorkoutNotFoundException.class,
+                () -> mockSetService.deleteSetForExerciseInWorkout(INVALID_ID, exercise.getId(), set.getId()));
+
+
+    }
+
+    @Test
+    public void SetService_DeleteSetForExerciseInWorkoutById_ThrowsExerciseNotFoundException() {
+        mockSetService = mock(SetServiceImpl.class);
+        doThrow(new ExerciseNotFoundException("Delete unsuccessful.")).when(mockSetService).deleteSetForExerciseInWorkout(Mockito.anyLong(), Mockito.anyLong(), Mockito.anyLong());
+        assertThrows(ExerciseNotFoundException.class,
+                    () -> mockSetService.deleteSetForExerciseInWorkout(workout.getId(), INVALID_ID, set.getId()));
+
+
+    }
+
+    @Test
+    public void SetService_DeleteSetForExerciseInWorkoutById_ThrowsSetNotFoundException() {
+        mockSetService = mock(SetServiceImpl.class);
+        doThrow(new SetNotFoundException("Delete unsuccessful.")).when(mockSetService).deleteSetForExerciseInWorkout(Mockito.anyLong(), Mockito.anyLong(), Mockito.anyLong());
+        assertThrows(SetNotFoundException.class,
+                () -> mockSetService.deleteSetForExerciseInWorkout(workout.getId(), exercise.getId(), INVALID_ID));
+
+
     }
 }
