@@ -38,11 +38,13 @@ public class WorkoutServiceImpl implements WorkoutService {
         }
         List<WorkoutDto> workoutDtoList = new ArrayList<>();
         for (Workout workout : workoutList) {
-            List<ExerciseDto> exerciseDtoList = workout.getExercises().stream()
-                    .map((exercise -> exerciseMapper.mapToDto(exercise))).toList();
-            WorkoutDto workoutDto = workoutMapper.mapToDto(workout);
-            workoutDto.setExerciseDtos(exerciseDtoList);
-            workoutDtoList.add(workoutDto);
+            List<ExerciseDto> exerciseDtoList = getExerciseDtoListForWorkout(workout);
+
+
+                WorkoutDto workoutDto = workoutMapper.mapToDto(workout);
+                workoutDto.setExerciseDtos(exerciseDtoList);
+                workoutDtoList.add(workoutDto);
+
         }
         return workoutDtoList;
     }
@@ -73,10 +75,10 @@ public class WorkoutServiceImpl implements WorkoutService {
     public WorkoutDto getWorkoutById(Long id) {
         Optional<Workout> workout = Optional.ofNullable(workoutRepository.findById(id)
                 .orElseThrow(() -> new WorkoutNotFoundException("Get unsuccessful. ")));
-
+        List<ExerciseDto> exerciseDtoList = getExerciseDtoListForWorkout(workout.get());
         WorkoutDto workoutDto = workoutMapper.mapToDto(workout.get());
-        workoutDto.setExerciseDtos(workout.get().getExercises().stream().map((exercise -> exerciseMapper.mapToDto(exercise))).toList());
-        System.out.println(workout.get().getExercises().isEmpty());
+        workoutDto.setExerciseDtos(exerciseDtoList);
+
 
         return workoutDto;
 
@@ -129,5 +131,11 @@ public class WorkoutServiceImpl implements WorkoutService {
         workoutDto.setName(workout.getName());
         workoutDto.setDate(workout.getDate());
         return workoutDto;
+    }
+
+    private List<ExerciseDto> getExerciseDtoListForWorkout(Workout workout) {
+        return workout.getExercises() != null ?
+                workout.getExercises().stream().map(exercise -> exerciseMapper.mapToDto(exercise)).toList()
+                : new ArrayList<>();
     }
 }

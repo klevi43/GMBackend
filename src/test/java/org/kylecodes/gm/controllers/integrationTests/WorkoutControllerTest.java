@@ -44,7 +44,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false) // circumvent spring sec so that we don't have to add tokens
 @Transactional
-public class WorkoutControllerIntegrationTest {
+public class WorkoutControllerTest {
 
     private static MockHttpServletRequest request;
 
@@ -226,6 +226,7 @@ public class WorkoutControllerIntegrationTest {
 
     @AfterEach
     public void teardown() {
+        jdbc.execute("DELETE FROM ex_set");
         jdbc.execute("DELETE FROM exercise");
         jdbc.execute("DELETE FROM workout WHERE name = 'Chest Day' OR name = 'Back Day' OR name = 'Leg Day'");
         jdbc.execute("ALTER TABLE workout AUTO_INCREMENT = 1");
