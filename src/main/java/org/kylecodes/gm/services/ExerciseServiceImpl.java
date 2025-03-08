@@ -4,6 +4,7 @@ import org.kylecodes.gm.dtos.ExerciseDto;
 import org.kylecodes.gm.entities.Exercise;
 import org.kylecodes.gm.entities.Workout;
 import org.kylecodes.gm.exceptions.ExerciseNotFoundException;
+import org.kylecodes.gm.exceptions.RequestFailure;
 import org.kylecodes.gm.exceptions.WorkoutNotFoundException;
 import org.kylecodes.gm.repositories.ExerciseRepository;
 import org.kylecodes.gm.repositories.WorkoutRepository;
@@ -34,7 +35,7 @@ public class ExerciseServiceImpl implements ExerciseService{
 
     @Override
     public List<ExerciseDto> getAllExercisesInWorkout(Long workoutId) {
-        Workout workout = workoutRepository.findById(workoutId).orElseThrow(() -> new WorkoutNotFoundException("Get unsuccessful. "));
+        Workout workout = workoutRepository.findById(workoutId).orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.GET_REQUEST_FAILURE));
 
         List<Exercise> exercisesInWorkout = exerciseRepository.findAllByWorkout(workout);
         return exercisesInWorkout.stream().map((exercise) -> exerciseMapper.mapToDto(exercise)).toList();
@@ -44,7 +45,7 @@ public class ExerciseServiceImpl implements ExerciseService{
     public ExerciseDto createExercise(ExerciseDto exerciseDto, Long workoutId) {
 
         Optional<Workout> workout = Optional.ofNullable(workoutRepository.findById(workoutId)
-                .orElseThrow(() -> new WorkoutNotFoundException("Get unsuccessful. ")));
+                .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.GET_REQUEST_FAILURE)));
 
         Exercise exercise = new Exercise();
         exercise.setName(exerciseDto.getName());
@@ -61,10 +62,10 @@ public class ExerciseServiceImpl implements ExerciseService{
     @Override
     public ExerciseDto updateExerciseInWorkoutById(ExerciseDto exerciseDto, Long workoutId) {
         Optional.ofNullable(workoutRepository.findById(workoutId)
-                .orElseThrow(() -> new WorkoutNotFoundException("Update unsuccessful. ")));
+                .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.PUT_REQUEST_FAILURE)));
 
         Optional<Exercise> exercise = Optional.ofNullable(exerciseRepository.findById(exerciseDto.getId())
-                .orElseThrow(() -> new ExerciseNotFoundException("Update unsuccessful. ")));
+                .orElseThrow(() -> new ExerciseNotFoundException(RequestFailure.PUT_REQUEST_FAILURE)));
 
         Exercise updateExercise = exercise.get();
         if (exerciseDto.getName() != null) {
@@ -78,10 +79,10 @@ public class ExerciseServiceImpl implements ExerciseService{
     @Override
     public void deleteExerciseInWorkoutById(Long workoutId, Long exerciseId) {
         Optional<Workout> workout = Optional.ofNullable(workoutRepository.findById(workoutId)
-                .orElseThrow(() -> new WorkoutNotFoundException("Delete unsuccessful. ")));
+                .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.DELETE_REQUEST_FAILURE)));
 
         Optional<Exercise> exercise = Optional.ofNullable(exerciseRepository.findById(exerciseId))
-                .orElseThrow(() -> new ExerciseNotFoundException("Delete unsuccessful. "));
+                .orElseThrow(() -> new ExerciseNotFoundException(RequestFailure.DELETE_REQUEST_FAILURE));
         exerciseRepository.deleteById(exerciseId);
     }
 

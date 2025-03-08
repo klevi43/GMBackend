@@ -4,6 +4,7 @@ import org.kylecodes.gm.dtos.ExerciseDto;
 import org.kylecodes.gm.dtos.WorkoutDto;
 import org.kylecodes.gm.entities.Exercise;
 import org.kylecodes.gm.entities.Workout;
+import org.kylecodes.gm.exceptions.RequestFailure;
 import org.kylecodes.gm.exceptions.WorkoutNotFoundException;
 import org.kylecodes.gm.repositories.WorkoutRepository;
 import org.kylecodes.gm.services.mappers.EntityToDtoMapper;
@@ -74,7 +75,7 @@ public class WorkoutServiceImpl implements WorkoutService {
     @Override
     public WorkoutDto getWorkoutById(Long id) {
         Optional<Workout> workout = Optional.ofNullable(workoutRepository.findById(id)
-                .orElseThrow(() -> new WorkoutNotFoundException("Get unsuccessful. ")));
+                .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.GET_REQUEST_FAILURE)));
         List<ExerciseDto> exerciseDtoList = getExerciseDtoListForWorkout(workout.get());
         WorkoutDto workoutDto = workoutMapper.mapToDto(workout.get());
         workoutDto.setExerciseDtos(exerciseDtoList);
@@ -88,7 +89,7 @@ public class WorkoutServiceImpl implements WorkoutService {
     public WorkoutDto updateWorkoutById(WorkoutDto workoutDto, Long id) {
 
         Optional<Workout> workout = Optional.ofNullable(workoutRepository.findById(id)
-                .orElseThrow(() -> new WorkoutNotFoundException("Update unsuccessful. ")));
+                .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.PUT_REQUEST_FAILURE)));
 
         Workout updateWorkout = workout.get();
         if (workoutDto.getName() != null) {
@@ -118,7 +119,7 @@ public class WorkoutServiceImpl implements WorkoutService {
     @Override
     public void deleteWorkoutById(Long id) {
         Optional<Workout> workout = Optional.ofNullable(workoutRepository.findById(id)
-                .orElseThrow(() -> new WorkoutNotFoundException("Delete unsuccessful. ")));
+                .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.DELETE_REQUEST_FAILURE)));
 
         workoutRepository.deleteById(id);
 

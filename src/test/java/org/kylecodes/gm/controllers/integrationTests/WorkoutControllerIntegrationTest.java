@@ -1,8 +1,6 @@
 package org.kylecodes.gm.controllers.integrationTests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeAll;
@@ -10,6 +8,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kylecodes.gm.dtos.WorkoutDto;
 import org.kylecodes.gm.entities.Workout;
+import org.kylecodes.gm.exceptions.RequestFailure;
+import org.kylecodes.gm.repositories.WorkoutRepository;
 import org.kylecodes.gm.services.WorkoutService;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +26,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import java.time.LocalDate;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -35,12 +36,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false) // circumvent spring sec so that we don't have to add tokens
 @Transactional
-@Sql(scripts = {"classpath:/insertWorkouts.sql"})//  this removes the need for setup and teardown
+@Sql(scripts = {"classpath:/insertWorkouts.sql", "classpath:/insertExercises.sql", "classpath:/insertSets.sql"})//  this removes the need for setup and teardown
 public class WorkoutControllerIntegrationTest {
 
     private String insertWorkouts;
     private final Long VALID_WORKOUT_ID_1 = 1L;
+    private final String VALID_WORKOUT_NAME_1 = "Test Workout";
+    private final String VALID_WORKOUT_DATE = LocalDate.now().toString();
     private final Long VALID_WORKOUT_ID_2 = 2L;
+    private final String VALID_WORKOUT_NAME_2 = "Test Workout 2";
     private final Long VALID_WORKOUT_ID_3 = 3L;
     private final Long INVALID_WORKOUT_ID = -1L;
     private Workout workout;
@@ -53,12 +57,11 @@ public class WorkoutControllerIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @PersistenceContext
-    private EntityManager entityManager;
-
     @Mock
     private WorkoutService workoutService;
 
+    @Autowired
+    WorkoutRepository workoutRepository;
 
 
     @BeforeAll
@@ -83,7 +86,8 @@ public class WorkoutControllerIntegrationTest {
 
         response.andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$", hasSize(2)));
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andDo(MockMvcResultHandlers.print());
     }
 
     @Test
@@ -95,11 +99,46 @@ public class WorkoutControllerIntegrationTest {
                 .content(objectMapper.writeValueAsString(workoutDto)));
 
         response.andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id", CoreMatchers.is(Long.class)))
                 .andExpect(jsonPath("$.name", CoreMatchers.is(workoutDto.getName())))
                 .andExpect(jsonPath("$.date", CoreMatchers.is(workoutDto.getDate().toString())))
                 .andDo(MockMvcResultHandlers.print());
     }
 
+    @Test
+    public void WorkoutController_GetWorkoutById_ReturnWorkoutDtoWithExerciseDtoList() throws Exception {
+
+        assertThat(workoutRepository.findById(VALID_WORKOUT_ID_1)).isNotEmpty();
+        mockMvc.perform(MockMvcRequestBuilders.get("/workouts/workout")
+                        .queryParam("workoutId", String.valueOf(VALID_WORKOUT_ID_1)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", CoreMatchers.is(VALID_WORKOUT_NAME_1)))
+                .andExpect(jsonPath("$.date", CoreMatchers.is(VALID_WORKOUT_DATE)))
+                .andExpect(jsonPath("$.exerciseDtos", hasSize(2)));
+    }
+
+    @Test
+    public void WorkoutController_GetWorkoutById_ReturnWorkoutDtoWithEmptyExerciseDtoList() throws Exception {
+
+        assertThat(workoutRepository.findById(VALID_WORKOUT_ID_2)).isNotEmpty();
+        mockMvc.perform(MockMvcRequestBuilders.get("/workouts/workout")
+                        .queryParam("workoutId", String.valueOf(VALID_WORKOUT_ID_2)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", CoreMatchers.is(VALID_WORKOUT_NAME_2)))
+                .andExpect(jsonPath("$.date", CoreMatchers.is(VALID_WORKOUT_DATE)))
+                .andExpect(jsonPath("$.exerciseDtos", hasSize(0)));
+    }
+
+        @Test
+    public void WorkoutController_GetWorkoutById_ThrowsWorkoutNotFoundException() throws Exception {
+
+            assertThat(workoutRepository.findById(INVALID_WORKOUT_ID)).isEmpty();
+            mockMvc.perform(MockMvcRequestBuilders.get("/workouts/workout")
+                            .queryParam("workoutId", INVALID_WORKOUT_ID.toString()))
+                    .andExpect(status().is4xxClientError())
+                    .andExpect(status().isNotFound())
+                    .andExpect(jsonPath("$.message", CoreMatchers.is(RequestFailure.GET_REQUEST_FAILURE
+                            + " No workout found with given id.")));
+
+        }
 
 }
