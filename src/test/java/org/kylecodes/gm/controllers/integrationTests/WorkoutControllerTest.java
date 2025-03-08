@@ -25,16 +25,17 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 @TestPropertySource("classpath:application-test.properties")
@@ -130,22 +131,22 @@ public class WorkoutControllerTest {
                 .content(objectMapper.writeValueAsString(workoutDto)));
 
         response.andExpect(status().isCreated())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.name", CoreMatchers.is(workoutDto.getName())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.date", CoreMatchers.is(workoutDto.getDate().toString())))
+                .andExpect(jsonPath("$.name", CoreMatchers.is(workoutDto.getName())))
+                .andExpect(jsonPath("$.date", CoreMatchers.is(workoutDto.getDate().toString())))
                 .andDo(MockMvcResultHandlers.print());
     }
 
-//
-//    @Test
-//    public void WorkoutController_GetAllWorkouts_ReturnWorkoutList() throws Exception {
-//        em.persist(workout);
-//        em.persist(workout2);
-//        em.flush(); // used to write all fhanges to the db before the transaction is committed
-//        mockMvc.perform(MockMvcRequestBuilders.get("/workouts"))
-//                .andExpect(status().isOk())
-//                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(jsonPath("$", hasSize(3)));
-//    }
+
+    @Test
+    public void WorkoutController_GetAllWorkouts_ReturnWorkoutList() throws Exception {
+        em.persist(workout);
+        em.persist(workout2);
+        em.flush(); // used to write all fhanges to the db before the transaction is committed
+        mockMvc.perform(MockMvcRequestBuilders.get("/workouts"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(3)));
+    }
 //    @Test
 //    public void WorkoutController_GetWorkoutById_ReturnWorkoutDto() throws Exception {
 //
