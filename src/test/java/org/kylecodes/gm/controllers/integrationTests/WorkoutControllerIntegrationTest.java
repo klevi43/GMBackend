@@ -39,7 +39,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Sql(scripts = {"classpath:/insertWorkouts.sql", "classpath:/insertExercises.sql", "classpath:/insertSets.sql"})//  this removes the need for setup and teardown
 public class WorkoutControllerIntegrationTest {
 
-    private String insertWorkouts;
+    private final String NO_WORKOUT_FOUND_MSG = "No workout found with given id.";
     private final Long VALID_WORKOUT_ID_1 = 1L;
     private final String VALID_WORKOUT_NAME_1 = "Test Workout";
     private final String VALID_WORKOUT_DATE = LocalDate.now().toString();
@@ -128,7 +128,7 @@ public class WorkoutControllerIntegrationTest {
                 .andExpect(jsonPath("$.exerciseDtos", hasSize(0)));
     }
 
-        @Test
+    @Test
     public void WorkoutController_GetWorkoutById_ThrowsWorkoutNotFoundException() throws Exception {
 
             assertThat(workoutRepository.findById(INVALID_WORKOUT_ID)).isEmpty();
@@ -137,8 +137,27 @@ public class WorkoutControllerIntegrationTest {
                     .andExpect(status().is4xxClientError())
                     .andExpect(status().isNotFound())
                     .andExpect(jsonPath("$.message", CoreMatchers.is(RequestFailure.GET_REQUEST_FAILURE
-                            + " No workout found with given id.")));
+                            + NO_WORKOUT_FOUND_MSG)));
 
         }
+    @Test
+    public void WorkoutController_UpdateWorkoutById_ReturnUpdateWorkout() throws Exception {
+        assertThat(workoutRepository.findById(VALID_WORKOUT_ID_1)).isNotEmpty();
+        workoutDto.setDate(LocalDate.of(2024, 3, 4));
+        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.put("/workouts/update")
+                        .queryParam("workoutId", VALID_WORKOUT_ID_1.toString())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(workoutDto)));
+
+        response.andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("$.name", CoreMatchers.is(workoutDto.getName())))
+                .andExpect(jsonPath("$.date", CoreMatchers.is(workoutDto.getDate().toString())))
+                .andExpect(jsonPath("$.exerciseDtos", hasSize(2)));
+
+        assertThat(workoutRepository.findById(VALID_WORKOUT_ID_1)).isNotEmpty();
+        assertThat(workoutRepository.findById(VALID_WORKOUT_ID_1).get().getName()).isEqualTo("Test Workout 5");
+        assertThat(workoutRepository.findById(VALID_WORKOUT_ID_1).get().getDate()).isNotEqualTo(LocalDate.now().toString());
+    }
+
 
 }
