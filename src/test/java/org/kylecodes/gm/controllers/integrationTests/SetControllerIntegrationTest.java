@@ -9,7 +9,7 @@ import org.kylecodes.gm.constants.InvalidSetData;
 import org.kylecodes.gm.constants.NotFoundMsg;
 import org.kylecodes.gm.constants.RequestFailure;
 import org.kylecodes.gm.dtos.SetDto;
-import org.kylecodes.gm.repositories.WorkoutRepository;
+import org.kylecodes.gm.repositories.SetRepository;
 import org.kylecodes.gm.services.SetService;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -54,7 +55,7 @@ public class SetControllerIntegrationTest {
     private SetService setService;
 
     @Autowired
-    WorkoutRepository setRepository;
+    SetRepository setRepository;
 
     SetDto setDto;
 
@@ -322,5 +323,76 @@ public class SetControllerIntegrationTest {
                 .andExpect(jsonPath("$.message",
                         CoreMatchers.is(InvalidSetData.INVALID_WEIGHT_MSG)));
 
+    }
+
+    @Test
+    public void SetController_UpdateSetForExerciseInWorkoutById_ThrowMethodArgumentNotValidExceptionForInvalidReps() throws Exception {
+
+        SetDto updatedSetDto = new SetDto();
+        updatedSetDto.setId(INVALID_ID);
+        updatedSetDto.setWeight(20);
+        updatedSetDto.setReps(-20);
+        ResultActions response = mockMvc.perform(put("/workouts/exercises/sets/update")
+                .queryParam("workoutId", VALID_WORKOUT_ID_1.toString())
+                .queryParam("exerciseId", VALID_EXERCISE_ID_1.toString())
+                .queryParam("setId", VALID_SET_ID_1.toString())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updatedSetDto)));
+
+        response.andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.message",
+                        CoreMatchers.is(InvalidSetData.INVALID_REPS_MSG)));
+
+    }
+
+    @Test
+    public void SetController_DeleteSetForExerciseInWorkoutById_ReturnNothing() throws Exception {
+        assertThat(setRepository.findById(VALID_SET_ID_1)).isNotEmpty();
+        ResultActions response = mockMvc.perform(delete("/workouts/exercises/sets/delete")
+                .queryParam("workoutId", VALID_WORKOUT_ID_1.toString())
+                .queryParam("exerciseId", VALID_EXERCISE_ID_1.toString())
+                .queryParam("setId", VALID_EXERCISE_ID_1.toString()));
+
+        response.andExpect(status().isOk());
+        assertThat(setRepository.findById(VALID_SET_ID_1)).isEmpty();
+    }
+
+    @Test
+    public void SetController_DeleteSetForExerciseInWorkoutById_ThrowWorkoutNotFoundException() throws Exception {
+        assertThat(setRepository.findById(VALID_SET_ID_1)).isNotEmpty();
+        ResultActions response = mockMvc.perform(delete("/workouts/exercises/sets/delete")
+                .queryParam("workoutId", INVALID_ID.toString())
+                .queryParam("exerciseId", VALID_EXERCISE_ID_1.toString())
+                .queryParam("setId", VALID_EXERCISE_ID_1.toString()));
+
+        response.andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.message",
+                        CoreMatchers.is(RequestFailure.DELETE_REQUEST_FAILURE + NotFoundMsg.WORKOUT_NOT_FOUND_MSG)));
+    }
+
+    @Test
+    public void SetController_DeleteSetForExerciseInWorkoutById_ThrowExerciseNotFoundException() throws Exception {
+        assertThat(setRepository.findById(VALID_SET_ID_1)).isNotEmpty();
+        ResultActions response = mockMvc.perform(delete("/workouts/exercises/sets/delete")
+                .queryParam("workoutId", VALID_WORKOUT_ID_1.toString())
+                .queryParam("exerciseId", INVALID_ID.toString())
+                .queryParam("setId", VALID_EXERCISE_ID_1.toString()));
+
+        response.andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.message",
+                        CoreMatchers.is(RequestFailure.DELETE_REQUEST_FAILURE + NotFoundMsg.EXERCISE_NOT_FOUND_MSG)));
+    }
+
+    @Test
+    public void SetController_DeleteSetForExerciseInWorkoutById_ThrowSetNotFoundException() throws Exception {
+        assertThat(setRepository.findById(VALID_SET_ID_1)).isNotEmpty();
+        ResultActions response = mockMvc.perform(delete("/workouts/exercises/sets/delete")
+                .queryParam("workoutId", VALID_WORKOUT_ID_1.toString())
+                .queryParam("exerciseId", VALID_EXERCISE_ID_1.toString())
+                .queryParam("setId", INVALID_ID.toString()));
+
+        response.andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.message",
+                        CoreMatchers.is(RequestFailure.DELETE_REQUEST_FAILURE + NotFoundMsg.SET_NOT_FOUND_MSG)));
     }
 }

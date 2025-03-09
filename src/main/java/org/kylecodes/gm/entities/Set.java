@@ -59,4 +59,14 @@ public class Set {
     public void setExercise(Exercise exercise) {
         this.exercise = exercise;
     }
+
+    @Override
+    public String toString() {
+        return "Set{" +
+                "id=" + id +
+                ", weight=" + weight +
+                ", reps=" + reps +
+                ", exercise=" + exercise +
+                '}';
+    }
 }

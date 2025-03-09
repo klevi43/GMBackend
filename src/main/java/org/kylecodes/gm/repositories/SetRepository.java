@@ -10,4 +10,5 @@ public interface SetRepository extends JpaRepository<Set, Long> {
 
     Optional<Set> findById(Long id);
     List<Set> findAllByExercise_Id(Long exerciseId);
+    void deleteById(Long id);
 }
