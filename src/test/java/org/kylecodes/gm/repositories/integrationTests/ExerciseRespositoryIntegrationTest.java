@@ -1,6 +1,5 @@
 package org.kylecodes.gm.repositories.integrationTests;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kylecodes.gm.entities.Exercise;
@@ -12,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -22,38 +22,47 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace =AutoConfigureTestDatabase.Replace.NONE )
 @TestPropertySource("classpath:application-test.properties")
+@Sql(scripts = {"classpath:/insertWorkouts.sql", "classpath:/insertExercises.sql", "classpath:/insertSets.sql"})
 public class ExerciseRespositoryIntegrationTest {
     @Autowired
-    WorkoutRepository workoutRepository;
+    private WorkoutRepository workoutRepository;
 
     @Autowired
-    ExerciseRepository exerciseRepository;
+    private ExerciseRepository exerciseRepository;
 
     @Autowired
-    JdbcTemplate jdbc;
-    List<Exercise> exerciseList;
-    Exercise exercise;
-    Exercise exercise2;
-    Exercise savedExercise;
+    private JdbcTemplate jdbc;
+    private Workout workout;
+    private List<Exercise> exerciseList;
+    private Exercise exercise;
+    private Exercise exercise2;
+    private Exercise savedExercise;
+
+    private final Long VALID_WORKOUT_ID_1 = 1L;
+    private final Long VALID_EXERCISE_ID_1 = 1L;
+    private final Long VALID_EXERCISE_ID_2 = 2L;
+
 
     Optional<Exercise> optionalExercise;
     @BeforeEach
     public void init() {
-        jdbc.execute("INSERT INTO workout (id, name, date) VALUES (1, 'Test Workout', current_date)");
-        jdbc.execute("INSERT INTO exercise (id, name, date, workout_id) VALUES (1, 'Test Exercise', current_date, 1)");
-        jdbc.execute("INSERT INTO exercise (id, name, date, workout_id) VALUES (2, 'Test Exercise', current_date, 1)");
-
-    }
-
-    @Test
-    public void ExerciseRepository_SaveExercise_ReturnSavedExercise() {
+        workout = workoutRepository.findById(VALID_WORKOUT_ID_1).get();
         exercise2 = new Exercise();
 
         exercise2.setName("Test Exercise 2");
         exercise2.setDate(LocalDate.now());
+        exercise2.setWorkout(workout);
+    }
+
+    @Test
+    public void ExerciseRepository_SaveExercise_ReturnSavedExercise() {
+
         savedExercise = exerciseRepository.save(exercise2);
 
         assertThat(savedExercise).isNotNull();
+        assertThat(savedExercise.getId()).isNotNull();
+        assertThat(savedExercise.getName()).isEqualTo("Test Exercise 2");
+        assertThat(savedExercise.getDate()).isEqualTo(LocalDate.now());
 
     }
 
@@ -86,17 +95,17 @@ public class ExerciseRespositoryIntegrationTest {
 
     @Test
     public void ExerciseRepository_GetAllExercisesInWorkout_ReturnExercisesInWorkout() {
-        Optional<Workout> workout = workoutRepository.findById(1L);
-        assertThat(workout).isPresent();
 
-        exerciseList = exerciseRepository.findAllByWorkout(workout.orElse(null));
+        assertThat(workout).isNotNull();
+
+        exerciseList = exerciseRepository.findAllByWorkout(workout);
 
         assertThat(exerciseList).hasSize(2);
     }
 
     @Test
     public void ExerciseRepository_UpdateExerciseById_ReturnUpdatedExercise() {
-        Optional<Exercise> optionalExercise = exerciseRepository.findById(1L);
+        Optional<Exercise> optionalExercise = exerciseRepository.findById(VALID_EXERCISE_ID_1);
         assertThat(optionalExercise).isPresent();
 
         optionalExercise.get().setName("Update");
@@ -108,21 +117,16 @@ public class ExerciseRespositoryIntegrationTest {
     }
 
     @Test
-    public void ExerciseRepository_DeleteExerciseById_ReturnExerciseIsEmpty() {
-        optionalExercise = exerciseRepository.findById(1L);
+    public void ExerciseRepository_DeleteExerciseById_ReturnNothing() {
+        optionalExercise = exerciseRepository.findById(VALID_EXERCISE_ID_2);
         assertThat(optionalExercise).isPresent();
 
         exerciseRepository.deleteById(optionalExercise.get().getId());
 
-        optionalExercise = exerciseRepository.findById(1L);
+        optionalExercise = exerciseRepository.findById(VALID_EXERCISE_ID_2);
 
         assertThat(optionalExercise).isEmpty();
     }
 
 
-    @AfterEach
-    public void teardown() {
-        jdbc.execute("DELETE FROM exercise WHERE name ='Test Exercise' OR name = 'Test Exercise 2'");
-
-    }
 }

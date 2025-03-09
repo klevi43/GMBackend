@@ -1,5 +1,6 @@
 package org.kylecodes.gm.repositories.integrationTests;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kylecodes.gm.entities.Workout;
 import org.kylecodes.gm.repositories.WorkoutRepository;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,16 +19,31 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace =AutoConfigureTestDatabase.Replace.NONE )
 @TestPropertySource("classpath:application-test.properties")
+@Sql(scripts = {"classpath:/insertWorkouts.sql", "classpath:/insertExercises.sql", "classpath:/insertSets.sql"})
 public class WorkoutRepositoryIntegrationTest {
     @Autowired
-    WorkoutRepository workoutRepository;
+    private WorkoutRepository workoutRepository;
+    private final Long VALID_WORKOUT_ID_1 = 1L;
+    private final Long VALID_WORKOUT_ID_2 = 2L;
 
-    @Test
-    public void WorkoutRepository_SaveAll_ReturnSavedWorkouts() {
-        // Arrange
-        Workout workout1 = new Workout();
-        workout1.setName("Chest Day");
+    private Workout workout1;
+    private Workout workout2;
+    @BeforeEach
+    public void init() {
+        workout1 = new Workout();
+        workout1.setId(VALID_WORKOUT_ID_1);
+        workout1.setName("Test Workout");
         workout1.setDate(LocalDate.now());
+
+        workout2 = new Workout();
+        workout2.setId(VALID_WORKOUT_ID_2);
+        workout2.setName("Test Workout 2");
+        workout2.setDate(LocalDate.now());
+    }
+
+        @Test
+        public void WorkoutRepository_SaveAll_ReturnSavedWorkouts() {
+        // Arrange
 
 
         //Act
@@ -41,13 +58,9 @@ public class WorkoutRepositoryIntegrationTest {
     public void WorkoutRepository_FindAll_ReturnMoreThanOneWorkout() {
 
         // Arrange
-        Workout workout1 = new Workout();
-        workout1.setName("Chest Day");
-        workout1.setDate(LocalDate.now());
 
-        Workout workout2 = new Workout();
-        workout2.setName("Back Day");
-        workout2.setDate(LocalDate.now());
+
+
 
         final int EXPECTED_SIZE = 2;
 
@@ -67,14 +80,11 @@ public class WorkoutRepositoryIntegrationTest {
     @Test
     public void WorkoutRepository_FindById_ReturnWorkout() {
         // Arrange
-        Workout workout = new Workout();
-        workout.setName("Chest Day");
-        workout.setDate(LocalDate.now());
 
-        Workout savedWorkout = workoutRepository.save(workout);
+        Workout savedWorkout = workoutRepository.save(workout1);
 
         // Act
-        Workout foundWorkout = workoutRepository.findById(workout.getId()).get();
+        Workout foundWorkout = workoutRepository.findById(VALID_WORKOUT_ID_1).get();
 
         // Assert
         assertThat(foundWorkout).isNotNull();
@@ -85,19 +95,17 @@ public class WorkoutRepositoryIntegrationTest {
     @Test
     public void WorkoutRepository_UpdateWorkoutName_ReturnUpdatedWorkout() {
         // Arrange
-        Workout workout = new Workout();
-        workout.setName("Chest Day");
-        workout.setDate(LocalDate.now());
 
-        Workout inputWorkout = workoutRepository.save(workout);
-        Workout workoutSave = workoutRepository.findById(inputWorkout.getId()).get();
+
+
+        Workout workoutSave = workoutRepository.findById(VALID_WORKOUT_ID_1).get();
         workoutSave.setName("Shoulder Day");
 
         // Act
         Workout savedWorkout = workoutRepository.save(workoutSave);
 
         // Assert
-        assertThat(workoutSave.getId()).isEqualTo(inputWorkout.getId());
+        assertThat(workoutSave.getId()).isEqualTo(VALID_WORKOUT_ID_1);
         assertThat(savedWorkout).isNotNull();
         assertThat(savedWorkout.getId()).isEqualTo(workoutSave.getId());
         assertThat(savedWorkout.getName()).isEqualTo(workoutSave.getName());
@@ -109,14 +117,11 @@ public class WorkoutRepositoryIntegrationTest {
     @Test
     public void WorkoutRepository_DeleteWorkout_ReturnWorkoutIsEmpty() {
         // Arrange
-        Workout workout = new Workout();
-        workout.setName("Chest Day");
-        workout.setDate(LocalDate.now());
-        Workout inputWorkout = workoutRepository.save(workout);
+
 
         // Act
-        workoutRepository.deleteById(inputWorkout.getId());
-        Optional<Workout> workoutReturn = workoutRepository.findById(inputWorkout.getId());
+        workoutRepository.deleteById(VALID_WORKOUT_ID_1);
+        Optional<Workout> workoutReturn = workoutRepository.findById(VALID_WORKOUT_ID_1);
 
         // Assert
         assertThat(workoutReturn).isEmpty();
