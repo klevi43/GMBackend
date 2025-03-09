@@ -5,6 +5,7 @@ import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class ExerciseDto {
     private Long id;
@@ -18,11 +19,14 @@ public class ExerciseDto {
 
 
     private Long workoutId;
-    public ExerciseDto(Long id, String name, LocalDate date, Long workoutId) {
+
+    private List<SetDto> setDtoList;
+    public ExerciseDto(Long id, String name, LocalDate date, Long workoutId, List<SetDto> setDtoList) {
         this.id = id;
         this.name = name;
         this.date = date;
         this.workoutId = workoutId;
+        this.setDtoList = setDtoList;
     }
 
 
@@ -61,5 +65,13 @@ public class ExerciseDto {
 
     public void setWorkoutId(Long workoutId) {
         this.workoutId = workoutId;
+    }
+
+    public List<SetDto> getSetDtoList() {
+        return setDtoList;
+    }
+
+    public void setSetDtoList(List<SetDto> setDtoList) {
+        this.setDtoList = setDtoList;
     }
 }

@@ -108,12 +108,14 @@ public class WorkoutControllerIntegrationTest {
     public void WorkoutController_GetWorkoutById_ReturnWorkoutDtoWithExerciseDtoList() throws Exception {
 
         assertThat(workoutRepository.findById(VALID_WORKOUT_ID_1)).isNotEmpty();
-        mockMvc.perform(MockMvcRequestBuilders.get("/workouts/workout")
-                        .queryParam("workoutId", String.valueOf(VALID_WORKOUT_ID_1)))
-                .andExpect(status().isOk())
+        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.get("/workouts/workout")
+                        .queryParam("workoutId", String.valueOf(VALID_WORKOUT_ID_1)));
+
+        response.andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", CoreMatchers.is(VALID_WORKOUT_NAME_1)))
                 .andExpect(jsonPath("$.date", CoreMatchers.is(VALID_WORKOUT_DATE)))
-                .andExpect(jsonPath("$.exerciseDtos", hasSize(2)));
+                .andExpect(jsonPath("$.exerciseDtos", hasSize(2)))
+                .andDo(MockMvcResultHandlers.print());
     }
 
     @Test
