@@ -4,9 +4,9 @@ import jakarta.validation.constraints.Min;
 
 public class SetDto {
     private Long id;
-    @Min(value = 0, message = "Weight cannot be less than zero")
+    @Min(value = 0, message = "Weight cannot be less than zero.")
     private Integer weight;
-    @Min(value = 0, message = "Reps cannot be less than zero")
+    @Min(value = 0, message = "Reps cannot be less than zero.")
     private Integer reps;
     private Long exerciseId;
 

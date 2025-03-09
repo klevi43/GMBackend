@@ -6,6 +6,8 @@ import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kylecodes.gm.dtos.SetDto;
+import org.kylecodes.gm.exceptions.NotFoundMsg;
+import org.kylecodes.gm.exceptions.RequestFailure;
 import org.kylecodes.gm.repositories.WorkoutRepository;
 import org.kylecodes.gm.services.SetService;
 import org.mockito.Mock;
@@ -20,6 +22,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
+import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -29,6 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 @Sql(scripts = {"classpath:/insertWorkouts.sql", "classpath:/insertExercises.sql", "classpath:/insertSets.sql"})//  this removes the need for setup and teardown
 public class SetControllerIntegrationTest {
+    private final String NO_WORKOUT_FOUND_MSG = "No workout found with given id.";
     private final Long VALID_WORKOUT_ID_1 = 1L;
     private final Long VALID_WORKOUT_ID_2 = 2L;
     private final Long VALID_EXERCISE_ID_1 = 1L;
@@ -88,7 +93,7 @@ public class SetControllerIntegrationTest {
     }
 
     @Test
-    public void SetController_CreateSetForExerciseInWorkout_ThrowException() throws Exception {
+    public void SetController_CreateSetForExerciseInWorkout_ThrowMethodArgumentNotValidExceptionForInvalidReps() throws Exception {
         invalidSetDto = new SetDto();
         invalidSetDto.setReps(-15);
         invalidSetDto.setWeight(15);
@@ -100,8 +105,80 @@ public class SetControllerIntegrationTest {
                 .content(objectMapper.writeValueAsString(invalidSetDto)));
 
         response.andExpect(status().is4xxClientError());
+        response.andExpect(jsonPath("$.message", CoreMatchers.is("Reps cannot be less than zero.\n")));
         response.andDo(MockMvcResultHandlers.print());
 
 
+    }
+
+    @Test
+    public void SetController_CreateSetForExerciseInWorkout_ThrowMethodArgumentNotValidExceptionForInvalidWeight() throws Exception {
+        invalidSetDto = new SetDto();
+        invalidSetDto.setReps(15);
+        invalidSetDto.setWeight(-15);
+        invalidSetDto.setExerciseId(VALID_EXERCISE_ID_1);
+        ResultActions response = mockMvc.perform(post("/workouts/exercises/sets/create")
+                .queryParam("workoutId", VALID_WORKOUT_ID_1.toString())
+                .queryParam("exerciseId", VALID_EXERCISE_ID_1.toString())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(invalidSetDto)));
+
+        response.andExpect(status().is4xxClientError());
+        response.andExpect(jsonPath("$.message", CoreMatchers.is("Weight cannot be less than zero.\n")));
+        response.andDo(MockMvcResultHandlers.print());
+    }
+    @Test
+    public void SetController_GetAllSetsForExerciseInWorkout_ReturnSetDtoList() throws Exception {
+        ResultActions response = mockMvc.perform(get("/workouts/exercises/sets")
+                .queryParam("workoutId", VALID_WORKOUT_ID_1.toString())
+                .queryParam("exerciseId", VALID_EXERCISE_ID_1.toString()));
+        response.andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)));
+        response.andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    public void SetController_GetSetForExerciseInWorkoutById_ReturnSetDtoList() throws Exception {
+        ResultActions response = mockMvc.perform(get("/workouts/exercises/sets/set")
+                .queryParam("workoutId", VALID_WORKOUT_ID_1.toString())
+                .queryParam("exerciseId", VALID_EXERCISE_ID_1.toString())
+                .queryParam("setId", VALID_SET_ID_1.toString()));
+        response.andExpect(status().isOk())
+                .andExpect(jsonPath("$.reps", CoreMatchers.is(setDto.getReps())))
+                .andExpect(jsonPath("$.weight", CoreMatchers.is(setDto.getWeight())))
+                .andExpect(jsonPath("$.id", CoreMatchers.notNullValue()));
+        response.andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    public void SetController_GetSetForExerciseInWorkoutById_ThrowsWorkoutNotFoundException() throws Exception {
+        ResultActions response = mockMvc.perform(get("/workouts/exercises/sets/set")
+                .queryParam("workoutId", INVALID_ID.toString())
+                .queryParam("exerciseId", VALID_EXERCISE_ID_1.toString())
+                .queryParam("setId", VALID_SET_ID_1.toString()));
+
+        response.andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.message", CoreMatchers.is(RequestFailure.GET_REQUEST_FAILURE + NotFoundMsg.WORKOUT_NOT_FOUND_MSG)));
+    }
+
+    @Test
+    public void SetController_GetSetForExerciseInWorkoutById_ThrowsExerciseNotFoundException() throws Exception {
+        ResultActions response = mockMvc.perform(get("/workouts/exercises/sets/set")
+                .queryParam("workoutId", VALID_WORKOUT_ID_1.toString())
+                .queryParam("exerciseId", INVALID_ID.toString())
+                .queryParam("setId", VALID_SET_ID_1.toString()));
+
+        response.andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.message", CoreMatchers.is(RequestFailure.GET_REQUEST_FAILURE + NotFoundMsg.EXERCISE_NOT_FOUND_MSG)));
+    }
+    @Test
+    public void SetController_GetSetForExerciseInWorkoutById_ThrowsSetNotFoundException() throws Exception {
+        ResultActions response = mockMvc.perform(get("/workouts/exercises/sets/set")
+                .queryParam("workoutId", VALID_WORKOUT_ID_1.toString())
+                .queryParam("exerciseId", VALID_EXERCISE_ID_1.toString())
+                .queryParam("setId", INVALID_ID.toString()));
+
+        response.andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.message", CoreMatchers.is(RequestFailure.GET_REQUEST_FAILURE + NotFoundMsg.SET_NOT_FOUND_MSG)));
     }
 }

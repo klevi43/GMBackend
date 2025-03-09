@@ -9,9 +9,9 @@ public class Set {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @Min(value = 0, message = "Weight cannot be less than zero")
+    @Min(value = 0, message = "Weight cannot be less than zero.")
     private Integer weight;
-    @Min(value = 0, message = "Reps cannot be less than zero")
+    @Min(value = 0, message = "Reps cannot be less than zero.")
     private Integer reps;
 
     @ManyToOne
