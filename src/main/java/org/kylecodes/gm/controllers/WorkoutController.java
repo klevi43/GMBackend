@@ -3,9 +3,11 @@ package org.kylecodes.gm.controllers;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.kylecodes.gm.dtos.WorkoutDto;
+import org.kylecodes.gm.exceptions.InvalidWorkoutNameException;
 import org.kylecodes.gm.services.WorkoutService;
 import org.kylecodes.gm.services.WorkoutServiceImpl;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -38,8 +40,10 @@ public class WorkoutController {
 //        return workoutService.findAllMostRecent();
 //    }
     @PostMapping("/workouts/create")
-    public ResponseEntity<WorkoutDto> createWorkout(@Valid @RequestBody WorkoutDto workout) {
-
+    public ResponseEntity<WorkoutDto> createWorkout(@Valid @RequestBody WorkoutDto workout, BindingResult bindingResult) {
+            if (bindingResult.hasErrors()) {
+                throw new InvalidWorkoutNameException(bindingResult);
+            }
             WorkoutDto newWorkout = workoutService.createWorkout(workout);
             URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                     .queryParam("workoutId={id}")
@@ -50,7 +54,7 @@ public class WorkoutController {
     }
 
     @PutMapping("/workouts/update")
-    public WorkoutDto updateWorkoutById(@RequestParam Long workoutId, @Valid @RequestBody WorkoutDto workoutDto) {
+    public WorkoutDto updateWorkoutById(@RequestParam Long workoutId, @Valid @RequestBody WorkoutDto workoutDto, BindingResult bindingResult) {
         WorkoutDto updatedWorkout = workoutService.updateWorkoutById(workoutDto, workoutId);
 
         return updatedWorkout;
