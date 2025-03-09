@@ -8,9 +8,10 @@ import jakarta.validation.constraints.Min;
 public class Set {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Min(0)
     private Long id;
+    @Min(value = 0, message = "Weight cannot be less than zero")
     private Integer weight;
+    @Min(value = 0, message = "Reps cannot be less than zero")
     private Integer reps;
 
     @ManyToOne
