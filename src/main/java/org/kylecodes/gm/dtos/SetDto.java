@@ -1,12 +1,13 @@
 package org.kylecodes.gm.dtos;
 
 import jakarta.validation.constraints.Min;
+import org.kylecodes.gm.constants.InvalidSetData;
 
 public class SetDto {
     private Long id;
-    @Min(value = 0, message = "Weight cannot be less than zero.")
+    @Min(value = 0, message = InvalidSetData.INVALID_WEIGHT_MSG)
     private Integer weight;
-    @Min(value = 0, message = "Reps cannot be less than zero.")
+    @Min(value = 0, message = InvalidSetData.INVALID_REPS_MSG)
     private Integer reps;
     private Long exerciseId;
 

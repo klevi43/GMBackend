@@ -4,6 +4,7 @@ package org.kylecodes.gm.dtos;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
+import org.kylecodes.gm.constants.InvalidWorkoutData;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -12,10 +13,10 @@ import java.util.List;
 public class WorkoutDto {
 
     private Long id;
-    @Size(min = 2, max = 100, message = "Workout name must be between 2 and 100 characters.")
+    @Size(min = 2, max = 50, message = InvalidWorkoutData.INVALID_NAME_MSG)
     private String name;
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    @PastOrPresent(message = "Workout date cannot be later than today's date.")
+    @PastOrPresent(message = InvalidWorkoutData.INVALID_DATE_MSG)
     private LocalDate date;
     private List<ExerciseDto> exerciseDtos;
     public WorkoutDto(Long id, String name, LocalDate date, List<ExerciseDto> exerciseDtos) {

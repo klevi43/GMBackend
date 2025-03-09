@@ -2,6 +2,7 @@ package org.kylecodes.gm.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
+import org.kylecodes.gm.constants.InvalidSetData;
 
 @Entity
 @Table(name = "ex_set")
@@ -9,9 +10,9 @@ public class Set {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @Min(value = 0, message = "Weight cannot be less than zero.")
+    @Min(value = 0, message = InvalidSetData.INVALID_WEIGHT_MSG)
     private Integer weight;
-    @Min(value = 0, message = "Reps cannot be less than zero.")
+    @Min(value = 0, message = InvalidSetData.INVALID_REPS_MSG)
     private Integer reps;
 
     @ManyToOne

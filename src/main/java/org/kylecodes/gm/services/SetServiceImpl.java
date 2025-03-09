@@ -61,10 +61,10 @@ public class SetServiceImpl implements SetService {
     @Override
     public SetDto createSetForExerciseInWorkout(Long workoutId, Long exerciseId, SetDto setDto) {
         Optional.ofNullable(workoutRepository.findById(workoutId)
-                .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.CREATE_REQUEST_FAILURE)));
+                .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.POST_REQUEST_FAILURE)));
 
         Optional<Exercise> exercise = Optional.ofNullable(exerciseRepository.findById(exerciseId)
-                .orElseThrow(() -> new ExerciseNotFoundException(RequestFailure.CREATE_REQUEST_FAILURE)));
+                .orElseThrow(() -> new ExerciseNotFoundException(RequestFailure.POST_REQUEST_FAILURE)));
 
         Set set = new Set();
         set.setWeight(setDto.getWeight());
