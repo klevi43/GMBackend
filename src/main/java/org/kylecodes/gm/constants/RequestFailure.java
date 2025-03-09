@@ -1,4 +1,4 @@
-package org.kylecodes.gm.exceptions;
+package org.kylecodes.gm.constants;
 
 public final class RequestFailure {
 

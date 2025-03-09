@@ -5,7 +5,7 @@ import org.kylecodes.gm.entities.Exercise;
 import org.kylecodes.gm.entities.Set;
 import org.kylecodes.gm.entities.Workout;
 import org.kylecodes.gm.exceptions.ExerciseNotFoundException;
-import org.kylecodes.gm.exceptions.RequestFailure;
+import org.kylecodes.gm.constants.RequestFailure;
 import org.kylecodes.gm.exceptions.SetNotFoundException;
 import org.kylecodes.gm.exceptions.WorkoutNotFoundException;
 import org.kylecodes.gm.repositories.ExerciseRepository;

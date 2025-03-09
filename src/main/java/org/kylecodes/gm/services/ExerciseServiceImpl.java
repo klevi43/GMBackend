@@ -4,7 +4,7 @@ import org.kylecodes.gm.dtos.ExerciseDto;
 import org.kylecodes.gm.entities.Exercise;
 import org.kylecodes.gm.entities.Workout;
 import org.kylecodes.gm.exceptions.ExerciseNotFoundException;
-import org.kylecodes.gm.exceptions.RequestFailure;
+import org.kylecodes.gm.constants.RequestFailure;
 import org.kylecodes.gm.exceptions.WorkoutNotFoundException;
 import org.kylecodes.gm.repositories.ExerciseRepository;
 import org.kylecodes.gm.repositories.WorkoutRepository;
