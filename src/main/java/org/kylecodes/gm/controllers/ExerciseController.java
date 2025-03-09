@@ -23,7 +23,7 @@ public class ExerciseController {
     }
 
     @GetMapping("/workouts/exercises/in-workout")
-    public List<ExerciseDto> getAllExercisesInWorkout(@Valid @RequestParam Long workoutId) {
+    public List<ExerciseDto> getAllExercisesInWorkout(@RequestParam Long workoutId) {
         List<ExerciseDto> allExercisesInWorkout = exerciseService.getAllExercisesInWorkout(workoutId);
 
         return allExercisesInWorkout;
@@ -43,7 +43,7 @@ public class ExerciseController {
     }
 
     @PutMapping("/workouts/exercises/update")
-    public ExerciseDto updateExerciseInWorkout(@Valid @RequestBody ExerciseDto exerciseDto, @Valid @RequestParam Long workoutId) {
+    public ExerciseDto updateExerciseInWorkout(@Valid @RequestBody ExerciseDto exerciseDto, @RequestParam Long workoutId) {
         ExerciseDto updatedExercise = exerciseService.updateExerciseInWorkoutById(exerciseDto, workoutId);
 
         return updatedExercise;

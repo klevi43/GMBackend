@@ -1,11 +1,11 @@
 package org.kylecodes.gm.controllers;
 
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import org.kylecodes.gm.dtos.WorkoutDto;
 import org.kylecodes.gm.services.WorkoutService;
 import org.kylecodes.gm.services.WorkoutServiceImpl;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -27,7 +27,7 @@ public class WorkoutController {
     }
 
     @GetMapping("/workouts/workout")
-    public WorkoutDto getWorkout(@RequestParam Long workoutId) {
+    public WorkoutDto getWorkoutById(@RequestParam Long workoutId) {
         WorkoutDto workoutDto = workoutService.getWorkoutById(workoutId);
 
         return workoutDto;
@@ -38,7 +38,7 @@ public class WorkoutController {
 //        return workoutService.findAllMostRecent();
 //    }
     @PostMapping("/workouts/create")
-    public ResponseEntity<WorkoutDto> createWorkout(@Validated @RequestBody WorkoutDto workout) {
+    public ResponseEntity<WorkoutDto> createWorkout(@Valid @RequestBody WorkoutDto workout) {
 
             WorkoutDto newWorkout = workoutService.createWorkout(workout);
             URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -50,7 +50,7 @@ public class WorkoutController {
     }
 
     @PutMapping("/workouts/update")
-    public WorkoutDto updateWorkoutById(@RequestParam Long workoutId, @Validated @RequestBody WorkoutDto workoutDto) {
+    public WorkoutDto updateWorkoutById(@RequestParam Long workoutId, @Valid @RequestBody WorkoutDto workoutDto) {
         WorkoutDto updatedWorkout = workoutService.updateWorkoutById(workoutDto, workoutId);
 
         return updatedWorkout;

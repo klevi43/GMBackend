@@ -1,5 +1,6 @@
 package org.kylecodes.gm.controllers;
 
+import jakarta.validation.Valid;
 import org.kylecodes.gm.dtos.SetDto;
 import org.kylecodes.gm.services.SetService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +23,14 @@ public class SetContoller {
     }
 
     @GetMapping("/workouts/exercises/sets/set")
-    public SetDto getSetForExerciseInWorkout(@RequestParam Long workoutId,  @RequestParam Long exerciseId,
+    public SetDto getSetForExerciseInWorkoutById(@RequestParam Long workoutId,  @RequestParam Long exerciseId,
                                              @RequestParam Long setId) {
 
         return setService.getSetForExerciseInWorkout(workoutId, exerciseId, setId);
     }
     @PostMapping("/workouts/exercises/sets/create")
-    public ResponseEntity<SetDto> createSetForExerciseInWorkout(@RequestParam Long workoutId, @RequestParam Long exerciseId,
-                                                @RequestBody SetDto setDto) {
+    public ResponseEntity<SetDto> createSetForExerciseInWorkoutById(@RequestParam Long workoutId, @RequestParam Long exerciseId,
+                                                @Valid @RequestBody SetDto setDto) {
 
 
         SetDto newSet = setService.createSetForExerciseInWorkout(workoutId, exerciseId, setDto);
@@ -45,14 +46,14 @@ public class SetContoller {
 
     @PutMapping("/workouts/exercises/sets/update")
     public SetDto updateSetForExerciseInWorkoutById(@RequestParam Long workoutId, @RequestParam Long exerciseId,
-                                                    @RequestBody SetDto setDto) {
+                                                    @Valid @RequestBody SetDto setDto) {
         SetDto updatedSetDto = setService.updateSetForExerciseInWorkout(workoutId, exerciseId, setDto);
 
         return updatedSetDto;
     }
 
     @DeleteMapping("/workouts/exercises/sets/delete")
-    public void deleteSetForExerciseInWorkout(@RequestParam Long workoutId, @RequestParam Long exerciseId,
+    public void deleteSetForExerciseInWorkoutById(@RequestParam Long workoutId, @RequestParam Long exerciseId,
                                               @RequestParam Long setId) {
         setService.deleteSetForExerciseInWorkout(workoutId, exerciseId, setId);
     }

@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.kylecodes.gm.controllers.ExerciseController;
 import org.kylecodes.gm.dtos.ExerciseDto;
+import org.kylecodes.gm.dtos.SetDto;
 import org.kylecodes.gm.dtos.WorkoutDto;
 import org.kylecodes.gm.entities.Workout;
 import org.kylecodes.gm.exceptions.ErrorResponse;
@@ -24,10 +25,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -58,10 +61,16 @@ public class ExerciseControllerTest {
     ErrorResponse errorResponse;
     private ExerciseDto exerciseDto;
     private Workout workout;
-    private final Long WORKOUT_ID = 1L;
+    private final Long VALID_WORKOUT_ID_1 = 1L;
+    private final Long VALID_WORKOUT_ID_2 = 2L;
+    private final Long VALID_EXERCISE_ID_1 = 1L;
+    private final Long VALID_EXERCISE_ID_2 = 2L;
+    private final Long VALID_SET_ID_1 = 1L;
+    private final Long VALID_SET_ID_2 = 2L;
     private final Long INVALID_ID = -1L;
     private List<ExerciseDto> exerciseDtoList = new ArrayList<>();
-
+    private SetDto setDto;
+    private SetDto setDto2;
 
 
 
@@ -75,24 +84,33 @@ public class ExerciseControllerTest {
         objectMapper.registerModule(new JavaTimeModule());
 
         workout = new Workout();
-        workout.setId(WORKOUT_ID);
+        workout.setId(VALID_WORKOUT_ID_1);
         workout.setName("Test Workout");
         workout.setDate(LocalDate.now());
+        setDto = new SetDto();
+        setDto.setId(VALID_SET_ID_1);
+        setDto.setWeight(15);
+        setDto.setReps(15);
+        setDto.setExerciseId(VALID_EXERCISE_ID_1);
 
+        setDto2 = new SetDto();
+        setDto2.setId(VALID_SET_ID_2);
+        setDto2.setWeight(15);
+        setDto2.setReps(15);
+        setDto2.setExerciseId(VALID_EXERCISE_ID_1);
 
         exerciseDto = new ExerciseDto();
-        exerciseDto.setId(WORKOUT_ID);
+        exerciseDto.setId(VALID_EXERCISE_ID_1);
         exerciseDto.setName("Test Dto");
         exerciseDto.setDate(workout.getDate());
         exerciseDto.setWorkoutId(workout.getId());
-        exerciseDtoList.add(exerciseDto);
-        exerciseDtoList.add(exerciseDto);
-        exerciseDtoList.add(exerciseDto);
+        exerciseDto.setSetDtoList(Arrays.asList(setDto, setDto2));
+
         WorkoutDto workoutDto = new WorkoutDto();
-        workoutDto.setId(40L);
+        workoutDto.setId(VALID_WORKOUT_ID_2);
         workoutDto.setName("Test WorkoutDto");
         workoutDto.setDate(LocalDate.now());
-        workoutDto.setExerciseDtos(exerciseDtoList);
+        workoutDto.setExerciseDtos(Arrays.asList(exerciseDto));
 
     }
 
@@ -106,14 +124,16 @@ public class ExerciseControllerTest {
         given(exerciseService.createExercise(ArgumentMatchers.any(), ArgumentMatchers.anyLong())).willAnswer((invocationOnMock -> invocationOnMock.getArgument(0)));
 
         ResultActions response = mockMvc
-                .perform(MockMvcRequestBuilders.post("/workouts/exercises/create?workoutId={workoutId}", WORKOUT_ID.toString())
+                .perform(MockMvcRequestBuilders.post("/workouts/exercises/create?workoutId={workoutId}", VALID_WORKOUT_ID_1.toString())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(exerciseDto)));
 
         response.andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name", CoreMatchers.is("Test Dto")))
                 .andExpect(jsonPath("$.date", CoreMatchers.is(LocalDate.now().toString())))
-                .andExpect(jsonPath("$.workoutId", CoreMatchers.is(1)));
+                .andExpect(jsonPath("$.workoutId", CoreMatchers.is(VALID_WORKOUT_ID_1.intValue())))
+                .andExpect(jsonPath("$.setDtoList", hasSize(2)))
+                .andDo(MockMvcResultHandlers.print());
         response.andDo(print());
     }
 
@@ -140,54 +160,60 @@ public class ExerciseControllerTest {
 
     @Test
     public void ExerciseController_GetAllExercises_ReturnExerciseList() throws Exception {
-        when(exerciseService.getAllExercises()).thenReturn(exerciseDtoList);
+        when(exerciseService.getAllExercises()).thenReturn(Arrays.asList(exerciseDto));
         ResultActions response = mockMvc.perform(MockMvcRequestBuilders.get("/workouts/exercises"));
 
         response.andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(3)));
+                .andExpect(jsonPath("$", hasSize(1)));
     }
 
 
     @Test
     public void ExerciseController_GetAllExercisesInWorkout_ReturnExerciseList() throws Exception {
-        when(exerciseService.getAllExercises()).thenReturn(exerciseDtoList);
-        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.get("/workouts/exercises?workoutId={workoutId}", WORKOUT_ID));
+        when(exerciseService.getAllExercises()).thenReturn(Arrays.asList(exerciseDto));
+        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.get("/workouts/exercises")
+                .queryParam("workoutId", VALID_WORKOUT_ID_1.toString()));
 
         response.andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(3)));
+                .andExpect(jsonPath("$", hasSize(1)));
     }
 
     @Test
     public void ExerciseController_UpdateExerciseInWorkout_ReturnUpdatedExercise() throws Exception {
         ExerciseDto updatedExerciseDto = new ExerciseDto();
-        updatedExerciseDto.setWorkoutId(WORKOUT_ID);
+        updatedExerciseDto.setWorkoutId(VALID_WORKOUT_ID_1);
         updatedExerciseDto.setId(exerciseDto.getId());
         updatedExerciseDto.setDate(workout.getDate());
         updatedExerciseDto.setName("Updated Test Dto");
+        updatedExerciseDto.setSetDtoList(Arrays.asList(setDto, setDto2));
 
         given(exerciseService.updateExerciseInWorkoutById(ArgumentMatchers.any(), ArgumentMatchers.anyLong())).willAnswer((invocationOnMock -> invocationOnMock.getArgument(0)));
 
 
-        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.put("/workouts/exercises/update?workoutId={workoutId}", WORKOUT_ID.toString())
+        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.put("/workouts/exercises/update")
+                        .queryParam("workoutId", VALID_WORKOUT_ID_1.toString())
+                        .queryParam("exerciseId", VALID_EXERCISE_ID_1.toString())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(updatedExerciseDto)));
-
-        response.andExpect(status().isOk())
-                        .andExpect(jsonPath("$.name", CoreMatchers.is(updatedExerciseDto.getName())));
         response.andDo(print());
+        response.andExpect(status().isOk())
+                        .andExpect(jsonPath("$.name", CoreMatchers.is(updatedExerciseDto.getName())))
+                .andExpect(jsonPath("$.date", CoreMatchers.is(workout.getDate().toString())))
+                .andExpect(jsonPath("$.setDtoList", hasSize(2)));
+
     }
 
     @Test
     public void ExerciseController_DeleteExerciseInWorkoutById_ReturnNothing() throws Exception {
 
-        doNothing().when(exerciseService).deleteExerciseInWorkoutById(WORKOUT_ID, exerciseDto.getId());
-        ResultActions response = mockMvc.perform(MockMvcRequestBuilders
-                        .delete("/workouts/exercises/delete?workoutId={workoutId}&exerciseId={exerciseId}",
-                                WORKOUT_ID, exerciseDto.getId())
-                        .contentType(MediaType.APPLICATION_JSON));
+        doNothing().when(exerciseService).deleteExerciseInWorkoutById(Mockito.anyLong(), Mockito.anyLong());
+        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.delete("/workouts/exercises/delete",
+                                VALID_WORKOUT_ID_1, exerciseDto.getId())
+                .queryParam("workoutId", VALID_WORKOUT_ID_1.toString())
+                .queryParam("exerciseId", VALID_EXERCISE_ID_1.toString()));
 
-                response.andDo(print())
-                        .andExpect(status().isOk());
+        response.andDo(print())
+                .andExpect(status().isOk());
 
 
     }
