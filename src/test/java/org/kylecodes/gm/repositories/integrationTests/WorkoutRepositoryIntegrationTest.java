@@ -49,7 +49,7 @@ public class WorkoutRepositoryIntegrationTest {
         workout2.setName("Back Day");
         workout2.setDate(LocalDate.now());
 
-        int expectedSize = 7;
+        final int EXPECTED_SIZE = 2;
 
         workoutRepository.save(workout1);
         workoutRepository.save(workout2);
@@ -59,7 +59,7 @@ public class WorkoutRepositoryIntegrationTest {
 
         // Assert
         assertThat(workoutList).isNotNull();
-        assertThat(workoutList.size()).isEqualTo(expectedSize);
+        assertThat(workoutList.size()).isEqualTo(EXPECTED_SIZE);
     }
 
 

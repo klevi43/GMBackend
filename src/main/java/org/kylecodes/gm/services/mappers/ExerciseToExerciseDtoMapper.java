@@ -23,7 +23,7 @@ public class ExerciseToExerciseDtoMapper implements EntityToDtoMapper<Exercise, 
     }
 
     private List<SetDto> getSetDtoListForExercise(Exercise exercise) {
-        return exercise != null ?
+        return exercise.getSets() != null ?
                 exercise.getSets().stream().map(set -> setMapper.mapToDto(set)).toList()
                 : new ArrayList<>();
     }
