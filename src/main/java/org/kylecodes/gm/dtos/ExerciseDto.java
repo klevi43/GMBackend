@@ -10,11 +10,11 @@ import java.util.List;
 public class ExerciseDto {
     private Long id;
 
-    @Size(min = 2, max = 100, message = "Exercise name must be between 2 and 100 characters")
+    @Size(min = 2, max = 100, message = "Exercise Name must be between 2 and 100 characters.")
     private String name;
 
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    @PastOrPresent(message = "Exercise date cannot exceed today's date")
+    @PastOrPresent(message =  "Exercise date cannot be later than today's date.")
     private LocalDate date;
 
 

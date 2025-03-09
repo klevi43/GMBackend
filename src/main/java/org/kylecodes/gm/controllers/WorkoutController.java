@@ -3,7 +3,6 @@ package org.kylecodes.gm.controllers;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.kylecodes.gm.dtos.WorkoutDto;
-import org.kylecodes.gm.exceptions.InvalidWorkoutNameException;
 import org.kylecodes.gm.services.WorkoutService;
 import org.kylecodes.gm.services.WorkoutServiceImpl;
 import org.springframework.http.ResponseEntity;
@@ -40,10 +39,8 @@ public class WorkoutController {
 //        return workoutService.findAllMostRecent();
 //    }
     @PostMapping("/workouts/create")
-    public ResponseEntity<WorkoutDto> createWorkout(@Valid @RequestBody WorkoutDto workout, BindingResult bindingResult) {
-            if (bindingResult.hasFieldErrors("name")) {
-                throw new InvalidWorkoutNameException(bindingResult);
-            }
+    public ResponseEntity<WorkoutDto> createWorkout(@Valid @RequestBody WorkoutDto workout) {
+
             WorkoutDto newWorkout = workoutService.createWorkout(workout);
             URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                     .queryParam("workoutId={id}")
