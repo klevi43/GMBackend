@@ -12,10 +12,10 @@ import java.util.List;
 public class WorkoutDto {
 
     private Long id;
-    @Size(min = 2, max = 200)
+    @Size(min = 2, max = 100, message = "Workout name must be between 2 and 100 characters.")
     private String name;
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    @PastOrPresent
+    @PastOrPresent(message = "Workout date cannot be later than today's date.")
     private LocalDate date;
     private List<ExerciseDto> exerciseDtos;
     public WorkoutDto(Long id, String name, LocalDate date, List<ExerciseDto> exerciseDtos) {

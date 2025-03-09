@@ -41,7 +41,7 @@ public class WorkoutController {
 //    }
     @PostMapping("/workouts/create")
     public ResponseEntity<WorkoutDto> createWorkout(@Valid @RequestBody WorkoutDto workout, BindingResult bindingResult) {
-            if (bindingResult.hasErrors()) {
+            if (bindingResult.hasFieldErrors("name")) {
                 throw new InvalidWorkoutNameException(bindingResult);
             }
             WorkoutDto newWorkout = workoutService.createWorkout(workout);
