@@ -159,5 +159,43 @@ public class WorkoutControllerIntegrationTest {
         assertThat(workoutRepository.findById(VALID_WORKOUT_ID_1).get().getDate()).isNotEqualTo(LocalDate.now().toString());
     }
 
+    @Test
+    public void WorkoutController_UpdateWorkoutById_ThrowWorkoutNotFoundException() throws Exception {
+        assertThat(workoutRepository.findById(INVALID_WORKOUT_ID)).isEmpty();
+
+        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.put("/workouts/update")
+                        .queryParam("workoutId", INVALID_WORKOUT_ID.toString())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(workoutDto)));
+
+        response.andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.status", CoreMatchers.is(404)))
+                .andExpect(jsonPath("$.message",
+                        CoreMatchers.is(RequestFailure.PUT_REQUEST_FAILURE + NO_WORKOUT_FOUND_MSG)));
+    }
+
+    @Test
+    public void WorkoutController_DeleteWorkoutById_ReturnNothing() throws Exception {
+        assertThat(workoutRepository.findById(VALID_WORKOUT_ID_1)).isNotNull();
+
+        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.delete("/workouts/delete")
+                        .queryParam("workoutId", VALID_WORKOUT_ID_1.toString()));
+
+        response.andExpect(status().isOk());
+
+        assertThat(workoutRepository.findById(VALID_WORKOUT_ID_1)).isEmpty();
+    }
+
+    @Test
+    public void WorkoutController_DeleteWorkoutById_ThrowsWorkoutNotFoundException() throws Exception {
+        assertThat(workoutRepository.findById(INVALID_WORKOUT_ID)).isEmpty();
+
+        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.delete("/workouts/delete")
+                        .queryParam("workoutId", INVALID_WORKOUT_ID.toString()));
+
+        response.andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.status", CoreMatchers.is(404)))
+                .andExpect(jsonPath("$.message", CoreMatchers.is(RequestFailure.DELETE_REQUEST_FAILURE + NO_WORKOUT_FOUND_MSG)));
+    }
 
 }
