@@ -6,6 +6,7 @@ import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.kylecodes.gm.constants.NotFoundMsg;
 import org.kylecodes.gm.dtos.WorkoutDto;
 import org.kylecodes.gm.entities.Workout;
 import org.kylecodes.gm.constants.RequestFailure;
@@ -139,7 +140,7 @@ public class WorkoutControllerIntegrationTest {
                     .andExpect(status().is4xxClientError())
                     .andExpect(status().isNotFound())
                     .andExpect(jsonPath("$.message", CoreMatchers.is(RequestFailure.GET_REQUEST_FAILURE
-                            + NO_WORKOUT_FOUND_MSG)));
+                            + NotFoundMsg.WORKOUT_NOT_FOUND_MSG)));
 
         }
     @Test
@@ -173,7 +174,7 @@ public class WorkoutControllerIntegrationTest {
         response.andExpect(status().is4xxClientError())
                 .andExpect(jsonPath("$.status", CoreMatchers.is(404)))
                 .andExpect(jsonPath("$.message",
-                        CoreMatchers.is(RequestFailure.PUT_REQUEST_FAILURE + NO_WORKOUT_FOUND_MSG)));
+                        CoreMatchers.is(RequestFailure.PUT_REQUEST_FAILURE + NotFoundMsg.WORKOUT_NOT_FOUND_MSG)));
     }
 
     @Test
@@ -197,7 +198,7 @@ public class WorkoutControllerIntegrationTest {
 
         response.andExpect(status().is4xxClientError())
                 .andExpect(jsonPath("$.status", CoreMatchers.is(404)))
-                .andExpect(jsonPath("$.message", CoreMatchers.is(RequestFailure.DELETE_REQUEST_FAILURE + NO_WORKOUT_FOUND_MSG)));
+                .andExpect(jsonPath("$.message", CoreMatchers.is(RequestFailure.DELETE_REQUEST_FAILURE + NotFoundMsg.WORKOUT_NOT_FOUND_MSG)));
     }
 
 }
