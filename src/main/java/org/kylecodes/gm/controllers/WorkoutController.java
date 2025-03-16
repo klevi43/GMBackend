@@ -22,7 +22,7 @@ public class WorkoutController {
         this.workoutService = workoutService;
     }
 
-    @GetMapping("/workouts")
+    @GetMapping("/workouts/history")
     public List<WorkoutDto>getAllWorkouts() {
         return workoutService.getAllWorkouts();
     }
@@ -34,10 +34,10 @@ public class WorkoutController {
         return workoutDto;
     }
 
-//    @GetMapping("/workouts/current")
-//    public List<Workout> getAllRecent() {
-//        return workoutService.findAllMostRecent();
-//    }
+    @GetMapping("/workouts")
+    public List<WorkoutDto> getAllRecent() {
+        return workoutService.getAllMostRecentWorkouts();
+    }
     @PostMapping("/workouts/create")
     public ResponseEntity<WorkoutDto> createWorkout(@Valid @RequestBody WorkoutDto workout) {
 

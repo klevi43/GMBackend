@@ -60,13 +60,13 @@ public class ExerciseServiceTest {
         exercise = new Exercise();
         exercise.setId(1L);
         exercise.setName("Test Exercise");
-        exercise.setDate(workout.getDate());
+
         exercise.setWorkout(workout);
 
 
         exerciseDto = new ExerciseDto();
         exerciseDto.setName("Test Exercise");
-        exerciseDto.setDate(workout.getDate());
+
         exerciseDto.setWorkoutId(workout.getId());
     }
 
@@ -80,7 +80,6 @@ public class ExerciseServiceTest {
 
         assertThat(savedExerciseDto).isNotNull();
         assertThat(savedExerciseDto.getName()).isEqualTo(exerciseDto.getName());
-        assertThat(savedExerciseDto.getDate()).isEqualTo(exerciseDto.getDate());
         assertThat(savedExerciseDto.getWorkoutId()).isEqualTo(exerciseDto.getWorkoutId());
 
     }
@@ -127,7 +126,6 @@ public class ExerciseServiceTest {
         updateDto.setId(exercise.getId());
         updateDto.setWorkoutId(workout.getId());
         updateDto.setName("Updated");
-        updateDto.setDate(LocalDate.of(2025, 02, 27)); // exercise date should not differ from workout date
 
 
         when(workoutRepository.findById(workout.getId())).thenReturn(Optional.ofNullable(workout));
@@ -139,7 +137,7 @@ public class ExerciseServiceTest {
 
         assertThat(savedExercise).isNotNull();
         assertThat(savedExercise.getName()).isEqualTo(updateDto.getName());
-        assertThat(savedExercise.getDate()).isNotEqualTo(LocalDate.of(2025, 2, 27));
+
         assertThat(savedExercise.getWorkoutId()).isEqualTo(updateDto.getWorkoutId());
         assertThat(savedExercise.getId()).isEqualTo(updateDto.getId());
     }

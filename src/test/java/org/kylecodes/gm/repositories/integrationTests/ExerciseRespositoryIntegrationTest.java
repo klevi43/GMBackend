@@ -13,7 +13,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,7 +49,7 @@ public class ExerciseRespositoryIntegrationTest {
         exercise2 = new Exercise();
 
         exercise2.setName("Test Exercise 2");
-        exercise2.setDate(LocalDate.now());
+
         exercise2.setWorkout(workout);
     }
 
@@ -62,7 +61,7 @@ public class ExerciseRespositoryIntegrationTest {
         assertThat(savedExercise).isNotNull();
         assertThat(savedExercise.getId()).isNotNull();
         assertThat(savedExercise.getName()).isEqualTo("Test Exercise 2");
-        assertThat(savedExercise.getDate()).isEqualTo(LocalDate.now());
+
 
     }
 
@@ -73,7 +72,7 @@ public class ExerciseRespositoryIntegrationTest {
 
         exercise = new Exercise();
         exercise.setName("Test Exercise");
-        exercise.setDate(LocalDate.now());
+
         exercise.setWorkout(workout);
 
         savedExercise = exerciseRepository.save(exercise);
@@ -109,11 +108,11 @@ public class ExerciseRespositoryIntegrationTest {
         assertThat(optionalExercise).isPresent();
 
         optionalExercise.get().setName("Update");
-        optionalExercise.get().setDate(LocalDate.of(2024, 2, 28));
+
         Exercise updatedExercise = exerciseRepository.save(optionalExercise.get());
 
         assertThat(updatedExercise.getName()).isEqualTo(optionalExercise.get().getName());
-        assertThat(updatedExercise.getDate()).isEqualTo(optionalExercise.get().getDate());
+
     }
 
     @Test

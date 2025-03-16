@@ -102,7 +102,7 @@ public class ExerciseControllerTest {
         exerciseDto = new ExerciseDto();
         exerciseDto.setId(VALID_EXERCISE_ID_1);
         exerciseDto.setName("Test Dto");
-        exerciseDto.setDate(workout.getDate());
+
         exerciseDto.setWorkoutId(workout.getId());
         exerciseDto.setSetDtoList(Arrays.asList(setDto, setDto2));
 
@@ -178,12 +178,14 @@ public class ExerciseControllerTest {
                 .andExpect(jsonPath("$", hasSize(1)));
     }
 
+
+
     @Test
     public void ExerciseController_UpdateExerciseInWorkout_ReturnUpdatedExercise() throws Exception {
         ExerciseDto updatedExerciseDto = new ExerciseDto();
         updatedExerciseDto.setWorkoutId(VALID_WORKOUT_ID_1);
         updatedExerciseDto.setId(exerciseDto.getId());
-        updatedExerciseDto.setDate(workout.getDate());
+
         updatedExerciseDto.setName("Updated Test Dto");
         updatedExerciseDto.setSetDtoList(Arrays.asList(setDto, setDto2));
 

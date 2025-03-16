@@ -1,14 +1,11 @@
 package org.kylecodes.gm.entities;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
 import org.kylecodes.gm.constants.InvalidExerciseData;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -21,9 +18,7 @@ public class Exercise {
     @Size(min = 2, max = 50, message = InvalidExerciseData.INVALID_NAME_MSG)
     private String name;
 
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    @PastOrPresent(message = InvalidExerciseData.INVALID_DATE_MSG)
-    private LocalDate date;
+
 
     @ManyToOne
     @JoinColumn
@@ -33,23 +28,16 @@ public class Exercise {
     @JsonIgnore
     List<Set> sets;
 
-    public Exercise(Long id, String name, LocalDate date, Workout workout, List<Set> sets) {
+    public Exercise(Long id, String name, Workout workout, List<Set> sets) {
         this.id = id;
         this.name = name;
-        this.date = date;
         this.workout = workout;
         this.sets = sets;
     }
     public Exercise() {
 
     }
-    public LocalDate getDate() {
-        return date;
-    }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
 
     public String getName() {
         return name;

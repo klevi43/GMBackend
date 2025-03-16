@@ -49,7 +49,6 @@ public class ExerciseServiceImpl implements ExerciseService{
 
         Exercise exercise = new Exercise();
         exercise.setName(exerciseDto.getName());
-        exercise.setDate(workout.get().getDate());
         exercise.setWorkout(workout.get());
 
         Exercise newExercise = exerciseRepository.save(exercise);

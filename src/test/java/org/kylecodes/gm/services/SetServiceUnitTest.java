@@ -74,19 +74,19 @@ public class SetServiceUnitTest {
         exercise = new Exercise();
         exercise.setId(VALID_ID);
         exercise.setName("Test Exercise");
-        exercise.setDate(workout.getDate());
+
         exercise.setWorkout(workout);
 
         exercise2 = new Exercise();
         exercise2.setId(VALID_ID_2);
         exercise2.setName("Test Exercise 2");
-        exercise2.setDate(workout.getDate());
+
         exercise2.setWorkout(workout);
 
 
         exerciseDto = new ExerciseDto();
         exerciseDto.setName("Test Exercise");
-        exerciseDto.setDate(workout.getDate());
+
         exerciseDto.setWorkoutId(workout.getId());
 
         set = new Set();

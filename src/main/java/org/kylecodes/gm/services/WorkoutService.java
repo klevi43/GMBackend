@@ -8,6 +8,7 @@ public interface WorkoutService {
 
     WorkoutDto createWorkout(WorkoutDto workoutDto);
 //    WorkoutResponse getAllWorkouts(int pageNo, int pageSize);
+    List<WorkoutDto> getAllMostRecentWorkouts();
     List<WorkoutDto> getAllWorkouts();
     WorkoutDto getWorkoutById(Long id);
     WorkoutDto updateWorkoutById(WorkoutDto workoutDto, Long id);

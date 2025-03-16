@@ -26,9 +26,18 @@ public class WorkoutServiceImpl implements WorkoutService {
     EntityToDtoMapper<Workout, WorkoutDto> workoutMapper = new WorkoutToWorkoutDtoMapper();
     EntityToDtoMapper<Exercise, ExerciseDto> exerciseMapper = new ExerciseToExerciseDtoMapper();
 
-    public List<Workout> findAllMostRecent() {
-        return workoutRepository.findAllMostRecent();
-
+    @Override
+    public List<WorkoutDto> getAllMostRecentWorkouts() {
+        List<Workout> workoutList = workoutRepository.findAllMostRecentWorkouts();
+        if (workoutList.isEmpty()) {
+            return new ArrayList<WorkoutDto>();
+        }
+        List<WorkoutDto> workoutDtoList = new ArrayList<>();
+        for (Workout workout : workoutList) {
+            WorkoutDto workoutDto = workoutMapper.mapToDto(workout);
+            workoutDtoList.add(workoutDto);
+        }
+        return workoutDtoList;
     }
 
     @Override

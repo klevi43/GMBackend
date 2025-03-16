@@ -16,7 +16,6 @@ public class ExerciseToExerciseDtoMapper implements EntityToDtoMapper<Exercise, 
         ExerciseDto exerciseDto = new ExerciseDto();
         exerciseDto.setId(exercise.getId());
         exerciseDto.setName(exercise.getName());
-        exerciseDto.setDate(exercise.getDate());
         exerciseDto.setWorkoutId(exercise.getWorkout().getId());
         exerciseDto.setSetDtoList(getSetDtoListForExercise(exercise));
         return exerciseDto;
