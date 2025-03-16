@@ -35,7 +35,7 @@ public class WorkoutController {
     }
 
     @GetMapping("/workouts")
-    public List<WorkoutDto> getAllRecent() {
+    public List<WorkoutDto> getAllMostRecentWorkouts() {
         return workoutService.getAllMostRecentWorkouts();
     }
     @PostMapping("/workouts/create")
