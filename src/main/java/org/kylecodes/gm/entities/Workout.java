@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
 import org.kylecodes.gm.constants.InvalidWorkoutData;
@@ -21,9 +22,11 @@ public class Workout {
 
     @Column(nullable = false, length = 50)
 
+    @NotNull
     @Size(min = 2, max = 50, message = InvalidWorkoutData.INVALID_NAME_MSG)
     private String name;
 
+    @NotNull
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @PastOrPresent(message = InvalidWorkoutData.INVALID_DATE_MSG)
     private LocalDate date;
