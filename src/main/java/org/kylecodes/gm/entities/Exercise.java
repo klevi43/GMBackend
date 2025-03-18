@@ -3,8 +3,10 @@ package org.kylecodes.gm.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.kylecodes.gm.constants.InvalidExerciseData;
+import org.kylecodes.gm.constants.InvalidInputData;
 
 import java.util.List;
 
@@ -15,11 +17,12 @@ public class Exercise {
     @Min(0)
     private Long id;
 
+    @NotNull(message = InvalidInputData.INVALID_EMPTY_NAME_MSG)
     @Size(min = 2, max = 50, message = InvalidExerciseData.INVALID_NAME_MSG)
     private String name;
 
 
-
+    @NotNull(message = InvalidInputData.INVALID_WORKOUT_MSG)
     @ManyToOne
     @JoinColumn
     Workout workout;
