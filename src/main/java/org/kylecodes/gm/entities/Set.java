@@ -43,27 +43,27 @@ public class Set {
         this.id = id;
     }
 
-    public Integer getWeight() {
+    public @NotNull(message = InvalidInputData.INVALID_EMPTY_WEIGHT_MSG) @Min(value = 0, message = InvalidSetData.INVALID_WEIGHT_MSG) Integer getWeight() {
         return weight;
     }
 
-    public void setWeight(Integer weight) {
+    public void setWeight(@NotNull(message = InvalidInputData.INVALID_EMPTY_WEIGHT_MSG) @Min(value = 0, message = InvalidSetData.INVALID_WEIGHT_MSG) Integer weight) {
         this.weight = weight;
     }
 
-    public Integer getReps() {
+    public @NotNull(message = InvalidInputData.INVALID_EMPTY_REPS_MSG) @Min(value = 0, message = InvalidSetData.INVALID_REPS_MSG) Integer getReps() {
         return reps;
     }
 
-    public void setReps(Integer reps) {
+    public void setReps(@NotNull(message = InvalidInputData.INVALID_EMPTY_REPS_MSG) @Min(value = 0, message = InvalidSetData.INVALID_REPS_MSG) Integer reps) {
         this.reps = reps;
     }
 
-    public Exercise getExercise() {
+    public @NotNull(message = InvalidInputData.INVALID_EXERCISE_MSG) Exercise getExercise() {
         return exercise;
     }
 
-    public void setExercise(Exercise exercise) {
+    public void setExercise(@NotNull(message = InvalidInputData.INVALID_EXERCISE_MSG) Exercise exercise) {
         this.exercise = exercise;
     }
 

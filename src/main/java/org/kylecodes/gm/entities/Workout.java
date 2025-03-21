@@ -54,19 +54,19 @@ public class Workout {
         this.id = id;
     }
 
-    public String getName() {
+    public @NotNull(message = InvalidInputData.INVALID_EMPTY_NAME_MSG) @Size(min = 2, max = 50, message = InvalidWorkoutData.INVALID_NAME_MSG) String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(@NotNull(message = InvalidInputData.INVALID_EMPTY_NAME_MSG) @Size(min = 2, max = 50, message = InvalidWorkoutData.INVALID_NAME_MSG) String name) {
         this.name = name;
     }
 
-    public LocalDate getDate() {
+    public @NotNull(message = InvalidInputData.INVALID_EMPTY_DATE_MSG) @PastOrPresent(message = InvalidWorkoutData.INVALID_DATE_MSG) LocalDate getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(@NotNull(message = InvalidInputData.INVALID_EMPTY_DATE_MSG) @PastOrPresent(message = InvalidWorkoutData.INVALID_DATE_MSG) LocalDate date) {
         this.date = date;
     }
 

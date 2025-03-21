@@ -27,7 +27,7 @@ public class Exercise {
     @JoinColumn
     Workout workout;
 
-    @OneToMany( orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "exercise", cascade = {CascadeType.ALL})
+    @OneToMany(orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "exercise", cascade = {CascadeType.ALL})
     @JsonIgnore
     List<Set> sets;
 
@@ -37,32 +37,32 @@ public class Exercise {
         this.workout = workout;
         this.sets = sets;
     }
+
     public Exercise() {
 
     }
 
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Long getId() {
+    public @Min(0) Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(@Min(0) Long id) {
         this.id = id;
     }
 
-    public Workout getWorkout() {
+    public @NotNull(message = InvalidInputData.INVALID_EMPTY_NAME_MSG) @Size(min = 2, max = 50, message = InvalidExerciseData.INVALID_NAME_MSG) String getName() {
+        return name;
+    }
+
+    public void setName(@NotNull(message = InvalidInputData.INVALID_EMPTY_NAME_MSG) @Size(min = 2, max = 50, message = InvalidExerciseData.INVALID_NAME_MSG) String name) {
+        this.name = name;
+    }
+
+    public @NotNull(message = InvalidInputData.INVALID_WORKOUT_MSG) Workout getWorkout() {
         return workout;
     }
 
-    public void setWorkout(Workout workout) {
+    public void setWorkout(@NotNull(message = InvalidInputData.INVALID_WORKOUT_MSG) Workout workout) {
         this.workout = workout;
     }
 
