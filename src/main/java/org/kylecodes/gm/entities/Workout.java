@@ -32,7 +32,7 @@ public class Workout {
     @PastOrPresent(message = InvalidWorkoutData.INVALID_DATE_MSG)
     private LocalDate date;
 
-    @OneToMany( fetch = FetchType.LAZY, mappedBy = "workout", cascade = {CascadeType.ALL})
+    @OneToMany( orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "workout", cascade = {CascadeType.ALL})
     @JsonIgnore
     List<Exercise> exercises;
 
