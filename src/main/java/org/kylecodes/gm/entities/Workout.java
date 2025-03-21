@@ -31,6 +31,9 @@ public class Workout {
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @PastOrPresent(message = InvalidWorkoutData.INVALID_DATE_MSG)
     private LocalDate date;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @OneToMany( orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "workout", cascade = {CascadeType.ALL})
     @JsonIgnore
