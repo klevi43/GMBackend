@@ -3,6 +3,7 @@ package org.kylecodes.gm.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import org.kylecodes.gm.constants.Roles;
 
 import java.util.List;
 
@@ -17,6 +18,9 @@ public class User {
     @NotNull
     String password;
 
+    @NotNull
+    String role;
+
     @OneToMany
     @JsonIgnore
     List<Workout> workouts;
@@ -25,6 +29,7 @@ public class User {
         this.id = id;
         this.username = username;
         this.password = password;
+        this.role = Roles.USER;
         this.workouts = workouts;
     }
 
@@ -53,6 +58,14 @@ public class User {
 
     public void setPassword(@NotNull String password) {
         this.password = password;
+    }
+
+    public @NotNull String getRole() {
+        return role;
+    }
+
+    public void setRole(@NotNull String role) {
+        this.role = role;
     }
 
     public List<Workout> getWorkouts() {
