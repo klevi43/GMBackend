@@ -3,69 +3,98 @@ package org.kylecodes.gm.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import org.kylecodes.gm.constants.Roles;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.List;
 
 @Entity(name = "user_tbl")
-public class User {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    Integer id;
+    private Long id;
 
     @NotNull
-    String username;
+    private String email;
     @NotNull
-    String password;
+    private String password;
 
-    @NotNull
-    String role;
+    @ManyToMany
+    private List<Role> roles;
 
     @OneToMany
     @JsonIgnore
-    List<Workout> workouts;
+    private List<Workout> workouts;
 
-    public User(Integer id, String username, String password, List<Workout> workouts) {
+    public User(Long id, String email, String password, List<Role> roles, List<Workout> workouts) {
         this.id = id;
-        this.username = username;
+        this.email = email;
         this.password = password;
-        this.role = Roles.USER;
+        this.roles = roles;
         this.workouts = workouts;
     }
 
     public User() {
     }
 
-    public Integer getId() {
+
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return UserDetails.super.isAccountNonExpired();
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return UserDetails.super.isAccountNonLocked();
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return UserDetails.super.isCredentialsNonExpired();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return UserDetails.super.isEnabled();
+    }
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public @NotNull String getUsername() {
-        return username;
+    public void setEmail(@NotNull String email) {
+        this.email = email;
     }
 
-    public void setUsername(@NotNull String username) {
-        this.username = username;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
     }
 
     public @NotNull String getPassword() {
         return password;
     }
 
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
+
     public void setPassword(@NotNull String password) {
         this.password = password;
     }
 
-    public @NotNull String getRole() {
-        return role;
+    public List<Role> getRoles() {
+        return roles;
     }
 
-    public void setRole(@NotNull String role) {
-        this.role = role;
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 
     public List<Workout> getWorkouts() {
