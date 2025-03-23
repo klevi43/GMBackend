@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -20,18 +22,18 @@ public class User implements UserDetails {
     @NotNull
     private String password;
 
-    @ManyToMany
-    private List<Role> roles;
+
+    private String role;
 
     @OneToMany
     @JsonIgnore
     private List<Workout> workouts;
 
-    public User(Long id, String email, String password, List<Role> roles, List<Workout> workouts) {
+    public User(Long id, String email, String password, String role, List<Workout> workouts) {
         this.id = id;
         this.email = email;
         this.password = password;
-        this.roles = roles;
+        this.role = role;
         this.workouts = workouts;
     }
 
@@ -42,22 +44,22 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return UserDetails.super.isAccountNonExpired();
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return UserDetails.super.isAccountNonLocked();
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return UserDetails.super.isCredentialsNonExpired();
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return UserDetails.super.isEnabled();
+        return true;
     }
     public Long getId() {
         return id;
@@ -73,7 +75,10 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+         List<GrantedAuthority> roles = new ArrayList();
+         roles.add(new SimpleGrantedAuthority(this.role));
+
+         return roles;
     }
 
     public @NotNull String getPassword() {
@@ -87,14 +92,6 @@ public class User implements UserDetails {
 
     public void setPassword(@NotNull String password) {
         this.password = password;
-    }
-
-    public List<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
     }
 
     public List<Workout> getWorkouts() {
