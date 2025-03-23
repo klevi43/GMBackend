@@ -23,17 +23,20 @@ public class WorkoutDto {
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @PastOrPresent(message = InvalidWorkoutData.INVALID_DATE_MSG)
     private LocalDate date;
+    private Long userId;
+
     private List<ExerciseDto> exerciseDtos;
-    public WorkoutDto(Long id, String name, LocalDate date, List<ExerciseDto> exerciseDtos) {
+
+    public WorkoutDto(Long id, String name, LocalDate date, Long userId, List<ExerciseDto> exerciseDtos) {
         this.id = id;
         this.name = name;
         this.date = date;
+        this.userId = userId;
         this.exerciseDtos = exerciseDtos;
     }
 
     public WorkoutDto() {
     }
-
 
     public Long getId() {
         return id;
@@ -43,20 +46,28 @@ public class WorkoutDto {
         this.id = id;
     }
 
-    public String getName() {
+    public @NotNull(message = InvalidInputData.INVALID_EMPTY_NAME_MSG) @Size(min = 2, max = 50, message = InvalidWorkoutData.INVALID_NAME_MSG) String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(@NotNull(message = InvalidInputData.INVALID_EMPTY_NAME_MSG) @Size(min = 2, max = 50, message = InvalidWorkoutData.INVALID_NAME_MSG) String name) {
         this.name = name;
     }
 
-    public LocalDate getDate() {
+    public @NotNull(message = InvalidInputData.INVALID_EMPTY_DATE_MSG) @PastOrPresent(message = InvalidWorkoutData.INVALID_DATE_MSG) LocalDate getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(@NotNull(message = InvalidInputData.INVALID_EMPTY_DATE_MSG) @PastOrPresent(message = InvalidWorkoutData.INVALID_DATE_MSG) LocalDate date) {
         this.date = date;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public List<ExerciseDto> getExerciseDtos() {

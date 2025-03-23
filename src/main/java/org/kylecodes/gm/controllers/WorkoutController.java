@@ -38,6 +38,7 @@ public class WorkoutController {
     public List<WorkoutDto> getAllMostRecentWorkouts() {
         return workoutService.getAllMostRecentWorkouts();
     }
+
     @PostMapping("/workouts/create")
     public ResponseEntity<WorkoutDto> createWorkout(@Valid @RequestBody WorkoutDto workout) {
 

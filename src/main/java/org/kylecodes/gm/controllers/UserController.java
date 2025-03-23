@@ -1,6 +1,6 @@
 package org.kylecodes.gm.controllers;
 
-import org.kylecodes.gm.dtos.UserDto;
+import org.kylecodes.gm.dtos.RegisterDto;
 import org.kylecodes.gm.services.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,7 +12,7 @@ public class UserController {
     @Autowired
     UserServiceImpl userService;
     @PostMapping("/sign-up")
-    public UserDto register(@RequestBody UserDto userDto) {
-        return userService.registerNewUser(userDto);
+    public RegisterDto register(@RequestBody RegisterDto registerDto) {
+        return userService.registerNewUser(registerDto);
     }
 }

@@ -43,7 +43,7 @@ public class SecurityConfig {
                     auth.requestMatchers("/sign-up").permitAll();
                     auth.anyRequest().authenticated();
                 });
-        http.formLogin(Customizer.withDefaults()); // this is an empty lambda
+        http.httpBasic(Customizer.withDefaults()); // this is an empty lambda
 //        http.sessionManagement(
 //                session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 //        );

@@ -2,7 +2,7 @@ package org.kylecodes.gm.services;
 
 import org.kylecodes.gm.constants.NotFoundMsg;
 import org.kylecodes.gm.constants.Roles;
-import org.kylecodes.gm.dtos.UserDto;
+import org.kylecodes.gm.dtos.RegisterDto;
 import org.kylecodes.gm.entities.User;
 import org.kylecodes.gm.repositories.UserRepository;
 import org.kylecodes.gm.services.mappers.EntityToDtoMapper;
@@ -20,13 +20,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private UserRepository userRepository;
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-    private final EntityToDtoMapper<User, UserDto> userMapper = new UserToUserDtoMapper();
+    private final EntityToDtoMapper<User, RegisterDto> userMapper = new UserToUserDtoMapper();
 
     @Override
-    public UserDto registerNewUser(UserDto userDto) {
+    public RegisterDto registerNewUser(RegisterDto registerDto) {
         User newUser = new User();
-        newUser.setEmail(userDto.getEmail());
-        newUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        newUser.setEmail(registerDto.getUsername());
+        newUser.setPassword(passwordEncoder.encode(registerDto.getPassword()));
         newUser.setRole(Roles.USER);
         User savedUser = userRepository.save(newUser);
         return userMapper.mapToDto(savedUser);

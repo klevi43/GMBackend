@@ -1,7 +1,7 @@
 package org.kylecodes.gm.services;
 
-import org.kylecodes.gm.dtos.UserDto;
+import org.kylecodes.gm.dtos.RegisterDto;
 
 public interface UserService {
-    UserDto registerNewUser(UserDto userDto);
+    RegisterDto registerNewUser(RegisterDto userDto);
 }
