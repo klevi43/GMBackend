@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -41,20 +40,21 @@ public class SecurityConfig {
          */
         http.authorizeHttpRequests(
                 auth -> {
+                    auth.requestMatchers("/sign-up").permitAll();
                     auth.anyRequest().authenticated();
                 });
         http.formLogin(Customizer.withDefaults()); // this is an empty lambda
 //        http.sessionManagement(
 //                session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 //        );
-
+        http.csrf((csrf) -> csrf.disable());
         return http.build();
     }
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider= new DaoAuthenticationProvider();
-        provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
+        provider.setPasswordEncoder(passwordEncoder());
         provider.setUserDetailsService(userDetailsService);
         return provider;
     }
