@@ -15,12 +15,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserServiceImpl implements UserDetailsService {
+public class UserServiceImpl implements UserService, UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     private final EntityToDtoMapper<User, UserDto> userMapper = new UserToUserDtoMapper();
+
+    @Override
     public UserDto registerNewUser(UserDto userDto) {
         User newUser = new User();
         newUser.setEmail(userDto.getEmail());
@@ -35,4 +37,5 @@ public class UserServiceImpl implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException(email + NotFoundMsg.EMAIL_NOT_FOUND_MSG));
         return user;
     }
+
 }
