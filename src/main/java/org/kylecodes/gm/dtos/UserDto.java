@@ -38,11 +38,11 @@ public class UserDto {
         this.id = id;
     }
 
-    public @NotNull String getEmail() {
+    public @NotNull String getUsername() {
         return email;
     }
 
-    public void setEmail(@NotNull String email) {
+    public void setUsername(@NotNull String email) {
         this.email = email;
     }
 

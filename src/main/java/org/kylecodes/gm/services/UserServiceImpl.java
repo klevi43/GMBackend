@@ -31,6 +31,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         User savedUser = userRepository.save(newUser);
         return userMapper.mapToDto(savedUser);
     }
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email)
