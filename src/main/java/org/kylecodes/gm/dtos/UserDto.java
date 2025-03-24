@@ -3,11 +3,13 @@ package org.kylecodes.gm.dtos;
 public class UserDto {
     private Long id;
     private String email;
+    private String password;
     private String role;
 
-    public UserDto(Long id, String email, String role) {
+    public UserDto(Long id, String email, String password, String role) {
         this.id = id;
         this.email = email;
+        this.password = password;
         this.role = role;
     }
 
@@ -28,6 +30,14 @@ public class UserDto {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getRole() {

@@ -8,7 +8,7 @@ public class UserToUserDtoMapper implements EntityToDtoMapper<User, RegisterDto>
     public RegisterDto mapToDto(User user) {
         RegisterDto userDto = new RegisterDto();
         userDto.setId(user.getId());
-        userDto.setUsername(user.getUsername());
+        userDto.setEmail(user.getUsername());
         userDto.setRole(user.getRole());
 
         return userDto;
