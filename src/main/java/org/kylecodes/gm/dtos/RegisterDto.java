@@ -1,13 +1,15 @@
 package org.kylecodes.gm.dtos;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 public class RegisterDto {
     private Long id;
 
     @NotNull
     private String email;
-
+    @NotNull
+    @Size(min = 8, max = 72)
     private String password;
 
 
