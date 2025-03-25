@@ -1,16 +1,18 @@
 package org.kylecodes.gm.services;
 
+import org.kylecodes.gm.constants.RequestFailure;
 import org.kylecodes.gm.dtos.ExerciseDto;
 import org.kylecodes.gm.dtos.WorkoutDto;
 import org.kylecodes.gm.entities.Exercise;
+import org.kylecodes.gm.entities.User;
 import org.kylecodes.gm.entities.Workout;
-import org.kylecodes.gm.constants.RequestFailure;
 import org.kylecodes.gm.exceptions.WorkoutNotFoundException;
 import org.kylecodes.gm.repositories.WorkoutRepository;
 import org.kylecodes.gm.services.mappers.EntityToDtoMapper;
 import org.kylecodes.gm.services.mappers.ExerciseToExerciseDtoMapper;
 import org.kylecodes.gm.services.mappers.WorkoutToWorkoutDtoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -108,10 +110,11 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Override
     public WorkoutDto createWorkout(WorkoutDto workoutDto) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Workout workout = new Workout();
         workout.setName(workoutDto.getName());
         workout.setDate(workoutDto.getDate());
-
+        workout.setUser(user);
         Workout newWorkout = workoutRepository.save(workout);
 
         WorkoutDto workoutResponse = workoutMapper.mapToDto(newWorkout);
