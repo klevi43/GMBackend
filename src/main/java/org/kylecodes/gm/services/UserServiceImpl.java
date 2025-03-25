@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
     public String verify(UserDto userDto) {
         Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(userDto.getEmail(),userDto.getPassword()));
         if (authentication.isAuthenticated()) {
-            return jwtService.generateToken();
+            return jwtService.generateToken(userDto.getEmail());
         } else {
             return "fail";
         }
