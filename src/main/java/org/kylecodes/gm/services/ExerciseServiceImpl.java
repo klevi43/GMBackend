@@ -8,8 +8,8 @@ import org.kylecodes.gm.constants.RequestFailure;
 import org.kylecodes.gm.exceptions.WorkoutNotFoundException;
 import org.kylecodes.gm.repositories.ExerciseRepository;
 import org.kylecodes.gm.repositories.WorkoutRepository;
-import org.kylecodes.gm.services.mappers.EntityToDtoMapper;
-import org.kylecodes.gm.services.mappers.ExerciseToExerciseDtoMapper;
+import org.kylecodes.gm.mappers.EntityToDtoMapper;
+import org.kylecodes.gm.mappers.ExerciseToExerciseDtoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

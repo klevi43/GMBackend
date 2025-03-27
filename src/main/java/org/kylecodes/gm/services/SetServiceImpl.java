@@ -11,8 +11,8 @@ import org.kylecodes.gm.exceptions.WorkoutNotFoundException;
 import org.kylecodes.gm.repositories.ExerciseRepository;
 import org.kylecodes.gm.repositories.SetRepository;
 import org.kylecodes.gm.repositories.WorkoutRepository;
-import org.kylecodes.gm.services.mappers.EntityToDtoMapper;
-import org.kylecodes.gm.services.mappers.SetToSetDtoMapper;
+import org.kylecodes.gm.mappers.EntityToDtoMapper;
+import org.kylecodes.gm.mappers.SetToSetDtoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

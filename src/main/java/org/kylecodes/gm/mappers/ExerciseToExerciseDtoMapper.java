@@ -1,4 +1,4 @@
-package org.kylecodes.gm.services.mappers;
+package org.kylecodes.gm.mappers;
 
 import org.kylecodes.gm.dtos.ExerciseDto;
 import org.kylecodes.gm.dtos.SetDto;
