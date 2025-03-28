@@ -14,8 +14,8 @@ public interface WorkoutRepository extends JpaRepository<Workout, Long> {
             + "FROM (SELECT *, ROW_NUMBER() OVER \n"
             + "(PARTITION BY name ORDER BY date DESC) rn \n"
             + "FROM gmdb.workout) temp WHERE rn = 1 and user_id=user_id", nativeQuery = true)
-    List<Workout> findAllMostRecentWorkouts();
-    Optional<Workout> findById(Long id);
+    List<Workout> findAllMostRecentWorkoutsByUserId(Long userId);
+    Optional<Workout> findByIdAndUserId(Long id, Long userID);
     void deleteById(Long id);
     Optional<Workout> findByName(String name);
 }
