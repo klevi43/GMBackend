@@ -2,11 +2,11 @@
 This is the backend for Growth Mindset, a REST API that allows a user to log and track their workouts.
 
 ## Table of Contents
-### Setup Guide
+### [Setup Guide]
 ### How to Use Guide
 
 
-## Setup Guide[Link Text](#Setup-Guide)
+## Setup Guide(#Setup-Guide)
 
 ### Install Java 17 
 
