@@ -4,6 +4,21 @@ This is the backend for Growth Mindset, a REST API that allows a user to log and
 ## Table of Contents
 ### [Setup Guide](#Setup-Guide)
 ### How to Use Guide
+adfasd
+a
+dfasd
+
+fs
+d
+fsdfs
+df
+s
+df
+s
+d
+fs
+df
+sdf
 
 
 ## Setup Guide
