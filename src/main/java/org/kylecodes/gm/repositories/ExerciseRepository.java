@@ -10,7 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface ExerciseRepository extends JpaRepository<Exercise, Long> {
-    Optional<Exercise> findById(Long id);
-
+    Optional<Exercise> findByIdAndWorkout(Long id, Workout workout);
     List<Exercise> findAllByWorkout(Workout workout);
 }

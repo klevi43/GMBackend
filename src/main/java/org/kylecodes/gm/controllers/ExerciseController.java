@@ -24,6 +24,11 @@ public class ExerciseController {
 
         return allExercisesInWorkout;
     }
+
+    @GetMapping("/workouts/exercises/exercise")
+    public ExerciseDto getExerciseInWorkoutById(@RequestParam Long workoutId, @RequestParam Long exerciseId) {
+        return exerciseService.getExerciseInWorkoutById(workoutId, exerciseId);
+    }
     @PostMapping("/workouts/exercises/create")
     public ResponseEntity<ExerciseDto> createExerciseForWorkout(@Valid @RequestBody ExerciseDto exerciseDto,
                                                                 @RequestParam Long workoutId) {
@@ -39,8 +44,8 @@ public class ExerciseController {
     }
 
     @PutMapping("/workouts/exercises/update")
-    public ExerciseDto updateExerciseInWorkout(@Valid @RequestBody ExerciseDto exerciseDto, @RequestParam Long workoutId) {
-        ExerciseDto updatedExercise = exerciseService.updateExerciseInWorkoutById(exerciseDto, workoutId);
+    public ExerciseDto updateExerciseInWorkout(@Valid @RequestBody ExerciseDto exerciseDto, @RequestParam Long workoutId, @RequestParam Long exerciseId) {
+        ExerciseDto updatedExercise = exerciseService.updateExerciseInWorkoutById(exerciseDto, workoutId, exerciseId);
 
         return updatedExercise;
     }

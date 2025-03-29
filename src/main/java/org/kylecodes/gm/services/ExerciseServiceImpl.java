@@ -45,6 +45,14 @@ public class ExerciseServiceImpl implements ExerciseService{
     }
 
     @Override
+    public ExerciseDto getExerciseInWorkoutById(Long workoutId, Long exerciseId) {
+        User user = SecurityContext.getPrincipalFromSecurityContext();
+        Workout workout = workoutRepository.findByIdAndUserId(workoutId, user.getId()).orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.GET_REQUEST_FAILURE));
+        Exercise exercise = exerciseRepository.findByIdAndWorkout(exerciseId, workout).orElseThrow(() -> new ExerciseNotFoundException(RequestFailure.GET_REQUEST_FAILURE));
+        return exerciseMapper.mapToDto(exercise);
+    }
+
+    @Override
     public ExerciseDto createExercise(ExerciseDto exerciseDto, Long workoutId) {
 
         Optional<Workout> workout = Optional.ofNullable(workoutRepository.findById(workoutId)
@@ -62,11 +70,11 @@ public class ExerciseServiceImpl implements ExerciseService{
     }
 
     @Override
-    public ExerciseDto updateExerciseInWorkoutById(ExerciseDto exerciseDto, Long workoutId) {
-        Optional.ofNullable(workoutRepository.findById(workoutId)
+    public ExerciseDto updateExerciseInWorkoutById(ExerciseDto exerciseDto, Long workoutId, Long exerciseId) {
+        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findById(workoutId)
                 .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.PUT_REQUEST_FAILURE)));
 
-        Optional<Exercise> exercise = Optional.ofNullable(exerciseRepository.findById(exerciseDto.getId())
+        Optional<Exercise> exercise = Optional.ofNullable(exerciseRepository.findByIdAndWorkout(exerciseId, workout.get())
                 .orElseThrow(() -> new ExerciseNotFoundException(RequestFailure.PUT_REQUEST_FAILURE)));
 
         Exercise updateExercise = exercise.get();
@@ -83,7 +91,7 @@ public class ExerciseServiceImpl implements ExerciseService{
         Optional<Workout> workout = Optional.ofNullable(workoutRepository.findById(workoutId)
                 .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.DELETE_REQUEST_FAILURE)));
 
-        Optional<Exercise> exercise = Optional.ofNullable(exerciseRepository.findById(exerciseId))
+        Optional<Exercise> exercise = Optional.ofNullable(exerciseRepository.findByIdAndWorkout(exerciseId, workout.get()))
                 .orElseThrow(() -> new ExerciseNotFoundException(RequestFailure.DELETE_REQUEST_FAILURE));
         exerciseRepository.deleteById(exerciseId);
     }
