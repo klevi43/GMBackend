@@ -7,7 +7,7 @@ import org.kylecodes.gm.entities.Workout;
 import org.kylecodes.gm.exceptions.ExerciseNotFoundException;
 import org.kylecodes.gm.constants.RequestFailure;
 import org.kylecodes.gm.exceptions.WorkoutNotFoundException;
-import org.kylecodes.gm.helpers.SecurityContext;
+import org.kylecodes.gm.utils.SecurityUtil;
 import org.kylecodes.gm.repositories.ExerciseRepository;
 import org.kylecodes.gm.repositories.WorkoutRepository;
 import org.kylecodes.gm.mappers.EntityToDtoMapper;
@@ -37,7 +37,7 @@ public class ExerciseServiceImpl implements ExerciseService{
 
     @Override
     public List<ExerciseDto> getAllExercisesInWorkout(Long workoutId) {
-        User user = SecurityContext.getPrincipalFromSecurityContext();
+        User user = SecurityUtil.getPrincipalFromSecurityContext();
         Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUser(workoutId, user)
                 .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.PUT_REQUEST_FAILURE)));
         List<Exercise> exercisesInWorkout = exerciseRepository.findAllByWorkout(workout.get());
@@ -46,7 +46,7 @@ public class ExerciseServiceImpl implements ExerciseService{
 
     @Override
     public ExerciseDto getExerciseInWorkoutById(Long workoutId, Long exerciseId) {
-        User user = SecurityContext.getPrincipalFromSecurityContext();
+        User user = SecurityUtil.getPrincipalFromSecurityContext();
         Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUser(workoutId, user)
                 .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.PUT_REQUEST_FAILURE)));
         Exercise exercise = exerciseRepository.findByIdAndWorkout(exerciseId, workout.get()).orElseThrow(() -> new ExerciseNotFoundException(RequestFailure.GET_REQUEST_FAILURE));
@@ -55,7 +55,7 @@ public class ExerciseServiceImpl implements ExerciseService{
 
     @Override
     public ExerciseDto createExercise(ExerciseDto exerciseDto, Long workoutId) {
-        User user = SecurityContext.getPrincipalFromSecurityContext();
+        User user = SecurityUtil.getPrincipalFromSecurityContext();
         Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUser(workoutId, user)
                 .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.PUT_REQUEST_FAILURE)));
 
@@ -72,7 +72,7 @@ public class ExerciseServiceImpl implements ExerciseService{
 
     @Override
     public ExerciseDto updateExerciseInWorkoutById(ExerciseDto exerciseDto, Long workoutId, Long exerciseId) {
-        User user = SecurityContext.getPrincipalFromSecurityContext();
+        User user = SecurityUtil.getPrincipalFromSecurityContext();
         Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUser(workoutId, user)
                 .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.PUT_REQUEST_FAILURE)));
 
@@ -90,7 +90,7 @@ public class ExerciseServiceImpl implements ExerciseService{
 
     @Override
     public void deleteExerciseInWorkoutById(Long workoutId, Long exerciseId) {
-        User user = SecurityContext.getPrincipalFromSecurityContext();
+        User user = SecurityUtil.getPrincipalFromSecurityContext();
         Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUser(workoutId, user)
                 .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.DELETE_REQUEST_FAILURE)));
 

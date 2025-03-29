@@ -5,7 +5,7 @@ import org.kylecodes.gm.constants.Roles;
 import org.kylecodes.gm.dtos.RegisterDto;
 import org.kylecodes.gm.entities.User;
 import org.kylecodes.gm.mappers.EntityToDtoMapper;
-import org.kylecodes.gm.mappers.UserToUserDtoMapper;
+import org.kylecodes.gm.mappers.UserToRegisterDtoMapper;
 import org.kylecodes.gm.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,7 +20,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private UserRepository userRepository;
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-    private final EntityToDtoMapper<User, RegisterDto> userMapper = new UserToUserDtoMapper();
+    private final EntityToDtoMapper<User, RegisterDto> userMapper = new UserToRegisterDtoMapper();
 
     @Override
     public RegisterDto registerNewUser(RegisterDto registerDto) {

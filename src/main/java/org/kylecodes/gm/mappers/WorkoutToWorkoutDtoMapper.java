@@ -4,7 +4,7 @@ import org.kylecodes.gm.dtos.ExerciseDto;
 import org.kylecodes.gm.dtos.WorkoutDto;
 import org.kylecodes.gm.entities.Exercise;
 import org.kylecodes.gm.entities.Workout;
-import org.kylecodes.gm.helpers.SecurityContext;
+import org.kylecodes.gm.utils.SecurityUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,7 @@ public class WorkoutToWorkoutDtoMapper implements EntityToDtoMapper<Workout, Wor
         workoutDto.setName(workout.getName());
         workoutDto.setDate(workout.getDate());
         workoutDto.setExerciseDtos(getExerciseDtoListForWorkout(workout));
-        workoutDto.setUserId(SecurityContext.getPrincipalFromSecurityContext().getId());
+        workoutDto.setUserId(SecurityUtil.getPrincipalFromSecurityContext().getId());
         return workoutDto;
     }
 
