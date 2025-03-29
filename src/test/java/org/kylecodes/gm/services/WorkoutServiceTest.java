@@ -5,13 +5,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.kylecodes.gm.constants.RequestFailure;
 import org.kylecodes.gm.contexts.SecurityContextForTests;
-import org.kylecodes.gm.dtos.UserDto;
 import org.kylecodes.gm.dtos.WorkoutDto;
 import org.kylecodes.gm.entities.User;
 import org.kylecodes.gm.entities.Workout;
 import org.kylecodes.gm.exceptions.WorkoutNotFoundException;
-import org.kylecodes.gm.mappers.EntityToDtoMapper;
-import org.kylecodes.gm.mappers.UserToUserDtoMapper;
 import org.kylecodes.gm.repositories.WorkoutRepository;
 import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
@@ -39,7 +36,7 @@ public class WorkoutServiceTest {
         It will greatly (negatively) impact the speed of the test.
 
      */
-    private EntityToDtoMapper<User, UserDto> userMapper = new UserToUserDtoMapper();
+
 
     private User user;
     private final Long VALID_USER_ID = 1L;

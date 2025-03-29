@@ -66,7 +66,6 @@ public class ExerciseServiceTest {
     private final Long VALID_WORKOUT_ID = 1L;
     private final String VALID_WORKOUT_NAME = "Test Workout";
     private final String VALID_EXERCISE_NAME = "Test Exercise";
-    private final String TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlQEUuY29tIiwiaWF0IjoxNzQzMjIxMzU5LCJleHAiOjE3NDMyMjI0Mzl9.f9mOwu1dzSYGI4_JXhyFfpkN7e2uzC7z3Qc1T-U0vdU";
     private final Long VALID_EXERCISE_ID = 1L;
     private final Long INVALID_ID = -1L;
     @BeforeEach
