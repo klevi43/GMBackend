@@ -1,16 +1,16 @@
 package org.kylecodes.gm.mappers;
 
-import org.kylecodes.gm.dtos.RegisterDto;
+import org.kylecodes.gm.dtos.UserDto;
 import org.kylecodes.gm.entities.User;
 
-public class UserToUserDtoMapper implements EntityToDtoMapper<User, RegisterDto> {
+public class UserToUserDtoMapper implements EntityToDtoMapper<User, UserDto> {
     @Override
-    public RegisterDto mapToDto(User user) {
-        RegisterDto userDto = new RegisterDto();
+    public UserDto mapToDto(User user) {
+        UserDto userDto = new UserDto();
         userDto.setId(user.getId());
         userDto.setEmail(user.getUsername());
         userDto.setRole(user.getRole());
-
         return userDto;
+
     }
 }
