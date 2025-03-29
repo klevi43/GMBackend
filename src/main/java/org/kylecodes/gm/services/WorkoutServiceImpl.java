@@ -32,7 +32,7 @@ public class WorkoutServiceImpl implements WorkoutService {
     @Override
     public List<WorkoutDto> getAllMostRecentWorkouts() {
         User user = SecurityContext.getPrincipalFromSecurityContext();
-        List<Workout> workoutList = workoutRepository.findAllMostRecentWorkoutsByUserId(user.getId());
+        List<Workout> workoutList = workoutRepository.findAllMostRecentWorkoutsByUser(user);
         if (workoutList.isEmpty()) {
             return new ArrayList<WorkoutDto>();
         }
@@ -83,7 +83,7 @@ public class WorkoutServiceImpl implements WorkoutService {
     @Override
     public WorkoutDto getWorkoutById(Long id) {
         User user = SecurityContext.getPrincipalFromSecurityContext();
-        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUserId(id, user.getId())
+        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUser(id, user)
                 .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.GET_REQUEST_FAILURE)));
 
         WorkoutDto workoutDto = workoutMapper.mapToDto(workout.get());
@@ -96,7 +96,7 @@ public class WorkoutServiceImpl implements WorkoutService {
     @Override
     public WorkoutDto updateWorkoutById(WorkoutDto workoutDto, Long id) {
         User user = SecurityContext.getPrincipalFromSecurityContext();
-        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUserId(id, user.getId())
+        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUser(id, user)
                 .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.PUT_REQUEST_FAILURE)));
 
         Workout updateWorkout = workout.get();
@@ -128,7 +128,7 @@ public class WorkoutServiceImpl implements WorkoutService {
     @Override
     public void deleteWorkoutById(Long id) {
         User user = SecurityContext.getPrincipalFromSecurityContext();
-        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUserId(id, user.getId())
+        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUser(id, user)
                 .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.DELETE_REQUEST_FAILURE)));
 
         workoutRepository.deleteById(id);
