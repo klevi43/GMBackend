@@ -3,9 +3,17 @@ package org.kylecodes.gm.services;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.kylecodes.gm.constants.RequestFailure;
+import org.kylecodes.gm.contexts.SecurityContextForTests;
+import org.kylecodes.gm.dtos.UserDto;
 import org.kylecodes.gm.dtos.WorkoutDto;
+import org.kylecodes.gm.entities.User;
 import org.kylecodes.gm.entities.Workout;
+import org.kylecodes.gm.exceptions.WorkoutNotFoundException;
+import org.kylecodes.gm.mappers.EntityToDtoMapper;
+import org.kylecodes.gm.mappers.UserToUserDtoMapper;
 import org.kylecodes.gm.repositories.WorkoutRepository;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -14,7 +22,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,37 +39,55 @@ public class WorkoutServiceTest {
         It will greatly (negatively) impact the speed of the test.
 
      */
+    private EntityToDtoMapper<User, UserDto> userMapper = new UserToUserDtoMapper();
+
+    private User user;
+    private final Long VALID_USER_ID = 1L;
+    private final String VALID_USER_EMAIL = "test@test.com";
+    private final String VALID_USER_PASSWORD = "password";
+    private final String VALID_USER_ROLE = "ROLE_USER";
+
+    private final Long VALID_WORKOUT_ID = 1L;
+    private final String VALID_WORKOUT_NAME = "Test Workout";
+    private final LocalDate VALID_WORKOUT_DATE = LocalDate.of(2025, 02, 18);
+    private final LocalDate INVALID_WORKOUT_DATE = LocalDate.of(2026, 02, 18);
 
     @Mock
     private WorkoutRepository workoutRepository;
 
     @InjectMocks
     private WorkoutServiceImpl workoutServiceImpl;
-    private Workout workout1;
+    private Workout workout;
     private Workout workout2;
+    private WorkoutDto workoutDto;
+    private SecurityContextForTests context = new SecurityContextForTests();
     @BeforeEach
     public void init() {
-        workout1 = new Workout();
-        workout1.setName("Chest Day");
-        workout1.setDate(LocalDate.now());
+        user = new User();
+        user.setId(VALID_USER_ID);
+        user.setEmail(VALID_USER_EMAIL);
+        user.setPassword(VALID_USER_PASSWORD);
+        user.setRole(VALID_USER_ROLE);
+
+        workout = new Workout();
+        workout.setName(VALID_WORKOUT_NAME);
+        workout.setDate(LocalDate.now());
 
         workout2 = new Workout();
-        workout2.setName("Chest Day");
-        workout2.setDate(LocalDate.now());
+        workout2.setName(VALID_WORKOUT_NAME);
+        workout2.setDate(VALID_WORKOUT_DATE);
 
+
+        workoutDto = new WorkoutDto();
+        workoutDto.setName(VALID_WORKOUT_NAME);
+        workoutDto.setDate(VALID_WORKOUT_DATE);
+        context.createSecurityContextWithUser(user);
 
     }
 
     @Test
     public void WorkoutService_CreateWorkout_ReturnWorkout() {
-        // Arrange
-        Workout workout = new Workout();
-        workout.setName("Chest Day");
-        workout.setDate(LocalDate.now());
 
-        WorkoutDto workoutDto = new WorkoutDto();
-        workoutDto.setName("Chest Day");
-        workoutDto.setDate(LocalDate.now());
 
         when(workoutRepository.save(Mockito.any(Workout.class))).thenReturn(workout);
 
@@ -77,7 +102,7 @@ public class WorkoutServiceTest {
     @Test
     public void WorkoutService_GetAllWorkouts_ReturnWorkoutList() {
         // Arrange
-        List<Workout> workoutList = Arrays.asList(workout1, workout2);
+        List<Workout> workoutList = Arrays.asList(workout, workout2);
         when(workoutRepository.findAll()).thenReturn(workoutList);
 
         //Act
@@ -102,50 +127,39 @@ public class WorkoutServiceTest {
 //    }
     @Test
     public void WorkoutService_GetWorkoutById_ReturnWorkoutDto() {
-        Workout workout = new Workout();
-        workout.setName("Chest Day");
-        workout.setDate(LocalDate.now());
-        WorkoutDto workoutDto = new WorkoutDto();
-        workoutDto.setName("Chest Day");
-        workoutDto.setDate(LocalDate.now());
 
-        when(workoutRepository.findById(1L)).thenReturn(Optional.ofNullable(workout));
 
-        WorkoutDto saveWorkout = workoutServiceImpl.getWorkoutById(1L);
+        when(workoutRepository.findByIdAndUser(ArgumentMatchers.anyLong(), ArgumentMatchers.any(User.class))).thenReturn(Optional.ofNullable(workout));
+
+        WorkoutDto saveWorkout = workoutServiceImpl.getWorkoutById(VALID_WORKOUT_ID);
 
 
         assertThat(saveWorkout).isNotNull();
     }
 
     @Test
-    public void WorkoutService_GetWorkoutById_ThrowsNoSuchElementException() {
-        when(workoutRepository.findById(1L)).thenThrow(new NoSuchElementException());
+    public void WorkoutService_GetWorkoutById_ThrowsWorkoutNotFoundException() {
+        when(workoutRepository.findByIdAndUser(ArgumentMatchers.anyLong(), ArgumentMatchers.any(User.class)))
+                .thenThrow(new WorkoutNotFoundException(RequestFailure.GET_REQUEST_FAILURE));
 
-        assertThrows(NoSuchElementException.class,
-                () -> workoutServiceImpl.getWorkoutById(1L));
+        assertThrows(WorkoutNotFoundException.class,
+                () -> workoutServiceImpl.getWorkoutById(VALID_WORKOUT_ID));
 
     }
 
     @Test
     public void WorkoutService_UpdateWorkoutById_ReturnsUpdatedWorkout() {
 
-        Workout workout = new Workout();
-        workout.setName("Chest Day");
-        workout.setDate(LocalDate.of(2025, 01, 16));
-        WorkoutDto workoutDto = new WorkoutDto();
-        workoutDto.setName("Chest Day");
-        workoutDto.setDate(LocalDate.of(2025, 02, 18));
-
-        when(workoutRepository.findById(1L)).thenReturn(Optional.ofNullable(workout));
-        when(workoutRepository.save(Mockito.any(Workout.class))).thenReturn(workout);
+        when(workoutRepository.findByIdAndUser(ArgumentMatchers.anyLong(),ArgumentMatchers.any(User.class))).thenReturn(Optional.ofNullable(workout));
+        when(workoutRepository.save(ArgumentMatchers.any(Workout.class))).thenReturn(workout);
 
         // Act
-        WorkoutDto savedWorkout = workoutServiceImpl.updateWorkoutById(workoutDto, 1L);
+        WorkoutDto savedWorkout = workoutServiceImpl.updateWorkoutById(workoutDto, VALID_WORKOUT_ID);
 
         // Assert
         assertThat(savedWorkout).isNotNull();
-        assertEquals(savedWorkout.getName(), "Chest Day");
-        assertEquals(savedWorkout.getDate(), LocalDate.of(2025, 02,18));
+        assertEquals(savedWorkout.getName(), VALID_WORKOUT_NAME);
+        assertEquals(savedWorkout.getDate(), VALID_WORKOUT_DATE);
     }
 
     @Test
@@ -155,9 +169,9 @@ public class WorkoutServiceTest {
         workout.setName("Chest Day");
         workout.setDate(LocalDate.now());
 
-        when(workoutRepository.findById(1L)).thenReturn(Optional.ofNullable(workout));
+        when(workoutRepository.findByIdAndUser(ArgumentMatchers.anyLong(), ArgumentMatchers.any(User.class))).thenReturn(Optional.ofNullable(workout));
 
-       assertAll(() -> workoutServiceImpl.deleteWorkoutById(1L));
+       assertAll(() -> workoutServiceImpl.deleteWorkoutById(VALID_WORKOUT_ID));
     }
     private WorkoutDto mapToDt0(Workout workout) {
         WorkoutDto workoutDto = new WorkoutDto();
