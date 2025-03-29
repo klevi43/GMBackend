@@ -11,7 +11,7 @@ public interface SetService {
 
     SetDto createSetForExerciseInWorkout(Long workoutId, Long exerciseId, SetDto setDto);
 
-    SetDto updateSetForExerciseInWorkout(Long workoutId, Long exerciseId, SetDto setDto);
+    SetDto updateSetForExerciseInWorkout(Long workoutId, Long exerciseId, Long setId, SetDto setDto);
 
     void deleteSetForExerciseInWorkout(Long workoutId, Long exerciseId, Long setId);
 }

@@ -46,8 +46,9 @@ public class SetController {
 
     @PutMapping("/workouts/exercises/sets/update")
     public SetDto updateSetForExerciseInWorkoutById(@RequestParam Long workoutId, @RequestParam Long exerciseId,
+                                                    @RequestParam Long setId,
                                                     @Valid @RequestBody SetDto setDto) {
-        SetDto updatedSetDto = setService.updateSetForExerciseInWorkout(workoutId, exerciseId, setDto);
+        SetDto updatedSetDto = setService.updateSetForExerciseInWorkout(workoutId, exerciseId, setId, setDto);
 
         return updatedSetDto;
     }
