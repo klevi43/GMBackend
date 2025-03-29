@@ -189,7 +189,7 @@ public class ExerciseControllerTest {
         updatedExerciseDto.setName("Updated Test Dto");
         updatedExerciseDto.setSetDtoList(Arrays.asList(setDto, setDto2));
 
-        given(exerciseService.updateExerciseInWorkoutById(ArgumentMatchers.any(), ArgumentMatchers.anyLong())).willAnswer((invocationOnMock -> invocationOnMock.getArgument(0)));
+        given(exerciseService.updateExerciseInWorkoutById(ArgumentMatchers.any(), ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong())).willAnswer((invocationOnMock -> invocationOnMock.getArgument(0)));
 
 
         ResultActions response = mockMvc.perform(MockMvcRequestBuilders.put("/workouts/exercises/update")
