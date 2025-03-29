@@ -2,10 +2,12 @@ package org.kylecodes.gm.services;
 
 import org.kylecodes.gm.dtos.ExerciseDto;
 import org.kylecodes.gm.entities.Exercise;
+import org.kylecodes.gm.entities.User;
 import org.kylecodes.gm.entities.Workout;
 import org.kylecodes.gm.exceptions.ExerciseNotFoundException;
 import org.kylecodes.gm.constants.RequestFailure;
 import org.kylecodes.gm.exceptions.WorkoutNotFoundException;
+import org.kylecodes.gm.helpers.SecurityContext;
 import org.kylecodes.gm.repositories.ExerciseRepository;
 import org.kylecodes.gm.repositories.WorkoutRepository;
 import org.kylecodes.gm.mappers.EntityToDtoMapper;
@@ -35,7 +37,8 @@ public class ExerciseServiceImpl implements ExerciseService{
 
     @Override
     public List<ExerciseDto> getAllExercisesInWorkout(Long workoutId) {
-        Workout workout = workoutRepository.findById(workoutId).orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.GET_REQUEST_FAILURE));
+        User user = SecurityContext.getPrincipalFromSecurityContext();
+        Workout workout = workoutRepository.findByIdAndUserId(workoutId, user.getId()).orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.GET_REQUEST_FAILURE));
 
         List<Exercise> exercisesInWorkout = exerciseRepository.findAllByWorkout(workout);
         return exercisesInWorkout.stream().map((exercise) -> exerciseMapper.mapToDto(exercise)).toList();

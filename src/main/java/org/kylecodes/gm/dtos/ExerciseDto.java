@@ -15,7 +15,7 @@ public class ExerciseDto {
     private String name;
 
 
-    @NotNull(message = InvalidInputData.INVALID_WORKOUT_ID_MSG)
+//    @NotNull(message = InvalidInputData.INVALID_WORKOUT_ID_MSG)
     private Long workoutId;
 
     private List<SetDto> setDtoList;
