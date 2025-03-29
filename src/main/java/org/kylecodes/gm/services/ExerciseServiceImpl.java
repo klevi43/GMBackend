@@ -38,25 +38,26 @@ public class ExerciseServiceImpl implements ExerciseService{
     @Override
     public List<ExerciseDto> getAllExercisesInWorkout(Long workoutId) {
         User user = SecurityContext.getPrincipalFromSecurityContext();
-        Workout workout = workoutRepository.findByIdAndUserId(workoutId, user.getId()).orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.GET_REQUEST_FAILURE));
-
-        List<Exercise> exercisesInWorkout = exerciseRepository.findAllByWorkout(workout);
+        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUser(workoutId, user)
+                .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.PUT_REQUEST_FAILURE)));
+        List<Exercise> exercisesInWorkout = exerciseRepository.findAllByWorkout(workout.get());
         return exercisesInWorkout.stream().map((exercise) -> exerciseMapper.mapToDto(exercise)).toList();
     }
 
     @Override
     public ExerciseDto getExerciseInWorkoutById(Long workoutId, Long exerciseId) {
         User user = SecurityContext.getPrincipalFromSecurityContext();
-        Workout workout = workoutRepository.findByIdAndUserId(workoutId, user.getId()).orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.GET_REQUEST_FAILURE));
-        Exercise exercise = exerciseRepository.findByIdAndWorkout(exerciseId, workout).orElseThrow(() -> new ExerciseNotFoundException(RequestFailure.GET_REQUEST_FAILURE));
+        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUser(workoutId, user)
+                .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.PUT_REQUEST_FAILURE)));
+        Exercise exercise = exerciseRepository.findByIdAndWorkout(exerciseId, workout.get()).orElseThrow(() -> new ExerciseNotFoundException(RequestFailure.GET_REQUEST_FAILURE));
         return exerciseMapper.mapToDto(exercise);
     }
 
     @Override
     public ExerciseDto createExercise(ExerciseDto exerciseDto, Long workoutId) {
-
-        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findById(workoutId)
-                .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.GET_REQUEST_FAILURE)));
+        User user = SecurityContext.getPrincipalFromSecurityContext();
+        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUser(workoutId, user)
+                .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.PUT_REQUEST_FAILURE)));
 
         Exercise exercise = new Exercise();
         exercise.setName(exerciseDto.getName());
@@ -71,7 +72,8 @@ public class ExerciseServiceImpl implements ExerciseService{
 
     @Override
     public ExerciseDto updateExerciseInWorkoutById(ExerciseDto exerciseDto, Long workoutId, Long exerciseId) {
-        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findById(workoutId)
+        User user = SecurityContext.getPrincipalFromSecurityContext();
+        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUser(workoutId, user)
                 .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.PUT_REQUEST_FAILURE)));
 
         Optional<Exercise> exercise = Optional.ofNullable(exerciseRepository.findByIdAndWorkout(exerciseId, workout.get())
@@ -88,7 +90,8 @@ public class ExerciseServiceImpl implements ExerciseService{
 
     @Override
     public void deleteExerciseInWorkoutById(Long workoutId, Long exerciseId) {
-        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findById(workoutId)
+        User user = SecurityContext.getPrincipalFromSecurityContext();
+        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUser(workoutId, user)
                 .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.DELETE_REQUEST_FAILURE)));
 
         Optional<Exercise> exercise = Optional.ofNullable(exerciseRepository.findByIdAndWorkout(exerciseId, workout.get()))
