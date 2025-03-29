@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.kylecodes.gm.constants.JwtTokenData;
 import org.kylecodes.gm.services.JwtService;
-import org.kylecodes.gm.services.UserDetailsServiceImpl;
+import org.kylecodes.gm.services.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,7 +23,7 @@ public class JwtFilter extends OncePerRequestFilter {
     private JwtService jwtService;
 
     @Autowired
-    private UserDetailsServiceImpl userDetailsService;
+    private UserServiceImpl userDetailsService;
 
     // for every request, we want this filter to execute once
     @Override
