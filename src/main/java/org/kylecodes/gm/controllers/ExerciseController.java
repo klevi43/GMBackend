@@ -16,13 +16,9 @@ public class ExerciseController {
     @Autowired
     private ExerciseServiceImpl exerciseService;
 
-//    @GetMapping("/workouts/exercises")
-//    public List<ExerciseDto> getAllExercises() {
-//        List<ExerciseDto> allExercises = exerciseService.getAllExercises();
-//        return allExercises;
-//    }
 
-    @GetMapping("/workouts/exercises/in-workout")
+
+    @GetMapping("/workouts/exercises")
     public List<ExerciseDto> getAllExercisesInWorkout(@RequestParam Long workoutId) {
         List<ExerciseDto> allExercisesInWorkout = exerciseService.getAllExercisesInWorkout(workoutId);
 
