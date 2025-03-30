@@ -27,7 +27,7 @@ public class User implements UserDetails {
 
     private String role;
 
-    @OneToMany
+    @OneToMany(orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "user", cascade = {CascadeType.ALL})
     @JsonIgnore
     private List<Workout> workouts;
 

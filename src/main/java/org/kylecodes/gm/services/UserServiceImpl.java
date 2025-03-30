@@ -43,6 +43,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userToUserDtoMapper.mapToDto(user);
     }
 
+    @Override
+    public void deleteUser() {
+        User user = SecurityUtil.getPrincipalFromSecurityContext();
+        userRepository.delete(user);
+    }
+
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
