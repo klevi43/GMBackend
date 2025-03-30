@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class JwtServiceImpl {
+public class JwtServiceImpl implements JwtService{
     private String secretKey;
     public JwtServiceImpl() {
         try {
@@ -29,6 +29,7 @@ public class JwtServiceImpl {
             throw new RuntimeException(e);
         }
     }
+    @Override
     public String generateToken(String email) {
         Map<String, Object> claims = new HashMap<>();
         return Jwts.builder()
@@ -47,6 +48,7 @@ public class JwtServiceImpl {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
+    @Override
     public String extractEmail(String token) {
     return extractClaim(token, Claims::getSubject);
     }
@@ -62,6 +64,8 @@ public class JwtServiceImpl {
         return Jwts.parser().verifyWith(getKey())
                 .build().parseSignedClaims(token).getPayload();
     }
+
+    @Override
     public boolean validateToken(String token, UserDetails userDetails) {
         final String email = extractEmail(token);
         return email.equals(userDetails.getUsername()) && !isTokenExpired(token);
