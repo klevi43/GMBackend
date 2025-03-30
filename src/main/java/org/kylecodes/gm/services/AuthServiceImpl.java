@@ -14,12 +14,12 @@ public class AuthServiceImpl implements AuthService {
     AuthenticationManager authManager;
 
     @Autowired
-    JwtService jwtService;
+    JwtServiceImpl jwtServiceImpl;
 
     public String verify(UserDto userDto) {
         Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(userDto.getEmail(),userDto.getPassword()));
         if (authentication.isAuthenticated()) {
-            return jwtService.generateToken(userDto.getEmail());
+            return jwtServiceImpl.generateToken(userDto.getEmail());
         } else {
             return "fail";
         }
