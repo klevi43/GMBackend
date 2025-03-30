@@ -2,8 +2,10 @@ package org.kylecodes.gm.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.kylecodes.gm.constants.PasswordLen;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,9 +21,10 @@ public class User implements UserDetails {
     private Long id;
 
     @NotNull
+    @Email
     private String email;
     @NotNull
-    @Size(min = 8, max = 72)
+    @Size(min = PasswordLen.MIN_LENGTH, max = PasswordLen.MAX_LENGTH)
     private String password;
 
 

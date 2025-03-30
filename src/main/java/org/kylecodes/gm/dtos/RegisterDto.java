@@ -1,15 +1,18 @@
 package org.kylecodes.gm.dtos;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.kylecodes.gm.constants.PasswordLen;
 
 public class RegisterDto {
     private Long id;
 
     @NotNull
+    @Email
     private String email;
     @NotNull
-    @Size(min = 8, max = 72)
+    @Size(min = PasswordLen.MIN_LENGTH, max = PasswordLen.MAX_LENGTH)
     private String password;
 
 
@@ -34,19 +37,19 @@ public class RegisterDto {
         this.id = id;
     }
 
-    public @NotNull String getEmail() {
+    public @NotNull @Email String getEmail() {
         return email;
     }
 
-    public void setEmail(@NotNull String email) {
+    public void setEmail(@NotNull @Email String email) {
         this.email = email;
     }
 
-    public @NotNull @Size(min = 8, max = 72) String getPassword() {
+    public @NotNull @Size(min = PasswordLen.MIN_LENGTH, max = PasswordLen.MAX_LENGTH) String getPassword() {
         return password;
     }
 
-    public void setPassword(@NotNull @Size(min = 8, max = 72) String password) {
+    public void setPassword(@NotNull @Size(min = PasswordLen.MIN_LENGTH, max = PasswordLen.MAX_LENGTH) String password) {
         this.password = password;
     }
 
