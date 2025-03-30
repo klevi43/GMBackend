@@ -44,6 +44,19 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    public UserDto updateUserInfo(UserDto updateUser) {
+        User currentUser = SecurityUtil.getPrincipalFromSecurityContext();
+        if (updateUser.getEmail() != null) {
+            currentUser.setEmail(updateUser.getEmail());
+        }
+        if(updateUser.getPassword() != null) {
+            currentUser.setPassword(passwordEncoder.encode(updateUser.getPassword()));
+        }
+        User savedUser = userRepository.save(currentUser);
+        return userToUserDtoMapper.mapToDto(savedUser);
+    }
+
+    @Override
     public void deleteUser() {
         User user = SecurityUtil.getPrincipalFromSecurityContext();
         userRepository.delete(user);

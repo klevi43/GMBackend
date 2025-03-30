@@ -42,11 +42,11 @@ public class RegisterDto {
         this.email = email;
     }
 
-    public @NotNull String getPassword() {
+    public @NotNull @Size(min = 8, max = 72) String getPassword() {
         return password;
     }
 
-    public void setPassword(@NotNull String password) {
+    public void setPassword(@NotNull @Size(min = 8, max = 72) String password) {
         this.password = password;
     }
 

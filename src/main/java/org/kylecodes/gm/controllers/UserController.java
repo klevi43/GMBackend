@@ -22,7 +22,12 @@ public class UserController {
         return userService.getUserInfo();
     }
 
-    @DeleteMapping("/users")
+    @PutMapping("/users/update")
+    public UserDto updateUserInfo(@RequestBody UserDto userDto) {
+        return userService.updateUserInfo(userDto);
+    }
+
+    @DeleteMapping("/users/delete")
     public void deleteUser() {
         userService.deleteUser();
     }
