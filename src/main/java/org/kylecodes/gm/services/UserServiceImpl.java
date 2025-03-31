@@ -2,6 +2,7 @@ package org.kylecodes.gm.services;
 
 import org.kylecodes.gm.constants.NotFoundMsg;
 import org.kylecodes.gm.constants.Roles;
+import org.kylecodes.gm.dtos.AuthUserDto;
 import org.kylecodes.gm.dtos.RegisterDto;
 import org.kylecodes.gm.dtos.UserDto;
 import org.kylecodes.gm.entities.User;
@@ -44,7 +45,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserDto updateUserInfo(UserDto updateUser) {
+    public UserDto updateUserInfo(AuthUserDto updateUser) {
         User currentUser = SecurityUtil.getPrincipalFromSecurityContext();
         if (updateUser.getEmail() != null) {
             currentUser.setEmail(updateUser.getEmail());

@@ -21,7 +21,7 @@ public class AuthServiceImpl implements AuthService {
         if (authentication.isAuthenticated()) {
             return jwtServiceImpl.generateToken(authUserDto.getEmail());
         } else {
-            return "fail";
+            return "Failed to generate token";
         }
 
     }

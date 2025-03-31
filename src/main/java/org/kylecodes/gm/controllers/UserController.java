@@ -1,5 +1,6 @@
 package org.kylecodes.gm.controllers;
 
+import org.kylecodes.gm.dtos.AuthUserDto;
 import org.kylecodes.gm.dtos.RegisterDto;
 import org.kylecodes.gm.dtos.UserDto;
 import org.kylecodes.gm.services.UserService;
@@ -23,8 +24,8 @@ public class UserController {
     }
 
     @PutMapping("/users/update")
-    public UserDto updateUserInfo(@RequestBody UserDto userDto) {
-        return userService.updateUserInfo(userDto);
+    public UserDto updateUserInfo(@RequestBody AuthUserDto authUserDto) {
+        return userService.updateUserInfo(authUserDto);
     }
 
     @DeleteMapping("/users/delete")

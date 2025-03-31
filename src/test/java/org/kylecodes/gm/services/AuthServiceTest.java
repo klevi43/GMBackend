@@ -13,6 +13,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.util.AssertionErrors.assertTrue;
 
@@ -28,6 +29,7 @@ public class AuthServiceTest {
     private final String USERNAME = "user@email.com";
     private final String PASSWORD = "password123";
     private final Long VALID_USER_ID = 1L;
+    private final Integer VALID_TOKEN_LENGTH = 72;
     @Before
     public void init() {
         MockitoAnnotations.openMocks(this);
@@ -39,12 +41,15 @@ public class AuthServiceTest {
     }
 
     @Test
-    public void testAuthenticationSuccess() {
+    public void AuthService_Verify_ReturnJwt() {
         when(authenticationManager.authenticate(ArgumentMatchers.any())).thenReturn(
                 new UsernamePasswordAuthenticationToken(USERNAME, PASSWORD)
         );
 
-        assertTrue(authService.verify(authUserDto), true);
+        String token = authService.verify(authUserDto);
+        System.out.println(token);
+        assertThat(token).isNotNull();
+        assertThat(token.length()).isEqualTo(VALID_TOKEN_LENGTH);
     }
 
     @Test

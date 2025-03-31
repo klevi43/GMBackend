@@ -1,21 +1,16 @@
 package org.kylecodes.gm.dtos;
 
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Size;
-import org.kylecodes.gm.constants.PasswordLen;
 
 public class UserDto {
     private Long id;
     @Email
     private String email;
-    @Size(min = PasswordLen.MIN_LENGTH, max = PasswordLen.MAX_LENGTH)
-    private String password;
     private String role;
 
-    public UserDto(Long id, String email, String password, String role) {
+    public UserDto(Long id, String email, String role) {
         this.id = id;
         this.email = email;
-        this.password = password;
         this.role = role;
     }
 
@@ -36,14 +31,6 @@ public class UserDto {
 
     public void setEmail(@Email String email) {
         this.email = email;
-    }
-
-    public @Size(min = PasswordLen.MIN_LENGTH, max = PasswordLen.MAX_LENGTH) String getPassword() {
-        return password;
-    }
-
-    public void setPassword(@Size(min = PasswordLen.MIN_LENGTH, max = PasswordLen.MAX_LENGTH) String password) {
-        this.password = password;
     }
 
     public String getRole() {
