@@ -1,7 +1,7 @@
 package org.kylecodes.gm.services;
 
-import org.kylecodes.gm.dtos.UserDto;
+import org.kylecodes.gm.dtos.AuthUserDto;
 
 public interface AuthService {
-    String verify(UserDto userDto);
+    String verify(AuthUserDto authUserDto);
 }

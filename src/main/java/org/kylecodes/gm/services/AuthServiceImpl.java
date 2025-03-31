@@ -1,6 +1,6 @@
 package org.kylecodes.gm.services;
 
-import org.kylecodes.gm.dtos.UserDto;
+import org.kylecodes.gm.dtos.AuthUserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,10 +16,10 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     JwtServiceImpl jwtServiceImpl;
 
-    public String verify(UserDto userDto) {
-        Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(userDto.getEmail(),userDto.getPassword()));
+    public String verify(AuthUserDto authUserDto) {
+        Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(authUserDto.getEmail(), authUserDto.getPassword()));
         if (authentication.isAuthenticated()) {
-            return jwtServiceImpl.generateToken(userDto.getEmail());
+            return jwtServiceImpl.generateToken(authUserDto.getEmail());
         } else {
             return "fail";
         }

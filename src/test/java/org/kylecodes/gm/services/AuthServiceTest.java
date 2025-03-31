@@ -3,7 +3,8 @@ package org.kylecodes.gm.services;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.kylecodes.gm.dtos.UserDto;
+import org.kylecodes.gm.constants.Roles;
+import org.kylecodes.gm.dtos.AuthUserDto;
 import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -23,25 +24,35 @@ public class AuthServiceTest {
 
     @InjectMocks
     private AuthService authService = new AuthServiceImpl();
-    private UserDto userDto;
-    String username = "user1";
-    String password = "pass123";
+    private AuthUserDto authUserDto;
+    private final String USERNAME = "user@email.com";
+    private final String PASSWORD = "password123";
+    private final Long VALID_USER_ID = 1L;
     @Before
     public void init() {
         MockitoAnnotations.openMocks(this);
-        userDto = new UserDto();
-        userDto.setId(1L);
-        userDto.setEmail(username);
-        userDto.setPassword(password);
-        userDto.setRole("ROLE_USER");
+        authUserDto = new AuthUserDto();
+        authUserDto.setId(VALID_USER_ID);
+        authUserDto.setEmail(USERNAME);
+        authUserDto.setPassword(PASSWORD);
+        authUserDto.setRole(Roles.USER);
     }
 
     @Test
     public void testAuthenticationSuccess() {
         when(authenticationManager.authenticate(ArgumentMatchers.any())).thenReturn(
-                new UsernamePasswordAuthenticationToken(username, password)
+                new UsernamePasswordAuthenticationToken(USERNAME, PASSWORD)
         );
 
-        assertTrue(authService.verify(userDto), true);
+        assertTrue(authService.verify(authUserDto), true);
+    }
+
+    @Test
+    public void AuthService_() {
+        when(authenticationManager.authenticate(ArgumentMatchers.any())).thenReturn(
+                new UsernamePasswordAuthenticationToken(USERNAME, PASSWORD)
+        );
+
+        assertTrue(authService.verify(authUserDto), true);
     }
 }
