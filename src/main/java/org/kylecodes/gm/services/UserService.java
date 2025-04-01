@@ -5,7 +5,7 @@ import org.kylecodes.gm.dtos.RegisterDto;
 import org.kylecodes.gm.dtos.UserDto;
 
 public interface UserService {
-    RegisterDto registerNewUser(RegisterDto userDto);
+    UserDto registerNewUser(RegisterDto userDto);
     UserDto getUserInfo();
     UserDto updateUserInfo(AuthUserDto authUserDto);
     void deleteUser();

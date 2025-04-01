@@ -7,7 +7,6 @@ import org.kylecodes.gm.dtos.RegisterDto;
 import org.kylecodes.gm.dtos.UserDto;
 import org.kylecodes.gm.entities.User;
 import org.kylecodes.gm.mappers.EntityToDtoMapper;
-import org.kylecodes.gm.mappers.UserToRegisterDtoMapper;
 import org.kylecodes.gm.mappers.UserToUserDtoMapper;
 import org.kylecodes.gm.repositories.UserRepository;
 import org.kylecodes.gm.utils.SecurityUtil;
@@ -24,11 +23,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private UserRepository userRepository;
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-    private final EntityToDtoMapper<User, RegisterDto> userMapper = new UserToRegisterDtoMapper();
-    private final EntityToDtoMapper<User, UserDto> userToUserDtoMapper = new UserToUserDtoMapper();
+
+    private final EntityToDtoMapper<User, UserDto> userMapper = new UserToUserDtoMapper();
 
     @Override
-    public RegisterDto registerNewUser(RegisterDto registerDto) {
+    public UserDto registerNewUser(RegisterDto registerDto) {
         User newUser = new User();
 
         newUser.setEmail(registerDto.getEmail());
@@ -41,7 +40,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public UserDto getUserInfo() {
         User user = SecurityUtil.getPrincipalFromSecurityContext();
-        return userToUserDtoMapper.mapToDto(user);
+        return userMapper.mapToDto(user);
     }
 
     @Override
@@ -54,7 +53,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             currentUser.setPassword(passwordEncoder.encode(updateUser.getPassword()));
         }
         User savedUser = userRepository.save(currentUser);
-        return userToUserDtoMapper.mapToDto(savedUser);
+        return userMapper.mapToDto(savedUser);
     }
 
     @Override

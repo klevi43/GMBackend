@@ -32,7 +32,8 @@ public class JwtSecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests(
                 auth -> {
-                    auth.requestMatchers("/sign-up", "/login").permitAll();
+                    auth.requestMatchers("/sign-up", "/login").permitAll()
+                            .requestMatchers("/admin/**").hasRole("ADMIN");
                     auth.anyRequest().authenticated();
                 });
         http.httpBasic(Customizer.withDefaults()); // this is an empty lambda
