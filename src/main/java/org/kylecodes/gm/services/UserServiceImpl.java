@@ -7,11 +7,13 @@ import org.kylecodes.gm.dtos.RegisterDto;
 import org.kylecodes.gm.dtos.UserDto;
 import org.kylecodes.gm.entities.User;
 import org.kylecodes.gm.exceptions.AlreadyLoggedInException;
+import org.kylecodes.gm.exceptions.EmailAlreadyExistsException;
 import org.kylecodes.gm.mappers.EntityToDtoMapper;
 import org.kylecodes.gm.mappers.UserToUserDtoMapper;
 import org.kylecodes.gm.repositories.UserRepository;
 import org.kylecodes.gm.utils.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -30,8 +32,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserDto registerNewUser(RegisterDto registerDto) {
-        if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
+        if (!(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)) {
             throw new AlreadyLoggedInException();
+        }
+        registerDto.setEmail(registerDto.getEmail().trim());
+        if (userRepository.findByEmail(registerDto.getEmail()).isPresent()) {
+            throw new EmailAlreadyExistsException();
         }
         User newUser = new User();
 

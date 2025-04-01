@@ -22,6 +22,7 @@ public class User implements UserDetails {
 
     @NotNull
     @Email
+    @Column(unique = true)
     private String email;
     @NotNull
     @Size(min = PasswordLen.MIN_LENGTH, max = PasswordLen.MAX_LENGTH)
