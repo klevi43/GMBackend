@@ -6,11 +6,13 @@ import org.kylecodes.gm.dtos.AuthUserDto;
 import org.kylecodes.gm.dtos.RegisterDto;
 import org.kylecodes.gm.dtos.UserDto;
 import org.kylecodes.gm.entities.User;
+import org.kylecodes.gm.exceptions.AlreadyLoggedInException;
 import org.kylecodes.gm.mappers.EntityToDtoMapper;
 import org.kylecodes.gm.mappers.UserToUserDtoMapper;
 import org.kylecodes.gm.repositories.UserRepository;
 import org.kylecodes.gm.utils.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -28,6 +30,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserDto registerNewUser(RegisterDto registerDto) {
+        if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
+            throw new AlreadyLoggedInException();
+        }
         User newUser = new User();
 
         newUser.setEmail(registerDto.getEmail());

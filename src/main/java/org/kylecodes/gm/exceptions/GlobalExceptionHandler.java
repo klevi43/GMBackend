@@ -71,5 +71,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleAlreadyLoggedInException(AlreadyLoggedInException e, WebRequest webRequest) {
+        ErrorResponse errorResponse = new ErrorResponse();
 
+        errorResponse.setStatus(HttpStatus.FORBIDDEN.value());
+        errorResponse.setMessage(e.getMessage());
+        errorResponse.setTimeStamp(new Date());
+        return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+    }
 }
