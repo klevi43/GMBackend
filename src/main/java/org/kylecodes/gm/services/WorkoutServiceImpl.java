@@ -46,7 +46,8 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Override
     public List<WorkoutDto> getAllWorkouts() {
-        List<Workout> workoutList = workoutRepository.findAll();
+        User user = SecurityUtil.getPrincipalFromSecurityContext();
+        List<Workout> workoutList = workoutRepository.findAllByUser(user);
         if (workoutList.isEmpty()) {
             return new ArrayList<WorkoutDto>();
         }

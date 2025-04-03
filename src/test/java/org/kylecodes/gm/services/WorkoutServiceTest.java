@@ -100,10 +100,27 @@ public class WorkoutServiceTest {
     public void WorkoutService_GetAllWorkouts_ReturnWorkoutList() {
         // Arrange
         List<Workout> workoutList = Arrays.asList(workout, workout2);
-        when(workoutRepository.findAll()).thenReturn(workoutList);
+        when(workoutRepository.findAllByUser(user)).thenReturn(workoutList);
 
         //Act
         List<WorkoutDto> saveWorkoutDtoList = workoutServiceImpl.getAllWorkouts();
+        List<WorkoutDto> convertedList = workoutList.stream().map(this::mapToDt0).toList();
+
+        // Assert
+        assertThat(saveWorkoutDtoList).isNotNull();
+        assertThat(saveWorkoutDtoList.size()).isEqualTo(convertedList.size());
+
+    }
+
+
+    @Test
+    public void WorkoutService_GetAllMostRecentWorkouts_ReturnWorkoutList() {
+        // Arrange
+        List<Workout> workoutList = Arrays.asList(workout, workout2);
+        when(workoutRepository.findAllMostRecentWorkoutsByUser(user)).thenReturn(workoutList);
+
+        //Act
+        List<WorkoutDto> saveWorkoutDtoList = workoutServiceImpl.getAllMostRecentWorkouts();
         List<WorkoutDto> convertedList = workoutList.stream().map(this::mapToDt0).toList();
 
         // Assert
