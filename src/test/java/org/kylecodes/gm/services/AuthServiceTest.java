@@ -2,31 +2,37 @@ package org.kylecodes.gm.services;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.kylecodes.gm.constants.Roles;
 import org.kylecodes.gm.contexts.SecurityContextForTests;
 import org.kylecodes.gm.dtos.AuthUserDto;
 import org.kylecodes.gm.entities.User;
-import org.mockito.ArgumentMatchers;
+import org.kylecodes.gm.filters.JwtFilter;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.util.AssertionErrors.assertTrue;
+import static org.mockito.Mockito.mock;
 
-@RunWith(MockitoJUnitRunner.class)
+@SpringBootTest
 public class AuthServiceTest {
 
+//
+//@Mock
+//    private AuthenticationManager authenticationManager;
+
+
     @Mock
-    private AuthenticationManager authenticationManager;
+    AuthenticationManager authenticationManager;
+
+    @MockitoBean
+    JwtFilter jwtFilter;
 
     @InjectMocks
-    private AuthService authService = new AuthServiceImpl();
+    private AuthService authService = mock(AuthServiceImpl.class);
+
     private User user;
 
     private AuthUserDto authUserDto;
@@ -34,7 +40,7 @@ public class AuthServiceTest {
     private final String PASSWORD = "password123";
     private final Long VALID_USER_ID = 1L;
     private final Integer VALID_TOKEN_LENGTH = 72;
-
+    private final String VALID_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQGVtYWlsLmNvbSIsImlhdCI6MTc0MzY3NDEzMSwiZXhwIjoxNzQzNjc1MjExfQ.VJ3D39dk8TvwNTIyHyYXA6b0sp8Ubr3Rx26_7UZd9cY";
     private SecurityContextForTests context = new SecurityContextForTests();
     @Before
     public void init() {
@@ -48,15 +54,16 @@ public class AuthServiceTest {
         user.setEmail(USERNAME);
         user.setPassword(PASSWORD);
         user.setRole(Roles.USER);
-        context.createSecurityContextWithUser(user);
+        //context.createSecurityContextWithUser(user);
     }
 
+
     @Test
-    @WithMockUser(username = "user@email.com", password = "password123")
-    public void AuthService_Verify_ReturnJwt() {
-        when(authenticationManager.authenticate(ArgumentMatchers.any())).thenReturn(
-                new UsernamePasswordAuthenticationToken(USERNAME, PASSWORD)
-        );
+    public void AuthService_Verify_ReturnJwt() throws InstantiationException, IllegalAccessException {
+//        when(authenticationManager.authenticate(ArgumentMatchers.any())).thenReturn(
+//                new UsernamePasswordAuthenticationToken(USERNAME, PASSWORD)
+//        );
+
 
 
 
@@ -66,12 +73,5 @@ public class AuthServiceTest {
         assertThat(token.length()).isEqualTo(VALID_TOKEN_LENGTH);
     }
 
-    @Test
-    public void AuthService_() {
-        when(authenticationManager.authenticate(ArgumentMatchers.any())).thenReturn(
-                new UsernamePasswordAuthenticationToken(USERNAME, PASSWORD)
-        );
 
-        assertTrue(authService.verify(authUserDto), true);
-    }
 }

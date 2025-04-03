@@ -114,7 +114,7 @@ public class SetServiceUnitTest {
         setDto.setExerciseId(exercise.getId());
         setDto.setWeight(WEIGHT);
         setDto.setReps(REPS);
-        context.createSecurityContextWithUser(user);
+        context.createSecurityContextWithAuthenticatedUser(user);
 
 //
     }

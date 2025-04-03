@@ -78,7 +78,7 @@ public class WorkoutServiceTest {
         workoutDto = new WorkoutDto();
         workoutDto.setName(VALID_WORKOUT_NAME);
         workoutDto.setDate(VALID_WORKOUT_DATE);
-        context.createSecurityContextWithUser(user);
+        context.createSecurityContextWithAuthenticatedUser(user);
 
     }
 

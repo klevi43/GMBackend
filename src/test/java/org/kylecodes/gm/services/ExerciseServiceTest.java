@@ -92,7 +92,7 @@ public class ExerciseServiceTest {
         exerciseDto.setName("Test Exercise");
 
         exerciseDto.setWorkoutId(workout.getId());
-        context.createSecurityContextWithUser(user);
+        context.createSecurityContextWithAuthenticatedUser(user);
     }
 
 
