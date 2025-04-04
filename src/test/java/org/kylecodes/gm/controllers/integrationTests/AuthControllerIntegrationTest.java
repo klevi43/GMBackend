@@ -30,6 +30,7 @@ public class AuthControllerIntegrationTest {
 
     AuthUserDto validUser;
     AuthUserDto nonexistentUser;
+    AuthUserDto badPwUser;
     @BeforeEach
     public void init() {
         validUser = new AuthUserDto();
@@ -38,6 +39,9 @@ public class AuthControllerIntegrationTest {
         nonexistentUser = new AuthUserDto();
         nonexistentUser.setEmail("nonexistentUser@email.com");
         nonexistentUser.setPassword("password123");
+        badPwUser = new AuthUserDto();
+        badPwUser.setEmail("user@email.com");
+        badPwUser.setPassword("password12");
     }
     @Test
     public void AuthContoller_Login_ReturnJwtDto() throws Exception {
@@ -51,10 +55,18 @@ public class AuthControllerIntegrationTest {
     }
 
     @Test
-    public void AuthContoller_Login_ThrowException() throws Exception {
+    public void AuthContoller_LoginWithNonExistentEmail_ThrowBadCredentialsException() throws Exception {
         ResultActions result = mockMvc.perform(post("/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(nonexistentUser)));
+
+        result.andExpect(status().is4xxClientError()).andDo(MockMvcResultHandlers.print());;
+    }
+    @Test
+    public void AuthContoller_LoginWithWrongPassword_ThrowBadCredentialsException() throws Exception {
+        ResultActions result = mockMvc.perform(post("/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(badPwUser)));
 
         result.andExpect(status().is4xxClientError()).andDo(MockMvcResultHandlers.print());;
     }
