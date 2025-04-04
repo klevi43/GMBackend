@@ -30,6 +30,7 @@ public class JwtSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http.csrf(AbstractHttpConfigurer::disable);
+
         http.authorizeHttpRequests(
                 auth -> {
                     auth.requestMatchers("/sign-up", "/login").permitAll()

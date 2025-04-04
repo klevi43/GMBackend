@@ -1,6 +1,7 @@
 package org.kylecodes.gm.controllers;
 
 import org.kylecodes.gm.dtos.AuthUserDto;
+import org.kylecodes.gm.dtos.JwtDto;
 import org.kylecodes.gm.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,7 +15,7 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/login")
-    public String login(@RequestBody AuthUserDto authUserDto) {
+    public JwtDto login(@RequestBody AuthUserDto authUserDto) {
 
         return authService.verify(authUserDto);
     }
