@@ -4,7 +4,7 @@ import org.kylecodes.gm.constants.RequestFailure;
 import org.kylecodes.gm.dtos.WorkoutDto;
 import org.kylecodes.gm.entities.User;
 import org.kylecodes.gm.entities.Workout;
-import org.kylecodes.gm.exceptions.ItemNotFoundException;
+import org.kylecodes.gm.exceptions.WorkoutNotFoundException;
 import org.kylecodes.gm.mappers.EntityToDtoMapper;
 import org.kylecodes.gm.mappers.WorkoutToWorkoutDtoMapper;
 import org.kylecodes.gm.repositories.WorkoutRepository;
@@ -83,7 +83,7 @@ public class WorkoutServiceImpl implements WorkoutService {
     public WorkoutDto getWorkoutById(Long id) {
         User user = SecurityUtil.getPrincipalFromSecurityContext();
         Optional<Workout> workout = Optional.of(workoutRepository.findByIdAndUserId(id, user.getId())
-                .orElseThrow(() -> new ItemNotFoundException(RequestFailure.GET_REQUEST_FAILURE)));
+                .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.GET_REQUEST_FAILURE)));
 
 
         return workoutMapper.mapToDto(workout.get());
@@ -94,7 +94,7 @@ public class WorkoutServiceImpl implements WorkoutService {
     public WorkoutDto updateWorkoutById(WorkoutDto workoutDto, Long id) {
         User user = SecurityUtil.getPrincipalFromSecurityContext();
         Optional<Workout> workout = Optional.of(workoutRepository.findByIdAndUserId(id, user.getId())
-                .orElseThrow(() -> new ItemNotFoundException(RequestFailure.PUT_REQUEST_FAILURE)));
+                .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.PUT_REQUEST_FAILURE)));
 
         Workout updateWorkout = workout.get();
         if (workoutDto.getName() != null) {
@@ -124,7 +124,7 @@ public class WorkoutServiceImpl implements WorkoutService {
     public void deleteWorkoutById(Long id) {
         User user = SecurityUtil.getPrincipalFromSecurityContext();
         Optional<Workout> workout = Optional.of(workoutRepository.findByIdAndUserId(id, user.getId())
-                .orElseThrow(() -> new ItemNotFoundException(RequestFailure.DELETE_REQUEST_FAILURE)));
+                .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.DELETE_REQUEST_FAILURE)));
 
         workoutRepository.deleteByIdAndUserId(id, user.getId());
 

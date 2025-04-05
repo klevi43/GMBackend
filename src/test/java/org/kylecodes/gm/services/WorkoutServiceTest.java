@@ -8,7 +8,7 @@ import org.kylecodes.gm.contexts.SecurityContextForTests;
 import org.kylecodes.gm.dtos.WorkoutDto;
 import org.kylecodes.gm.entities.User;
 import org.kylecodes.gm.entities.Workout;
-import org.kylecodes.gm.exceptions.ItemNotFoundException;
+import org.kylecodes.gm.exceptions.WorkoutNotFoundException;
 import org.kylecodes.gm.repositories.WorkoutRepository;
 import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
@@ -154,9 +154,9 @@ public class WorkoutServiceTest {
     @Test
     public void WorkoutService_GetWorkoutById_ThrowsWorkoutNotFoundException() {
         when(workoutRepository.findByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong()))
-                .thenThrow(new ItemNotFoundException(RequestFailure.GET_REQUEST_FAILURE));
+                .thenThrow(new WorkoutNotFoundException(RequestFailure.GET_REQUEST_FAILURE));
 
-        assertThrows(ItemNotFoundException.class,
+        assertThrows(WorkoutNotFoundException.class,
                 () -> workoutServiceImpl.getWorkoutById(VALID_WORKOUT_ID));
 
     }

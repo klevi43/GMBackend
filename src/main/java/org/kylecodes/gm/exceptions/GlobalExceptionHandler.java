@@ -23,7 +23,7 @@ import java.util.Date;
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler
-    public ResponseEntity<ErrorResponse> handleWorkoutNotFoundException(ItemNotFoundException e, WebRequest request) {
+    public ResponseEntity<ErrorResponse> handleWorkoutNotFoundException(WorkoutNotFoundException e, WebRequest request) {
         ErrorResponse errorResponse = new ErrorResponse();
 
         errorResponse.setStatus(HttpStatus.NOT_FOUND.value());
