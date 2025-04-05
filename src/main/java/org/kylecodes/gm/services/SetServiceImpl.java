@@ -37,7 +37,7 @@ public class SetServiceImpl implements SetService {
     @Override
     public List<SetDto> getAllSetsForExerciseInWorkout(Long workoutId, Long exerciseId) {
         User user = SecurityUtil.getPrincipalFromSecurityContext();
-        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUserId(workoutId, user)
+        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUserId(workoutId, user.getId())
                 .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.GET_REQUEST_FAILURE)));
 
         Optional<Exercise> exercise = Optional.ofNullable(exerciseRepository.findByIdAndWorkout(exerciseId, workout.get())
@@ -50,7 +50,7 @@ public class SetServiceImpl implements SetService {
     @Override
     public SetDto getSetForExerciseInWorkout(Long workoutId, Long exerciseId, Long setId) {
         User user = SecurityUtil.getPrincipalFromSecurityContext();
-        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUserId(workoutId, user)
+        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUserId(workoutId, user.getId())
                 .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.GET_REQUEST_FAILURE)));
 
         Optional<Exercise> exercise = Optional.ofNullable(exerciseRepository.findByIdAndWorkout(exerciseId, workout.get())
@@ -65,7 +65,7 @@ public class SetServiceImpl implements SetService {
     @Override
     public SetDto createSetForExerciseInWorkout(Long workoutId, Long exerciseId, SetDto setDto) {
         User user = SecurityUtil.getPrincipalFromSecurityContext();
-        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUserId(workoutId, user)
+        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUserId(workoutId, user.getId())
                 .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.POST_REQUEST_FAILURE)));
 
         Optional<Exercise> exercise = Optional.ofNullable(exerciseRepository.findByIdAndWorkout(exerciseId, workout.get())
@@ -84,7 +84,7 @@ public class SetServiceImpl implements SetService {
     @Override
     public SetDto updateSetForExerciseInWorkout(Long workoutId, Long exerciseId, Long setId, SetDto setDto) {
         User user = SecurityUtil.getPrincipalFromSecurityContext();
-        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUserId(workoutId, user)
+        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUserId(workoutId, user.getId())
                 .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.PUT_REQUEST_FAILURE)));
 
         Optional<Exercise> exercise = Optional.ofNullable(exerciseRepository.findByIdAndWorkout(exerciseId, workout.get())
@@ -112,7 +112,7 @@ public class SetServiceImpl implements SetService {
     @Override
     public void deleteSetForExerciseInWorkout(Long workoutId, Long exerciseId, Long setId) {
         User user = SecurityUtil.getPrincipalFromSecurityContext();
-        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUserId(workoutId, user)
+        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUserId(workoutId, user.getId())
                 .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.DELETE_REQUEST_FAILURE)));
 
         Optional<Exercise> exercise = Optional.ofNullable(exerciseRepository.findByIdAndWorkout(exerciseId, workout.get())

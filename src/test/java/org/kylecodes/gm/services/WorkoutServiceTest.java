@@ -117,7 +117,7 @@ public class WorkoutServiceTest {
     public void WorkoutService_GetAllMostRecentWorkouts_ReturnWorkoutList() {
         // Arrange
         List<Workout> workoutList = Arrays.asList(workout, workout2);
-        when(workoutRepository.findAllMostRecentWorkoutsByUser(user)).thenReturn(workoutList);
+        when(workoutRepository.findAllMostRecentWorkoutsByUserId(ArgumentMatchers.anyLong())).thenReturn(workoutList);
 
         //Act
         List<WorkoutDto> saveWorkoutDtoList = workoutServiceImpl.getAllMostRecentWorkouts();
@@ -143,7 +143,7 @@ public class WorkoutServiceTest {
     public void WorkoutService_GetWorkoutById_ReturnWorkoutDto() {
 
 
-        when(workoutRepository.findByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.any(User.class))).thenReturn(Optional.ofNullable(workout));
+        when(workoutRepository.findByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong())).thenReturn(Optional.ofNullable(workout));
 
         WorkoutDto saveWorkout = workoutServiceImpl.getWorkoutById(VALID_WORKOUT_ID);
 
@@ -153,7 +153,7 @@ public class WorkoutServiceTest {
 
     @Test
     public void WorkoutService_GetWorkoutById_ThrowsWorkoutNotFoundException() {
-        when(workoutRepository.findByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.any(User.class)))
+        when(workoutRepository.findByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong()))
                 .thenThrow(new WorkoutNotFoundException(RequestFailure.GET_REQUEST_FAILURE));
 
         assertThrows(WorkoutNotFoundException.class,
@@ -164,7 +164,7 @@ public class WorkoutServiceTest {
     @Test
     public void WorkoutService_UpdateWorkoutById_ReturnsUpdatedWorkout() {
 
-        when(workoutRepository.findByIdAndUserId(ArgumentMatchers.anyLong(),ArgumentMatchers.any(User.class))).thenReturn(Optional.ofNullable(workout));
+        when(workoutRepository.findByIdAndUserId(ArgumentMatchers.anyLong(),ArgumentMatchers.anyLong())).thenReturn(Optional.ofNullable(workout));
         when(workoutRepository.save(ArgumentMatchers.any(Workout.class))).thenReturn(workout);
 
         // Act
@@ -183,7 +183,7 @@ public class WorkoutServiceTest {
         workout.setName("Chest Day");
         workout.setDate(LocalDate.now());
 
-        when(workoutRepository.findByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.any(User.class))).thenReturn(Optional.ofNullable(workout));
+        when(workoutRepository.findByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong())).thenReturn(Optional.ofNullable(workout));
 
        assertAll(() -> workoutServiceImpl.deleteWorkoutById(VALID_WORKOUT_ID));
     }
