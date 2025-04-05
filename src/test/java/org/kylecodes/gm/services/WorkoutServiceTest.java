@@ -53,7 +53,7 @@ public class WorkoutServiceTest {
     private WorkoutRepository workoutRepository;
 
     @InjectMocks
-    private WorkoutServiceImpl workoutServiceImpl;
+    private WorkoutService workoutService = new WorkoutServiceImpl();
     private Workout workout;
     private Workout workout2;
     private WorkoutDto workoutDto;
@@ -67,13 +67,16 @@ public class WorkoutServiceTest {
         user.setRole(VALID_USER_ROLE);
 
         workout = new Workout();
+        workout.setId(VALID_WORKOUT_ID);
         workout.setName(VALID_WORKOUT_NAME);
         workout.setDate(LocalDate.now());
+        workout.setUser(user);
 
         workout2 = new Workout();
+        workout2.setId(VALID_WORKOUT_ID);
         workout2.setName(VALID_WORKOUT_NAME);
         workout2.setDate(VALID_WORKOUT_DATE);
-
+        workout2.setUser(user);
 
         workoutDto = new WorkoutDto();
         workoutDto.setName(VALID_WORKOUT_NAME);
@@ -89,7 +92,7 @@ public class WorkoutServiceTest {
         when(workoutRepository.save(Mockito.any(Workout.class))).thenReturn(workout);
 
         // Act
-        WorkoutDto savedWorkout = workoutServiceImpl.createWorkout(workoutDto);
+        WorkoutDto savedWorkout = workoutService.createWorkout(workoutDto);
 
         // Assert
         assertThat(savedWorkout).isNotNull();
@@ -103,7 +106,7 @@ public class WorkoutServiceTest {
         when(workoutRepository.findAllByUserId(user.getId())).thenReturn(workoutList);
 
         //Act
-        List<WorkoutDto> saveWorkoutDtoList = workoutServiceImpl.getAllWorkouts();
+        List<WorkoutDto> saveWorkoutDtoList = workoutService.getAllWorkouts();
         List<WorkoutDto> convertedList = workoutList.stream().map(this::mapToDt0).toList();
 
         // Assert
@@ -120,7 +123,7 @@ public class WorkoutServiceTest {
         when(workoutRepository.findAllMostRecentWorkoutsByUserId(ArgumentMatchers.anyLong())).thenReturn(workoutList);
 
         //Act
-        List<WorkoutDto> saveWorkoutDtoList = workoutServiceImpl.getAllMostRecentWorkouts();
+        List<WorkoutDto> saveWorkoutDtoList = workoutService.getAllMostRecentWorkouts();
         List<WorkoutDto> convertedList = workoutList.stream().map(this::mapToDt0).toList();
 
         // Assert
@@ -145,7 +148,7 @@ public class WorkoutServiceTest {
 
         when(workoutRepository.findByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong())).thenReturn(Optional.ofNullable(workout));
 
-        WorkoutDto saveWorkout = workoutServiceImpl.getWorkoutById(VALID_WORKOUT_ID);
+        WorkoutDto saveWorkout = workoutService.getWorkoutById(VALID_WORKOUT_ID);
 
 
         assertThat(saveWorkout).isNotNull();
@@ -157,7 +160,7 @@ public class WorkoutServiceTest {
                 .thenThrow(new WorkoutNotFoundException(RequestFailure.GET_REQUEST_FAILURE));
 
         assertThrows(WorkoutNotFoundException.class,
-                () -> workoutServiceImpl.getWorkoutById(VALID_WORKOUT_ID));
+                () -> workoutService.getWorkoutById(VALID_WORKOUT_ID));
 
     }
 
@@ -168,7 +171,7 @@ public class WorkoutServiceTest {
         when(workoutRepository.save(ArgumentMatchers.any(Workout.class))).thenReturn(workout);
 
         // Act
-        WorkoutDto savedWorkout = workoutServiceImpl.updateWorkoutById(workoutDto, VALID_WORKOUT_ID);
+        WorkoutDto savedWorkout = workoutService.updateWorkoutById(workoutDto, VALID_WORKOUT_ID);
 
         // Assert
         assertThat(savedWorkout).isNotNull();
@@ -179,14 +182,23 @@ public class WorkoutServiceTest {
     @Test
     public void WorkoutService_DeleteWorkoutById_ReturnNothing() {
         // Arrange
-        Workout workout = new Workout();
-        workout.setName("Chest Day");
-        workout.setDate(LocalDate.now());
 
-        when(workoutRepository.findByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong())).thenReturn(Optional.ofNullable(workout));
 
-       assertAll(() -> workoutServiceImpl.deleteWorkoutById(VALID_WORKOUT_ID));
+        when(workoutRepository.existsByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong())).thenReturn(true);
+
+       assertAll(() -> workoutService.deleteWorkoutById(VALID_WORKOUT_ID));
     }
+
+    @Test
+    public void WorkoutService_DeleteWorkoutById_ThrowWorkoutNotFoundException() {
+        // Arrange
+
+
+        when(workoutRepository.existsByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong())).thenReturn(false);
+
+        assertThrows(WorkoutNotFoundException.class, () -> workoutService.deleteWorkoutById(VALID_WORKOUT_ID));
+    }
+
     private WorkoutDto mapToDt0(Workout workout) {
         WorkoutDto workoutDto = new WorkoutDto();
         workoutDto.setId(workout.getId());

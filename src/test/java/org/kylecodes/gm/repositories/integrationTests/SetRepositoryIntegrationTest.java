@@ -86,7 +86,7 @@ public class SetRepositoryIntegrationTest {
 
         assertThat(exercise).isNotEmpty();
 
-        setList = setRepository.findAllByExercise_Id(VALID_EXERCISE_ID_1);
+        setList = setRepository.findAllByExerciseId(VALID_EXERCISE_ID_1);
 
         assertThat(setList).hasSize(2);
 

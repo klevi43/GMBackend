@@ -126,7 +126,7 @@ public class WorkoutServiceImpl implements WorkoutService {
     public void deleteWorkoutById(Long id) {
         User user = SecurityUtil.getPrincipalFromSecurityContext();
         if(workoutRepository.existsByIdAndUserId(id, user.getId())) {
-            workoutRepository.deleteById(id);
+            workoutRepository.deleteByIdAndUserId(id, user.getId());
         }
         else {
             throw new WorkoutNotFoundException(RequestFailure.DELETE_REQUEST_FAILURE);

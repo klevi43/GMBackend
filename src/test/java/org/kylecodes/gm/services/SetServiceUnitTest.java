@@ -121,11 +121,11 @@ public class SetServiceUnitTest {
 
     @Test
     public void SetService_GetSetForExerciseInWorkoutById_ReturnSetDto() {
-        when(workoutRepository.findByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.ofNullable(workout));
-        when(exerciseRepository.findByIdAndWorkoutId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.ofNullable(exercise));
-        when(setRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.ofNullable(set));
+        when(workoutRepository.findByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(workout));
+        when(exerciseRepository.findByIdAndWorkoutId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(exercise));
+        when(setRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(set));
 
-        SetDto foundSet = mockSetService.getSetForExerciseInWorkout(VALID_WORKOUT_ID, VALID_EXERCISE_ID, VALID_SET_ID);
+        SetDto foundSet = mockSetService.getSetForExerciseInWorkout(VALID_SET_ID, VALID_EXERCISE_ID, VALID_WORKOUT_ID);
         assertThat(foundSet).isNotNull();
         assertThat(foundSet.getId()).isEqualTo(VALID_ID);
         assertThat(foundSet.getWeight()).isEqualTo(WEIGHT);
@@ -137,7 +137,7 @@ public class SetServiceUnitTest {
     public void SetService_GetSetForExerciseInWorkoutById_ThrowsWorkoutNotFoundException() {
         mockSetService = mock(SetServiceImpl.class);
         when(mockSetService.getSetForExerciseInWorkout(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong())).thenThrow(WorkoutNotFoundException.class);
-        assertThrows(WorkoutNotFoundException.class, () -> mockSetService.getSetForExerciseInWorkout(INVALID_ID, exercise.getId(), set.getId()));
+        assertThrows(WorkoutNotFoundException.class, () -> mockSetService.getSetForExerciseInWorkout(VALID_SET_ID, VALID_EXERCISE_ID, INVALID_ID));
 
 
     }
@@ -146,7 +146,7 @@ public class SetServiceUnitTest {
     public void SetService_GetSetForExerciseInWorkoutById_ThrowsExerciseNotFoundException() {
         mockSetService = mock(SetServiceImpl.class);
         when(mockSetService.getSetForExerciseInWorkout(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong())).thenThrow(ExerciseNotFoundException.class);
-        assertThrows(ExerciseNotFoundException.class, () -> mockSetService.getSetForExerciseInWorkout(VALID_WORKOUT_ID, INVALID_ID, VALID_SET_ID));
+        assertThrows(ExerciseNotFoundException.class, () -> mockSetService.getSetForExerciseInWorkout(VALID_SET_ID, INVALID_ID, VALID_WORKOUT_ID));
 
 
     }
@@ -155,7 +155,7 @@ public class SetServiceUnitTest {
     public void SetService_GetSetForExerciseInWorkoutById_ThrowsSetNotFoundException() {
         mockSetService = mock(SetServiceImpl.class);
         when(mockSetService.getSetForExerciseInWorkout(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong())).thenThrow(SetNotFoundException.class);
-        assertThrows(SetNotFoundException.class, () -> mockSetService.getSetForExerciseInWorkout(VALID_WORKOUT_ID, VALID_EXERCISE_ID, INVALID_ID));
+        assertThrows(SetNotFoundException.class, () -> mockSetService.getSetForExerciseInWorkout(INVALID_ID, VALID_EXERCISE_ID, VALID_WORKOUT_ID));
 
 
     }
@@ -163,21 +163,21 @@ public class SetServiceUnitTest {
 
     @Test
     public void SetService_GetAllSetsForExerciseInWorkoutById_ReturnSetDtoList() {
-        when(workoutRepository.findByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.ofNullable(workout));
-        when(exerciseRepository.findByIdAndWorkoutId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.ofNullable(exercise));
-        when(setRepository.findAllByExercise_Id(ArgumentMatchers.anyLong())).thenReturn(Arrays.asList(set, set));
+        when(workoutRepository.findByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(workout));
+        when(exerciseRepository.findByIdAndWorkoutId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(exercise));
+        when(setRepository.findAllByExerciseId(ArgumentMatchers.anyLong())).thenReturn(Arrays.asList(set, set));
 
-        List<SetDto> setDtoList = mockSetService.getAllSetsForExerciseInWorkout(VALID_WORKOUT_ID, VALID_WORKOUT_ID);
+        List<SetDto> setDtoList = mockSetService.getAllSetsForExerciseInWorkout(VALID_EXERCISE_ID, VALID_WORKOUT_ID);
         assertThat(setDtoList).hasSize(2);
 
     }
     @Test
     public void SetService_GetAllSetsForExerciseInWorkoutById_ReturnEmptyList() {
-        when(workoutRepository.findByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.ofNullable(workout));
-        when(exerciseRepository.findByIdAndWorkoutId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.ofNullable(exercise));
-        when(setRepository.findAllByExercise_Id(ArgumentMatchers.anyLong())).thenReturn(new ArrayList<>());
+        when(workoutRepository.findByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(workout));
+        when(exerciseRepository.findByIdAndWorkoutId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(exercise));
+        when(setRepository.findAllByExerciseId(ArgumentMatchers.anyLong())).thenReturn(new ArrayList<>());
 
-        List<SetDto> setDtoList = mockSetService.getAllSetsForExerciseInWorkout(workout.getId(), exercise.getId());
+        List<SetDto> setDtoList = mockSetService.getAllSetsForExerciseInWorkout(VALID_EXERCISE_ID, VALID_WORKOUT_ID);
         assertThat(setDtoList).hasSize(0);
 
     }
@@ -187,7 +187,7 @@ public class SetServiceUnitTest {
     public void SetService_GetAllSetsForExerciseInWorkoutById_ThrowsWorkoutNotFoundException() {
         mockSetService = mock(SetServiceImpl.class);
         when(mockSetService.getAllSetsForExerciseInWorkout(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong())).thenThrow(WorkoutNotFoundException.class);
-        assertThrows(WorkoutNotFoundException.class, () -> mockSetService.getAllSetsForExerciseInWorkout(INVALID_ID, exercise.getId()));
+        assertThrows(WorkoutNotFoundException.class, () -> mockSetService.getAllSetsForExerciseInWorkout(VALID_EXERCISE_ID, INVALID_ID));
 
 
     }
@@ -197,7 +197,7 @@ public class SetServiceUnitTest {
     public void SetService_GetAllSetsForExerciseInWorkoutById_ThrowsExerciseNotFoundException() {
         mockSetService = mock(SetServiceImpl.class);
         when(mockSetService.getAllSetsForExerciseInWorkout(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong())).thenThrow(WorkoutNotFoundException.class);
-        assertThrows(WorkoutNotFoundException.class, () -> mockSetService.getAllSetsForExerciseInWorkout(workout.getId(), INVALID_ID));
+        assertThrows(WorkoutNotFoundException.class, () -> mockSetService.getAllSetsForExerciseInWorkout(INVALID_ID, VALID_WORKOUT_ID));
 
 
     }
@@ -206,46 +206,46 @@ public class SetServiceUnitTest {
 
     @Test
     public void SetService_CreateSetForExerciseInWorkout_ReturnSet() {
-        when(workoutRepository.findByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.ofNullable(workout));
-        when(exerciseRepository.findByIdAndWorkoutId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.ofNullable(exercise));
+        when(workoutRepository.findByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(workout));
+        when(exerciseRepository.findByIdAndWorkoutId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(exercise));
         when(setRepository.save(ArgumentMatchers.any(Set.class))).thenReturn(set);
 
-            SetDto savedSet = mockSetService.createSetForExerciseInWorkout(VALID_ID, VALID_ID, setDto);
+            SetDto savedSet = mockSetService.createSetForExerciseInWorkout(setDto, VALID_EXERCISE_ID, VALID_WORKOUT_ID);
 
         assertThat(savedSet).isNotNull();
         assertThat(savedSet.getId()).isEqualTo(VALID_ID);
         assertThat(savedSet.getReps()).isEqualTo(REPS);
         assertThat(savedSet.getWeight()).isEqualTo(WEIGHT);
-        assertThat(savedSet.getExerciseId()).isEqualTo(exercise.getId());
+        assertThat(savedSet.getExerciseId()).isEqualTo(VALID_EXERCISE_ID);
 
     }
 
     @Test
     public void SetService_CreateSetForExerciseInWorkout_ThrowsWorkoutNotFoundException() {
         mockSetService = mock(SetServiceImpl.class);
-        when(mockSetService.createSetForExerciseInWorkout(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong(), ArgumentMatchers.any(SetDto.class))).thenThrow(WorkoutNotFoundException.class);
-        assertThrows(WorkoutNotFoundException.class, () -> mockSetService.createSetForExerciseInWorkout(INVALID_ID, exercise.getId(), setDto));
+        when(mockSetService.createSetForExerciseInWorkout(ArgumentMatchers.any(), ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong())).thenThrow(WorkoutNotFoundException.class);
+        assertThrows(WorkoutNotFoundException.class, () -> mockSetService.createSetForExerciseInWorkout(setDto, VALID_EXERCISE_ID, INVALID_ID));
     }
 
     @Test
     public void SetService_CreateSetForExerciseInWorkout_ThrowsExerciseNotFoundException() {
         mockSetService = mock(SetServiceImpl.class);
-        when(mockSetService.createSetForExerciseInWorkout(workout.getId(), INVALID_ID, setDto)).thenThrow(ExerciseNotFoundException.class);
-        assertThrows(ExerciseNotFoundException.class, () -> mockSetService.createSetForExerciseInWorkout(workout.getId(), INVALID_ID, setDto));
+        when(mockSetService.createSetForExerciseInWorkout(ArgumentMatchers.any(), ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong())).thenThrow(ExerciseNotFoundException.class);
+        assertThrows(ExerciseNotFoundException.class, () -> mockSetService.createSetForExerciseInWorkout(setDto, INVALID_ID, VALID_WORKOUT_ID));
     }
 
     @Test
     public void SetService_UpdateSetForExerciseInWorkout_ReturnUpdatedSet() {
-        when(workoutRepository.findByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.ofNullable(workout));
-        when(exerciseRepository.findByIdAndWorkoutId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.ofNullable(exercise));
-        when(setRepository.findByIdAndExercise(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.ofNullable(set));
+        when(workoutRepository.findByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(workout));
+        when(exerciseRepository.findByIdAndWorkoutId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(exercise));
+        when(setRepository.findByIdAndExerciseId(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong())).thenReturn(Optional.of(set));
         when(setRepository.save(ArgumentMatchers.any(Set.class))).thenReturn(set);
 
         setDto.setReps(REPS_2);
         setDto.setWeight(WEIGHT_2);
 
 
-        SetDto updatedSet = mockSetService.updateSetForExerciseInWorkout(VALID_WORKOUT_ID, VALID_EXERCISE_ID, VALID_SET_ID, setDto);
+        SetDto updatedSet = mockSetService.updateSetForExerciseInWorkout(setDto, VALID_SET_ID, VALID_EXERCISE_ID, VALID_WORKOUT_ID);
 
         assertThat(updatedSet).isNotNull();
         assertThat(updatedSet.getId()).isEqualTo(VALID_ID);
@@ -257,25 +257,25 @@ public class SetServiceUnitTest {
     @Test
     public void SetService_UpdateSetForExerciseInWorkout_ThrowsWorkoutNotFoundException() {
         mockSetService = mock(SetServiceImpl.class);
-        when(mockSetService.updateSetForExerciseInWorkout(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong(), ArgumentMatchers.any(SetDto.class))).thenThrow(ExerciseNotFoundException.class);
-        assertThrows(ExerciseNotFoundException.class, () -> mockSetService.updateSetForExerciseInWorkout(INVALID_ID, VALID_EXERCISE_ID, VALID_SET_ID, setDto));
+        when(mockSetService.updateSetForExerciseInWorkout(ArgumentMatchers.any(), ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong())).thenThrow(ExerciseNotFoundException.class);
+        assertThrows(ExerciseNotFoundException.class, () -> mockSetService.updateSetForExerciseInWorkout(setDto, VALID_SET_ID, VALID_EXERCISE_ID, INVALID_ID));
     }
 
     @Test
     public void SetService_UpdateSetForExerciseInWorkout_ThrowsExerciseNotFoundException() {
         mockSetService = mock(SetServiceImpl.class);
-        when(mockSetService.updateSetForExerciseInWorkout(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenThrow(ExerciseNotFoundException.class);
-        assertThrows(ExerciseNotFoundException.class, () -> mockSetService.updateSetForExerciseInWorkout(VALID_WORKOUT_ID, INVALID_ID, VALID_SET_ID, setDto));
+        when(mockSetService.updateSetForExerciseInWorkout(ArgumentMatchers.any(), ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong())).thenThrow(ExerciseNotFoundException.class);
+        assertThrows(ExerciseNotFoundException.class, () -> mockSetService.updateSetForExerciseInWorkout(setDto, VALID_SET_ID, INVALID_ID, VALID_WORKOUT_ID));
     }
 
 
     @Test
     public void SetService_DeleteSetForExerciseInWorkoutById_ReturnNothing() {
-        when(workoutRepository.findByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.ofNullable(workout));
-        when(exerciseRepository.findByIdAndWorkoutId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.ofNullable(exercise));
-        when(setRepository.findByIdAndExercise(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.ofNullable(set));
+        when(workoutRepository.findByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(workout));
+        when(exerciseRepository.findByIdAndWorkoutId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(exercise));
+        when(setRepository.findByIdAndExerciseId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(set));
 
-        assertAll(() -> mockSetService.deleteSetForExerciseInWorkout(VALID_WORKOUT_ID, VALID_EXERCISE_ID, VALID_SET_ID));
+        assertAll(() -> mockSetService.deleteSetForExerciseInWorkout(VALID_SET_ID, VALID_EXERCISE_ID, VALID_WORKOUT_ID));
 
     }
 
@@ -284,7 +284,7 @@ public class SetServiceUnitTest {
         mockSetService = mock(SetServiceImpl.class);
         doThrow(new WorkoutNotFoundException("Delete unsuccessful.")).when(mockSetService).deleteSetForExerciseInWorkout(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong());
         assertThrows(WorkoutNotFoundException.class,
-                () -> mockSetService.deleteSetForExerciseInWorkout(INVALID_ID, VALID_EXERCISE_ID, VALID_SET_ID));
+                () -> mockSetService.deleteSetForExerciseInWorkout(VALID_SET_ID, VALID_EXERCISE_ID, INVALID_ID));
 
 
     }
@@ -294,7 +294,7 @@ public class SetServiceUnitTest {
         mockSetService = mock(SetServiceImpl.class);
         doThrow(new ExerciseNotFoundException("Delete unsuccessful.")).when(mockSetService).deleteSetForExerciseInWorkout(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong());
         assertThrows(ExerciseNotFoundException.class,
-                    () -> mockSetService.deleteSetForExerciseInWorkout(workout.getId(), INVALID_ID, set.getId()));
+                    () -> mockSetService.deleteSetForExerciseInWorkout(VALID_SET_ID, INVALID_ID, VALID_WORKOUT_ID));
 
 
     }
@@ -304,7 +304,7 @@ public class SetServiceUnitTest {
         mockSetService = mock(SetServiceImpl.class);
         doThrow(new SetNotFoundException("Delete unsuccessful.")).when(mockSetService).deleteSetForExerciseInWorkout(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong());
         assertThrows(SetNotFoundException.class,
-                () -> mockSetService.deleteSetForExerciseInWorkout(workout.getId(), exercise.getId(), INVALID_ID));
+                () -> mockSetService.deleteSetForExerciseInWorkout(INVALID_ID, VALID_EXERCISE_ID, VALID_WORKOUT_ID));
 
 
     }

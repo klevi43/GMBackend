@@ -97,7 +97,7 @@ public class ExerciseRespositoryIntegrationTest {
 
         assertThat(workout).isNotNull();
 
-        exerciseList = exerciseRepository.findAllByWorkout(workout);
+        exerciseList = exerciseRepository.findAllByWorkoutId(VALID_WORKOUT_ID_1);
 
         assertThat(exerciseList).hasSize(2);
     }
