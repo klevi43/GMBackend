@@ -149,7 +149,7 @@ public class ExerciseServiceTest {
 
 
         when(workoutRepository.findByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.ofNullable(workout));
-        when(exerciseRepository.findByIdAndWorkout(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.ofNullable(exercise));
+        when(exerciseRepository.findByIdAndWorkoutId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.ofNullable(exercise));
         when(exerciseRepository.save(Mockito.any(Exercise.class))).thenReturn(exercise);
 
 
@@ -183,7 +183,7 @@ public class ExerciseServiceTest {
     @Test
     public void ExerciseService_DeleteExerciseById_ReturnNothing() {
         when(workoutRepository.findByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.ofNullable(workout));
-        when(exerciseRepository.findByIdAndWorkout(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.ofNullable(exercise));
+        when(exerciseRepository.findByIdAndWorkoutId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.ofNullable(exercise));
 
         assertAll(() -> mockExerciseService.deleteExerciseInWorkoutById(VALID_WORKOUT_ID, VALID_EXERCISE_ID));
 

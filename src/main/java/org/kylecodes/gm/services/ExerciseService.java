@@ -8,10 +8,10 @@ public interface ExerciseService {
     List<ExerciseDto> getAllExercises();
 
     List<ExerciseDto> getAllExercisesInWorkout(Long workoutId);
-    ExerciseDto getExerciseInWorkoutById(Long workoutId, Long exerciseId);
+    ExerciseDto getExerciseInWorkoutById( Long exerciseId, Long workoutId);
     ExerciseDto createExercise(ExerciseDto exerciseDto, Long workoutId);
 
-    ExerciseDto updateExerciseInWorkoutById(ExerciseDto exerciseDto, Long workoutId, Long exerciseId);
+    ExerciseDto updateExerciseInWorkoutById(ExerciseDto exerciseDto, Long exerciseId, Long workoutId);
 
-    void deleteExerciseInWorkoutById(Long workoutId, Long exerciseId);
+    void deleteExerciseInWorkoutById(Long exerciseId, Long workoutId);
 }
