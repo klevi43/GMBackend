@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class WorkoutServiceTest {
+public class WorkoutServiceUnitTest {
     // mocking
     /*
         tests need to be fast and non-deterministic
