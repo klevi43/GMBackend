@@ -121,7 +121,7 @@ public class SetServiceUnitTest {
 
     @Test
     public void SetService_GetSetForExerciseInWorkoutById_ReturnSetDto() {
-        when(workoutRepository.findByIdAndUser(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.ofNullable(workout));
+        when(workoutRepository.findByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.ofNullable(workout));
         when(exerciseRepository.findByIdAndWorkout(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.ofNullable(exercise));
         when(setRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.ofNullable(set));
 
@@ -163,7 +163,7 @@ public class SetServiceUnitTest {
 
     @Test
     public void SetService_GetAllSetsForExerciseInWorkoutById_ReturnSetDtoList() {
-        when(workoutRepository.findByIdAndUser(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.ofNullable(workout));
+        when(workoutRepository.findByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.ofNullable(workout));
         when(exerciseRepository.findByIdAndWorkout(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.ofNullable(exercise));
         when(setRepository.findAllByExercise_Id(ArgumentMatchers.anyLong())).thenReturn(Arrays.asList(set, set));
 
@@ -173,7 +173,7 @@ public class SetServiceUnitTest {
     }
     @Test
     public void SetService_GetAllSetsForExerciseInWorkoutById_ReturnEmptyList() {
-        when(workoutRepository.findByIdAndUser(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.ofNullable(workout));
+        when(workoutRepository.findByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.ofNullable(workout));
         when(exerciseRepository.findByIdAndWorkout(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.ofNullable(exercise));
         when(setRepository.findAllByExercise_Id(ArgumentMatchers.anyLong())).thenReturn(new ArrayList<>());
 
@@ -206,7 +206,7 @@ public class SetServiceUnitTest {
 
     @Test
     public void SetService_CreateSetForExerciseInWorkout_ReturnSet() {
-        when(workoutRepository.findByIdAndUser(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.ofNullable(workout));
+        when(workoutRepository.findByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.ofNullable(workout));
         when(exerciseRepository.findByIdAndWorkout(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.ofNullable(exercise));
         when(setRepository.save(ArgumentMatchers.any(Set.class))).thenReturn(set);
 
@@ -236,7 +236,7 @@ public class SetServiceUnitTest {
 
     @Test
     public void SetService_UpdateSetForExerciseInWorkout_ReturnUpdatedSet() {
-        when(workoutRepository.findByIdAndUser(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.ofNullable(workout));
+        when(workoutRepository.findByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.ofNullable(workout));
         when(exerciseRepository.findByIdAndWorkout(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.ofNullable(exercise));
         when(setRepository.findByIdAndExercise(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.ofNullable(set));
         when(setRepository.save(ArgumentMatchers.any(Set.class))).thenReturn(set);
@@ -271,7 +271,7 @@ public class SetServiceUnitTest {
 
     @Test
     public void SetService_DeleteSetForExerciseInWorkoutById_ReturnNothing() {
-        when(workoutRepository.findByIdAndUser(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.ofNullable(workout));
+        when(workoutRepository.findByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.ofNullable(workout));
         when(exerciseRepository.findByIdAndWorkout(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.ofNullable(exercise));
         when(setRepository.findByIdAndExercise(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.ofNullable(set));
 

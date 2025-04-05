@@ -38,7 +38,7 @@ public class ExerciseServiceImpl implements ExerciseService{
     @Override
     public List<ExerciseDto> getAllExercisesInWorkout(Long workoutId) {
         User user = SecurityUtil.getPrincipalFromSecurityContext();
-        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUser(workoutId, user)
+        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUserId(workoutId, user.getId())
                 .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.PUT_REQUEST_FAILURE)));
         List<Exercise> exercisesInWorkout = exerciseRepository.findAllByWorkout(workout.get());
         return exercisesInWorkout.stream().map((exercise) -> exerciseMapper.mapToDto(exercise)).toList();
@@ -47,7 +47,7 @@ public class ExerciseServiceImpl implements ExerciseService{
     @Override
     public ExerciseDto getExerciseInWorkoutById(Long workoutId, Long exerciseId) {
         User user = SecurityUtil.getPrincipalFromSecurityContext();
-        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUser(workoutId, user)
+        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUserId(workoutId, user.getId())
                 .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.PUT_REQUEST_FAILURE)));
         Exercise exercise = exerciseRepository.findByIdAndWorkout(exerciseId, workout.get()).orElseThrow(() -> new ExerciseNotFoundException(RequestFailure.GET_REQUEST_FAILURE));
         return exerciseMapper.mapToDto(exercise);
@@ -56,7 +56,7 @@ public class ExerciseServiceImpl implements ExerciseService{
     @Override
     public ExerciseDto createExercise(ExerciseDto exerciseDto, Long workoutId) {
         User user = SecurityUtil.getPrincipalFromSecurityContext();
-        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUser(workoutId, user)
+        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUserId(workoutId, user.getId())
                 .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.PUT_REQUEST_FAILURE)));
 
         Exercise exercise = new Exercise();
@@ -73,10 +73,10 @@ public class ExerciseServiceImpl implements ExerciseService{
     @Override
     public ExerciseDto updateExerciseInWorkoutById(ExerciseDto exerciseDto, Long workoutId, Long exerciseId) {
         User user = SecurityUtil.getPrincipalFromSecurityContext();
-        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUser(workoutId, user)
+        Optional<Workout> workout = Optional.of(workoutRepository.findByIdAndUserId(workoutId, user.getId())
                 .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.PUT_REQUEST_FAILURE)));
 
-        Optional<Exercise> exercise = Optional.ofNullable(exerciseRepository.findByIdAndWorkout(exerciseId, workout.get())
+        Optional<Exercise> exercise = Optional.of(exerciseRepository.findByIdAndWorkout(exerciseId, workout.get())
                 .orElseThrow(() -> new ExerciseNotFoundException(RequestFailure.PUT_REQUEST_FAILURE)));
 
         Exercise updateExercise = exercise.get();
@@ -91,10 +91,10 @@ public class ExerciseServiceImpl implements ExerciseService{
     @Override
     public void deleteExerciseInWorkoutById(Long workoutId, Long exerciseId) {
         User user = SecurityUtil.getPrincipalFromSecurityContext();
-        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUser(workoutId, user)
+        Optional<Workout> workout = Optional.of(workoutRepository.findByIdAndUserId(workoutId, user.getId())
                 .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.DELETE_REQUEST_FAILURE)));
 
-        Optional<Exercise> exercise = Optional.ofNullable(exerciseRepository.findByIdAndWorkout(exerciseId, workout.get()))
+        Optional<Exercise> exercise = Optional.of(exerciseRepository.findByIdAndWorkout(exerciseId, workout.get()))
                 .orElseThrow(() -> new ExerciseNotFoundException(RequestFailure.DELETE_REQUEST_FAILURE));
         exerciseRepository.deleteById(exerciseId);
     }

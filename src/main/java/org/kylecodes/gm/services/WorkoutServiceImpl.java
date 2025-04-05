@@ -32,9 +32,9 @@ public class WorkoutServiceImpl implements WorkoutService {
     @Override
     public List<WorkoutDto> getAllMostRecentWorkouts() {
         User user = SecurityUtil.getPrincipalFromSecurityContext();
-        List<Workout> workoutList = workoutRepository.findAllMostRecentWorkoutsByUser(user);
+        List<Workout> workoutList = workoutRepository.findAllMostRecentWorkoutsByUserId(user.getId());
         if (workoutList.isEmpty()) {
-            return new ArrayList<WorkoutDto>();
+            return new ArrayList<>();
         }
         List<WorkoutDto> workoutDtoList = new ArrayList<>();
         for (Workout workout : workoutList) {
@@ -47,9 +47,9 @@ public class WorkoutServiceImpl implements WorkoutService {
     @Override
     public List<WorkoutDto> getAllWorkouts() {
         User user = SecurityUtil.getPrincipalFromSecurityContext();
-        List<Workout> workoutList = workoutRepository.findAllByUser(user);
+        List<Workout> workoutList = workoutRepository.findAllByUserId(user.getId());
         if (workoutList.isEmpty()) {
-            return new ArrayList<WorkoutDto>();
+            return new ArrayList<>();
         }
         List<WorkoutDto> workoutDtoList = new ArrayList<>();
         for (Workout workout : workoutList) {
@@ -84,20 +84,18 @@ public class WorkoutServiceImpl implements WorkoutService {
     @Override
     public WorkoutDto getWorkoutById(Long id) {
         User user = SecurityUtil.getPrincipalFromSecurityContext();
-        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUser(id, user)
+        Optional<Workout> workout = Optional.of(workoutRepository.findByIdAndUserId(id, user.getId())
                 .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.GET_REQUEST_FAILURE)));
 
-        WorkoutDto workoutDto = workoutMapper.mapToDto(workout.get());
 
-
-        return workoutDto;
+        return workoutMapper.mapToDto(workout.get());
 
     }
 
     @Override
     public WorkoutDto updateWorkoutById(WorkoutDto workoutDto, Long id) {
         User user = SecurityUtil.getPrincipalFromSecurityContext();
-        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUser(id, user)
+        Optional<Workout> workout = Optional.of(workoutRepository.findByIdAndUserId(id, user.getId())
                 .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.PUT_REQUEST_FAILURE)));
 
         Workout updateWorkout = workout.get();
@@ -121,18 +119,18 @@ public class WorkoutServiceImpl implements WorkoutService {
         workout.setUser(user);
         Workout newWorkout = workoutRepository.save(workout);
 
-        WorkoutDto workoutResponse = workoutMapper.mapToDto(newWorkout);
-
-        return workoutResponse;
+        return workoutMapper.mapToDto(newWorkout);
     }
 
     @Override
     public void deleteWorkoutById(Long id) {
         User user = SecurityUtil.getPrincipalFromSecurityContext();
-        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUser(id, user)
-                .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.DELETE_REQUEST_FAILURE)));
-
-        workoutRepository.deleteById(id);
+        if(workoutRepository.existsByIdAndUserId(id, user.getId())) {
+            workoutRepository.deleteById(id);
+        }
+        else {
+            throw new WorkoutNotFoundException(RequestFailure.DELETE_REQUEST_FAILURE);
+        }
 
     }
 
