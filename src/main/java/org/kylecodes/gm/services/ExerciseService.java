@@ -5,7 +5,7 @@ import org.kylecodes.gm.dtos.ExerciseDto;
 import java.util.List;
 
 public interface ExerciseService {
-    List<ExerciseDto> getAllExercises();
+
 
     List<ExerciseDto> getAllExercisesInWorkout(Long workoutId);
     ExerciseDto getExerciseInWorkoutById( Long exerciseId, Long workoutId);

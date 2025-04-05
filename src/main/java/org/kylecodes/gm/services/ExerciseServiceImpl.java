@@ -29,12 +29,7 @@ public class ExerciseServiceImpl implements ExerciseService{
 
     EntityToDtoMapper<Exercise, ExerciseDto> exerciseMapper = new ExerciseToExerciseDtoMapper();
 
-    @Override
-    public List<ExerciseDto> getAllExercises() {
-        List<Exercise> exercises = exerciseRepository.findAll();
 
-        return exercises.stream().map((exercise) -> exerciseMapper.mapToDto(exercise)).toList();
-    }
 
     @Override
     public List<ExerciseDto> getAllExercisesInWorkout(Long workoutId) {

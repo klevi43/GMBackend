@@ -24,8 +24,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -122,20 +120,6 @@ public class ExerciseServiceTest {
         assertThrows(WorkoutNotFoundException.class, () -> mockExerciseService.createExercise(exerciseDto, workout.getId()));
     }
 
-    @Test
-    public void ExerciseList_GetAllExercises_ReturnExerciseList() {
-
-        when(SecurityUtil.getPrincipalFromSecurityContext()).thenReturn(user);
-        List<Exercise> exerciseList = Arrays.asList(exercise);
-        when(exerciseRepository.findAll()).thenReturn(exerciseList);
-
-        List<ExerciseDto> saveExerciseList = mockExerciseService.getAllExercises();
-        List<ExerciseDto> convertedList = exerciseList.stream()
-                .map(exercise -> exerciseMapper.mapToDto(exercise)).toList();
-
-        assertThat(saveExerciseList).isNotNull();
-        assertThat(saveExerciseList.size()).isEqualTo(convertedList.size());
-    }
 
 
 
