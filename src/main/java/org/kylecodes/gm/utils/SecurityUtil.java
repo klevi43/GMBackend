@@ -8,4 +8,10 @@ public final class SecurityUtil {
         System.out.println(SecurityContextHolder.getContext().getAuthentication().isAuthenticated());
         return  (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
+
+    public static Long getPrincipalIdFromSecurityContext() {
+        System.out.println(SecurityContextHolder.getContext().getAuthentication().isAuthenticated());
+        User user =  (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return user.getId();
+    }
 }
