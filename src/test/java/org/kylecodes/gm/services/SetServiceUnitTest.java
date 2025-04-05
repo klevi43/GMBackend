@@ -3,6 +3,7 @@ package org.kylecodes.gm.services;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.kylecodes.gm.constants.RequestFailure;
 import org.kylecodes.gm.contexts.SecurityContextForTests;
 import org.kylecodes.gm.dtos.ExerciseDto;
 import org.kylecodes.gm.dtos.SetDto;
@@ -80,6 +81,12 @@ public class SetServiceUnitTest {
     private SecurityContextForTests context = new SecurityContextForTests();
     @BeforeEach
     public void init() {
+        user = new User();
+        user.setId(VALID_USER_ID);
+        user.setEmail(VALID_USER_EMAIL);
+        user.setPassword(VALID_USER_PASSWORD);
+        user.setRole(VALID_USER_ROLE);
+
         workout = new Workout();
         workout.setId(VALID_ID);
         workout.setName(VALID_WORKOUT_NAME);
@@ -121,9 +128,9 @@ public class SetServiceUnitTest {
 
     @Test
     public void SetService_GetSetForExerciseInWorkoutById_ReturnSetDto() {
-        when(workoutRepository.findByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(workout));
-        when(exerciseRepository.findByIdAndWorkoutId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(exercise));
-        when(setRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(set));
+        when(workoutRepository.existsByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(true);
+        when(exerciseRepository.existsByIdAndWorkoutId(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong())).thenReturn(true);
+        when(setRepository.findByIdAndExerciseId(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong())).thenReturn(Optional.of(set));
 
         SetDto foundSet = mockSetService.getSetForExerciseInWorkout(VALID_SET_ID, VALID_EXERCISE_ID, VALID_WORKOUT_ID);
         assertThat(foundSet).isNotNull();
@@ -163,8 +170,8 @@ public class SetServiceUnitTest {
 
     @Test
     public void SetService_GetAllSetsForExerciseInWorkoutById_ReturnSetDtoList() {
-        when(workoutRepository.findByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(workout));
-        when(exerciseRepository.findByIdAndWorkoutId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(exercise));
+        when(workoutRepository.existsByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(true);
+        when(exerciseRepository.existsByIdAndWorkoutId(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong())).thenReturn(true);
         when(setRepository.findAllByExerciseId(ArgumentMatchers.anyLong())).thenReturn(Arrays.asList(set, set));
 
         List<SetDto> setDtoList = mockSetService.getAllSetsForExerciseInWorkout(VALID_EXERCISE_ID, VALID_WORKOUT_ID);
@@ -173,8 +180,8 @@ public class SetServiceUnitTest {
     }
     @Test
     public void SetService_GetAllSetsForExerciseInWorkoutById_ReturnEmptyList() {
-        when(workoutRepository.findByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(workout));
-        when(exerciseRepository.findByIdAndWorkoutId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(exercise));
+        when(workoutRepository.existsByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(true);
+        when(exerciseRepository.existsByIdAndWorkoutId(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong())).thenReturn(true);
         when(setRepository.findAllByExerciseId(ArgumentMatchers.anyLong())).thenReturn(new ArrayList<>());
 
         List<SetDto> setDtoList = mockSetService.getAllSetsForExerciseInWorkout(VALID_EXERCISE_ID, VALID_WORKOUT_ID);
@@ -206,7 +213,7 @@ public class SetServiceUnitTest {
 
     @Test
     public void SetService_CreateSetForExerciseInWorkout_ReturnSet() {
-        when(workoutRepository.findByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(workout));
+        when(workoutRepository.existsByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(true);
         when(exerciseRepository.findByIdAndWorkoutId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(exercise));
         when(setRepository.save(ArgumentMatchers.any(Set.class))).thenReturn(set);
 
@@ -236,7 +243,7 @@ public class SetServiceUnitTest {
 
     @Test
     public void SetService_UpdateSetForExerciseInWorkout_ReturnUpdatedSet() {
-        when(workoutRepository.findByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(workout));
+        when(workoutRepository.existsByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(true);
         when(exerciseRepository.findByIdAndWorkoutId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(exercise));
         when(setRepository.findByIdAndExerciseId(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong())).thenReturn(Optional.of(set));
         when(setRepository.save(ArgumentMatchers.any(Set.class))).thenReturn(set);
@@ -271,9 +278,9 @@ public class SetServiceUnitTest {
 
     @Test
     public void SetService_DeleteSetForExerciseInWorkoutById_ReturnNothing() {
-        when(workoutRepository.findByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(workout));
-        when(exerciseRepository.findByIdAndWorkoutId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(exercise));
-        when(setRepository.findByIdAndExerciseId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(set));
+        when(workoutRepository.existsByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(true);
+        when(exerciseRepository.existsByIdAndWorkoutId(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong())).thenReturn(true);
+        when(setRepository.existsByIdAndExerciseId(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong())).thenReturn(true);
 
         assertAll(() -> mockSetService.deleteSetForExerciseInWorkout(VALID_SET_ID, VALID_EXERCISE_ID, VALID_WORKOUT_ID));
 
@@ -282,7 +289,7 @@ public class SetServiceUnitTest {
     @Test
     public void SetService_DeleteSetForExerciseInWorkoutById_ThrowsWorkoutNotFoundException() {
         mockSetService = mock(SetServiceImpl.class);
-        doThrow(new WorkoutNotFoundException("Delete unsuccessful.")).when(mockSetService).deleteSetForExerciseInWorkout(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong());
+        doThrow(new WorkoutNotFoundException(RequestFailure.DELETE_REQUEST_FAILURE)).when(mockSetService).deleteSetForExerciseInWorkout(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong());
         assertThrows(WorkoutNotFoundException.class,
                 () -> mockSetService.deleteSetForExerciseInWorkout(VALID_SET_ID, VALID_EXERCISE_ID, INVALID_ID));
 
