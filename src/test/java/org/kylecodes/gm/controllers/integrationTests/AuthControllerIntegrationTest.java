@@ -44,7 +44,7 @@ public class AuthControllerIntegrationTest {
         badPwUser.setPassword("password12");
     }
     @Test
-    public void AuthContoller_Login_ReturnJwtDto() throws Exception {
+    public void AuthController_Login_ReturnJwtDto() throws Exception {
         ResultActions result = mockMvc.perform(post("/login")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(validUser)));
@@ -55,7 +55,7 @@ public class AuthControllerIntegrationTest {
     }
 
     @Test
-    public void AuthContoller_LoginWithNonExistentEmail_ThrowBadCredentialsException() throws Exception {
+    public void AuthController_LoginWithNonExistentEmail_ThrowBadCredentialsException() throws Exception {
         ResultActions result = mockMvc.perform(post("/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(nonexistentUser)));
