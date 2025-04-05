@@ -10,7 +10,7 @@ import org.kylecodes.gm.entities.Exercise;
 import org.kylecodes.gm.entities.User;
 import org.kylecodes.gm.entities.Workout;
 import org.kylecodes.gm.exceptions.ExerciseNotFoundException;
-import org.kylecodes.gm.exceptions.WorkoutNotFoundException;
+import org.kylecodes.gm.exceptions.ItemNotFoundException;
 import org.kylecodes.gm.mappers.EntityToDtoMapper;
 import org.kylecodes.gm.mappers.ExerciseToExerciseDtoMapper;
 import org.kylecodes.gm.mappers.UserToUserDtoMapper;
@@ -117,9 +117,9 @@ public class ExerciseServiceTest {
         when(SecurityUtil.getPrincipalFromSecurityContext()).thenReturn(user);
 
         mockExerciseService = mock(ExerciseServiceImpl.class);
-        when(mockExerciseService.createExercise(exerciseDto, workout.getId())).thenThrow(WorkoutNotFoundException.class);
+        when(mockExerciseService.createExercise(exerciseDto, workout.getId())).thenThrow(ItemNotFoundException.class);
 
-        assertThrows(WorkoutNotFoundException.class, () -> mockExerciseService.createExercise(exerciseDto, workout.getId()));
+        assertThrows(ItemNotFoundException.class, () -> mockExerciseService.createExercise(exerciseDto, workout.getId()));
     }
 
     @Test
@@ -166,8 +166,8 @@ public class ExerciseServiceTest {
     public void ExerciseService_UpdateExerciseById_ThrowsWorkoutNotFoundException() {
 
         mockExerciseService = mock(ExerciseServiceImpl.class);
-        when(mockExerciseService.updateExerciseInWorkoutById(exerciseDto, INVALID_ID, VALID_EXERCISE_ID)).thenThrow(WorkoutNotFoundException.class);
-        assertThrows(WorkoutNotFoundException.class, () -> mockExerciseService.updateExerciseInWorkoutById(exerciseDto, INVALID_ID, VALID_EXERCISE_ID));
+        when(mockExerciseService.updateExerciseInWorkoutById(exerciseDto, INVALID_ID, VALID_EXERCISE_ID)).thenThrow(ItemNotFoundException.class);
+        assertThrows(ItemNotFoundException.class, () -> mockExerciseService.updateExerciseInWorkoutById(exerciseDto, INVALID_ID, VALID_EXERCISE_ID));
     }
 
     @Test
@@ -195,8 +195,8 @@ public class ExerciseServiceTest {
     public void ExerciseService_DeleteExerciseById_ThrowsWorkoutNotFoundException() {
 
         mockExerciseService = mock(ExerciseServiceImpl.class);
-        doThrow(new WorkoutNotFoundException("Delete unsuccessful.")).when(mockExerciseService).deleteExerciseInWorkoutById(INVALID_ID, exercise.getId());
-        assertThrows(WorkoutNotFoundException.class,
+        doThrow(new ItemNotFoundException("Delete unsuccessful.")).when(mockExerciseService).deleteExerciseInWorkoutById(INVALID_ID, exercise.getId());
+        assertThrows(ItemNotFoundException.class,
                 () -> mockExerciseService.deleteExerciseInWorkoutById(INVALID_ID, exercise.getId()));
 
     }

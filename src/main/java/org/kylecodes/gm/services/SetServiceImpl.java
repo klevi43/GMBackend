@@ -8,7 +8,7 @@ import org.kylecodes.gm.entities.Workout;
 import org.kylecodes.gm.exceptions.ExerciseNotFoundException;
 import org.kylecodes.gm.constants.RequestFailure;
 import org.kylecodes.gm.exceptions.SetNotFoundException;
-import org.kylecodes.gm.exceptions.WorkoutNotFoundException;
+import org.kylecodes.gm.exceptions.ItemNotFoundException;
 import org.kylecodes.gm.repositories.ExerciseRepository;
 import org.kylecodes.gm.repositories.SetRepository;
 import org.kylecodes.gm.repositories.WorkoutRepository;
@@ -38,7 +38,7 @@ public class SetServiceImpl implements SetService {
     public List<SetDto> getAllSetsForExerciseInWorkout(Long workoutId, Long exerciseId) {
         User user = SecurityUtil.getPrincipalFromSecurityContext();
         Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUserId(workoutId, user.getId())
-                .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.GET_REQUEST_FAILURE)));
+                .orElseThrow(() -> new ItemNotFoundException(RequestFailure.GET_REQUEST_FAILURE)));
 
         Optional<Exercise> exercise = Optional.ofNullable(exerciseRepository.findByIdAndWorkout(exerciseId, workout.get())
                 .orElseThrow(() -> new ExerciseNotFoundException(RequestFailure.GET_REQUEST_FAILURE)));
@@ -51,7 +51,7 @@ public class SetServiceImpl implements SetService {
     public SetDto getSetForExerciseInWorkout(Long workoutId, Long exerciseId, Long setId) {
         User user = SecurityUtil.getPrincipalFromSecurityContext();
         Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUserId(workoutId, user.getId())
-                .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.GET_REQUEST_FAILURE)));
+                .orElseThrow(() -> new ItemNotFoundException(RequestFailure.GET_REQUEST_FAILURE)));
 
         Optional<Exercise> exercise = Optional.ofNullable(exerciseRepository.findByIdAndWorkout(exerciseId, workout.get())
                 .orElseThrow(() -> new ExerciseNotFoundException(RequestFailure.GET_REQUEST_FAILURE)));
@@ -66,7 +66,7 @@ public class SetServiceImpl implements SetService {
     public SetDto createSetForExerciseInWorkout(Long workoutId, Long exerciseId, SetDto setDto) {
         User user = SecurityUtil.getPrincipalFromSecurityContext();
         Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUserId(workoutId, user.getId())
-                .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.POST_REQUEST_FAILURE)));
+                .orElseThrow(() -> new ItemNotFoundException(RequestFailure.POST_REQUEST_FAILURE)));
 
         Optional<Exercise> exercise = Optional.ofNullable(exerciseRepository.findByIdAndWorkout(exerciseId, workout.get())
                 .orElseThrow(() -> new ExerciseNotFoundException(RequestFailure.POST_REQUEST_FAILURE)));
@@ -85,7 +85,7 @@ public class SetServiceImpl implements SetService {
     public SetDto updateSetForExerciseInWorkout(Long workoutId, Long exerciseId, Long setId, SetDto setDto) {
         User user = SecurityUtil.getPrincipalFromSecurityContext();
         Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUserId(workoutId, user.getId())
-                .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.PUT_REQUEST_FAILURE)));
+                .orElseThrow(() -> new ItemNotFoundException(RequestFailure.PUT_REQUEST_FAILURE)));
 
         Optional<Exercise> exercise = Optional.ofNullable(exerciseRepository.findByIdAndWorkout(exerciseId, workout.get())
                 .orElseThrow(() -> new ExerciseNotFoundException(RequestFailure.PUT_REQUEST_FAILURE)));
@@ -113,7 +113,7 @@ public class SetServiceImpl implements SetService {
     public void deleteSetForExerciseInWorkout(Long workoutId, Long exerciseId, Long setId) {
         User user = SecurityUtil.getPrincipalFromSecurityContext();
         Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUserId(workoutId, user.getId())
-                .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.DELETE_REQUEST_FAILURE)));
+                .orElseThrow(() -> new ItemNotFoundException(RequestFailure.DELETE_REQUEST_FAILURE)));
 
         Optional<Exercise> exercise = Optional.ofNullable(exerciseRepository.findByIdAndWorkout(exerciseId, workout.get())
                 .orElseThrow(() -> new ExerciseNotFoundException(RequestFailure.DELETE_REQUEST_FAILURE)));

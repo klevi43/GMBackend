@@ -18,6 +18,6 @@ public interface WorkoutRepository extends JpaRepository<Workout, Long> {
     List<Workout> findAllByUserId(Long userId);
     Optional<Workout> findByIdAndUserId(Long id, Long userId);
 
-    void deleteById(Long id);
+    void deleteByIdAndUserId(Long id, Long userId);
     Optional<Workout> findByName(String name);
 }

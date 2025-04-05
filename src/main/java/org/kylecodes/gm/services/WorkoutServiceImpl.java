@@ -1,18 +1,14 @@
 package org.kylecodes.gm.services;
 
 import org.kylecodes.gm.constants.RequestFailure;
-import org.kylecodes.gm.dtos.ExerciseDto;
 import org.kylecodes.gm.dtos.WorkoutDto;
-import org.kylecodes.gm.entities.Exercise;
 import org.kylecodes.gm.entities.User;
 import org.kylecodes.gm.entities.Workout;
-import org.kylecodes.gm.exceptions.WorkoutNotFoundException;
-import org.kylecodes.gm.utils.SecurityUtil;
+import org.kylecodes.gm.exceptions.ItemNotFoundException;
 import org.kylecodes.gm.mappers.EntityToDtoMapper;
-import org.kylecodes.gm.mappers.ExerciseToExerciseDtoMapper;
 import org.kylecodes.gm.mappers.WorkoutToWorkoutDtoMapper;
 import org.kylecodes.gm.repositories.WorkoutRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.kylecodes.gm.utils.SecurityUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,19 +18,21 @@ import java.util.Optional;
 @Service
 public class WorkoutServiceImpl implements WorkoutService {
 
-    @Autowired
-    private WorkoutRepository workoutRepository;
+    private final WorkoutRepository workoutRepository;
 
 
     EntityToDtoMapper<Workout, WorkoutDto> workoutMapper = new WorkoutToWorkoutDtoMapper();
-    EntityToDtoMapper<Exercise, ExerciseDto> exerciseMapper = new ExerciseToExerciseDtoMapper();
+
+    public WorkoutServiceImpl(WorkoutRepository workoutRepository) {
+        this.workoutRepository = workoutRepository;
+    }
 
     @Override
     public List<WorkoutDto> getAllMostRecentWorkouts() {
-        User user= SecurityUtil.getPrincipalFromSecurityContext();
+        User user = SecurityUtil.getPrincipalFromSecurityContext();
         List<Workout> workoutList = workoutRepository.findAllMostRecentWorkoutsByUserId(user.getId());
         if (workoutList.isEmpty()) {
-            return new ArrayList<WorkoutDto>();
+            return new ArrayList<>();
         }
         List<WorkoutDto> workoutDtoList = new ArrayList<>();
         for (Workout workout : workoutList) {
@@ -46,10 +44,10 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Override
     public List<WorkoutDto> getAllWorkouts() {
-        User user= SecurityUtil.getPrincipalFromSecurityContext();
+        User user = SecurityUtil.getPrincipalFromSecurityContext();
         List<Workout> workoutList = workoutRepository.findAllByUserId(user.getId());
         if (workoutList.isEmpty()) {
-            return new ArrayList<WorkoutDto>();
+            return new ArrayList<>();
         }
         List<WorkoutDto> workoutDtoList = new ArrayList<>();
         for (Workout workout : workoutList) {
@@ -83,22 +81,20 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Override
     public WorkoutDto getWorkoutById(Long id) {
-        User user= SecurityUtil.getPrincipalFromSecurityContext();
-        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUserId(id, user.getId())
-                .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.GET_REQUEST_FAILURE)));
-
-        WorkoutDto workoutDto = workoutMapper.mapToDto(workout.get());
+        User user = SecurityUtil.getPrincipalFromSecurityContext();
+        Optional<Workout> workout = Optional.of(workoutRepository.findByIdAndUserId(id, user.getId())
+                .orElseThrow(() -> new ItemNotFoundException(RequestFailure.GET_REQUEST_FAILURE)));
 
 
-        return workoutDto;
+        return workoutMapper.mapToDto(workout.get());
 
     }
 
     @Override
     public WorkoutDto updateWorkoutById(WorkoutDto workoutDto, Long id) {
-        User user= SecurityUtil.getPrincipalFromSecurityContext();
-        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUserId(id, user.getId())
-                .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.PUT_REQUEST_FAILURE)));
+        User user = SecurityUtil.getPrincipalFromSecurityContext();
+        Optional<Workout> workout = Optional.of(workoutRepository.findByIdAndUserId(id, user.getId())
+                .orElseThrow(() -> new ItemNotFoundException(RequestFailure.PUT_REQUEST_FAILURE)));
 
         Workout updateWorkout = workout.get();
         if (workoutDto.getName() != null) {
@@ -121,18 +117,16 @@ public class WorkoutServiceImpl implements WorkoutService {
         workout.setUser(user);
         Workout newWorkout = workoutRepository.save(workout);
 
-        WorkoutDto workoutResponse = workoutMapper.mapToDto(newWorkout);
-
-        return workoutResponse;
+        return workoutMapper.mapToDto(newWorkout);
     }
 
     @Override
     public void deleteWorkoutById(Long id) {
-        User user= SecurityUtil.getPrincipalFromSecurityContext();
-        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUserId(id, user.getId())
-                .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.DELETE_REQUEST_FAILURE)));
+        User user = SecurityUtil.getPrincipalFromSecurityContext();
+        Optional<Workout> workout = Optional.of(workoutRepository.findByIdAndUserId(id, user.getId())
+                .orElseThrow(() -> new ItemNotFoundException(RequestFailure.DELETE_REQUEST_FAILURE)));
 
-        workoutRepository.deleteById(id);
+        workoutRepository.deleteByIdAndUserId(id, user.getId());
 
     }
 

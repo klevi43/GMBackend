@@ -2,6 +2,7 @@ package org.kylecodes.gm.repositories.integrationTests;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.kylecodes.gm.entities.User;
 import org.kylecodes.gm.entities.Workout;
 import org.kylecodes.gm.repositories.WorkoutRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,22 +24,34 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class WorkoutRepositoryIntegrationTest {
     @Autowired
     private WorkoutRepository workoutRepository;
-    private final Long VALID_WORKOUT_ID_1 = 1L;
-    private final Long VALID_WORKOUT_ID_2 = 2L;
+    private final long VALID_USER_ID = 1L;
+    private final String VALID_USER_EMAIL = "test@email.com";
 
+    private final String VALID_USER_PASSWORD = "password123";
+    private final String VALID_USER_ROLE = "USER";
+    private final long VALID_WORKOUT_ID_1 = 12L;
+    private final long VALID_WORKOUT_ID_2 = 13L;
+    private User user;
     private Workout workout1;
     private Workout workout2;
     @BeforeEach
     public void init() {
+        user = new User();
+        user.setId(VALID_USER_ID);
+        user.setEmail(VALID_USER_EMAIL);
+        user.setPassword(VALID_USER_PASSWORD);
+        user.setRole(VALID_USER_ROLE);
         workout1 = new Workout();
         workout1.setId(VALID_WORKOUT_ID_1);
         workout1.setName("Test Workout");
         workout1.setDate(LocalDate.now());
+        workout1.setUser(user);
 
         workout2 = new Workout();
         workout2.setId(VALID_WORKOUT_ID_2);
         workout2.setName("Test Workout 2");
         workout2.setDate(LocalDate.now());
+        workout2.setUser(user);
     }
 
         @Test
@@ -78,13 +91,13 @@ public class WorkoutRepositoryIntegrationTest {
 
 
     @Test
-    public void WorkoutRepository_FindById_ReturnWorkout() {
+    public void WorkoutRepository_FindByIdAndUserId_ReturnWorkout() {
         // Arrange
 
         Workout savedWorkout = workoutRepository.save(workout1);
 
         // Act
-        Workout foundWorkout = workoutRepository.findById(VALID_WORKOUT_ID_1).get();
+        Workout foundWorkout = workoutRepository.findByIdAndUserId(VALID_WORKOUT_ID_1, user.getId()).get();
 
         // Assert
         assertThat(foundWorkout).isNotNull();
@@ -98,7 +111,7 @@ public class WorkoutRepositoryIntegrationTest {
 
 
 
-        Workout workoutSave = workoutRepository.findById(VALID_WORKOUT_ID_1).get();
+        Workout workoutSave = workoutRepository.findByIdAndUserId(VALID_WORKOUT_ID_1, VALID_USER_ID).get();
         workoutSave.setName("Shoulder Day");
 
         // Act
