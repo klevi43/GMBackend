@@ -113,7 +113,7 @@ public class SetServiceImpl implements SetService {
     }
 
     @Override
-    public void deleteSetForExerciseInWorkout(Long workoutId, Long exerciseId, Long setId) {
+    public void deleteSetForExerciseInWorkout(Long setId, Long exerciseId, Long workoutId) {
         User user = SecurityUtil.getPrincipalFromSecurityContext();
         if (!workoutRepository.existsByIdAndUserId(workoutId, user.getId())) {
             throw new WorkoutNotFoundException(RequestFailure.DELETE_REQUEST_FAILURE);
