@@ -19,21 +19,21 @@ public class SetController {
 
     @GetMapping("/workouts/exercises/sets")
     public List<SetDto> getAllSetsForExerciseInWorkout(@RequestParam Long workoutId,  @RequestParam Long exerciseId) {
-        return setService.getAllSetsForExerciseInWorkout(workoutId,exerciseId);
+        return setService.getAllSetsForExerciseInWorkout(exerciseId, workoutId);
     }
 
     @GetMapping("/workouts/exercises/sets/set")
     public SetDto getSetForExerciseInWorkoutById(@RequestParam Long workoutId,  @RequestParam Long exerciseId,
                                              @RequestParam Long setId) {
 
-        return setService.getSetForExerciseInWorkout(workoutId, exerciseId, setId);
+        return setService.getSetForExerciseInWorkout(setId, exerciseId, workoutId);
     }
     @PostMapping("/workouts/exercises/sets/create")
     public ResponseEntity<SetDto> createSetForExerciseInWorkoutById(@RequestParam Long workoutId, @RequestParam Long exerciseId,
                                                 @Valid @RequestBody SetDto setDto) {
 
 
-        SetDto newSet = setService.createSetForExerciseInWorkout(workoutId, exerciseId, setDto);
+        SetDto newSet = setService.createSetForExerciseInWorkout(setDto, exerciseId, workoutId);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .queryParam("workoutId={workoutId}")
                 .queryParam("exerciseId={exerciseId}")
@@ -48,7 +48,7 @@ public class SetController {
     public SetDto updateSetForExerciseInWorkoutById(@RequestParam Long workoutId, @RequestParam Long exerciseId,
                                                     @RequestParam Long setId,
                                                     @Valid @RequestBody SetDto setDto) {
-        SetDto updatedSetDto = setService.updateSetForExerciseInWorkout(workoutId, exerciseId, setId, setDto);
+        SetDto updatedSetDto = setService.updateSetForExerciseInWorkout(setDto, setId, exerciseId, workoutId);
 
         return updatedSetDto;
     }
@@ -56,6 +56,6 @@ public class SetController {
     @DeleteMapping("/workouts/exercises/sets/delete")
     public void deleteSetForExerciseInWorkoutById(@RequestParam Long workoutId, @RequestParam Long exerciseId,
                                               @RequestParam Long setId) {
-        setService.deleteSetForExerciseInWorkout(workoutId, exerciseId, setId);
+        setService.deleteSetForExerciseInWorkout(setId, exerciseId, workoutId);
     }
 }

@@ -39,9 +39,11 @@ public class ExerciseServiceImpl implements ExerciseService{
     @Override
     public List<ExerciseDto> getAllExercisesInWorkout(Long workoutId) {
         User user = SecurityUtil.getPrincipalFromSecurityContext();
+
         if (!workoutRepository.existsByIdAndUserId(workoutId, user.getId())) {
             throw new WorkoutNotFoundException(RequestFailure.GET_REQUEST_FAILURE);
         }
+
         List<Exercise> exercisesInWorkout = exerciseRepository.findAllByWorkoutId(workoutId);
         return exercisesInWorkout.stream().map((exercise) -> exerciseMapper.mapToDto(exercise)).toList();
     }
