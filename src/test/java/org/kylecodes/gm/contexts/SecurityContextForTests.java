@@ -36,4 +36,14 @@ public class SecurityContextForTests {
         SecurityContextHolder.setContext(securityContext);
     }
 
+    public void setSecurityContextForAuthenticationFailedUser() {
+
+
+        authentication.setAuthenticated(false);
+
+
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+    }
+
 }
