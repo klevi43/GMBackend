@@ -9,6 +9,7 @@ import org.kylecodes.gm.dtos.RegisterDto;
 import org.kylecodes.gm.dtos.UserDto;
 import org.kylecodes.gm.entities.User;
 import org.kylecodes.gm.exceptions.AlreadyLoggedInException;
+import org.kylecodes.gm.exceptions.EmailAlreadyExistsException;
 import org.kylecodes.gm.repositories.UserRepository;
 import org.kylecodes.gm.utils.SecurityUtil;
 import org.mockito.ArgumentMatchers;
@@ -75,6 +76,19 @@ public class UserServiceUnitTest {
     }
 
     @Test
+    public void UserService_RegisterNewUser_ThrowEmailAlreadyExistsException() {
+        SecurityContextForTests context = new SecurityContextForTests();
+        context.setSecurityContextAsIfUserIsAlreadyAuthenticated();
+
+        when(userRepository.existsByEmail(ArgumentMatchers.anyString())).thenThrow(EmailAlreadyExistsException.class);
+
+        assertThrows(EmailAlreadyExistsException.class, () -> userService.registerNewUser(registerDto));
+
+
+    }
+
+
+    @Test
     public void UserService_RegisterNewUser_ThrowIsAlreadyLoggedInException() {
         SecurityContextForTests context = new SecurityContextForTests();
         context.setSecurityContextAsIfUserIsAlreadyAuthenticated();
@@ -86,17 +100,18 @@ public class UserServiceUnitTest {
 
     }
 
+
     @Test
-    public void UserService_GetUserDetails_ReturnLogginUserDto() {
+    public void UserService_GetUserDetails_ReturnUserDtoOfLoggedInUser() {
         SecurityContextForTests context = new SecurityContextForTests();
         context.createSecurityContextToReturnAuthenticatedUser(user);
 
         when(SecurityUtil.getPrincipalFromSecurityContext()).thenReturn(user);
+        UserDto userDto = userService.getUserInfo();
+        assertThat(userDto.getEmail()).isEqualTo(user.getUsername());
 
-        UserDto foundUser = userService.getUserInfo();
-
-        assertThat(foundUser.getEmail()).isEqualTo(user.getUsername());
     }
+
 
     @Test
     public void UserService_UpdateUserEmailAndPassword_ReturnUpdatedUserDto() {

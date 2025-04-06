@@ -19,7 +19,7 @@ public class SecurityContextForTests {
     public void createSecurityContextToReturnAuthenticatedUser(User user) {
         when(authentication.getPrincipal()).thenReturn(user);
         authentication.setAuthenticated(true);
-        when(authentication.isAuthenticated()).thenReturn(true);
+//        when(authentication.isAuthenticated()).thenReturn(true);
 
         when(securityContext.getAuthentication()).thenReturn(authentication);
         SecurityContextHolder.setContext(securityContext);

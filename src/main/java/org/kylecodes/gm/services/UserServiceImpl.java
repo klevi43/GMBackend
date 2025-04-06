@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
             throw new AlreadyLoggedInException();
         }
         registerDto.setEmail(registerDto.getEmail().trim());
-        if (userRepository.findByEmail(registerDto.getEmail()).isPresent()) {
+        if (userRepository.existsByEmail(registerDto.getEmail())) {
             throw new EmailAlreadyExistsException();
         }
         User newUser = new User();
