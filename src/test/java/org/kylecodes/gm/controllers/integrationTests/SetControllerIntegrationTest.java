@@ -112,7 +112,7 @@ public class SetControllerIntegrationTest {
         exercise.setWorkout(workout);
         exercise.setSets(Arrays.asList(set));
         context = new SecurityContextForTests();
-        context.createSecurityContextWithAuthenticatedUser(user);
+        context.createSecurityContextToReturnAuthenticatedUser(user);
     }
 
     @Test

@@ -24,13 +24,14 @@ public class JwtServiceImpl implements JwtService{
         try {
             KeyGenerator keyGen = KeyGenerator.getInstance("HmacSHA256");
             SecretKey sk = keyGen.generateKey();
-            secretKey = Base64.getEncoder().encodeToString(sk.getEncoded()); // convert generated key to string
+            secretKey = Base64.getEncoder().encodeToString(sk.getEncoded());// convert generated key to string
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
     }
     @Override
     public String generateToken(String email) {
+        System.out.println(getKey());
         Map<String, Object> claims = new HashMap<>();
         return Jwts.builder()
                 .claims()
@@ -41,10 +42,12 @@ public class JwtServiceImpl implements JwtService{
                 .and()
                 .signWith(getKey())
                 .compact();
+
     }
 
     private SecretKey getKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+
         return Keys.hmacShaKeyFor(keyBytes);
     }
 

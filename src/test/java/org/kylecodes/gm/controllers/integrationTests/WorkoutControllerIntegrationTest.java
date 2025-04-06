@@ -99,7 +99,7 @@ public class WorkoutControllerIntegrationTest {
         workoutDto.setDate(LocalDate.now());
         workoutDto.setUserId(VALID_USER_ID);
         context = new SecurityContextForTests();
-        context.createSecurityContextWithAuthenticatedUser(user);
+        context.createSecurityContextToReturnAuthenticatedUser(user);
     }
 
     @Test

@@ -5,7 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.kylecodes.gm.constants.JwtTokenData;
-import org.kylecodes.gm.services.JwtServiceImpl;
+import org.kylecodes.gm.services.JwtService;
 import org.kylecodes.gm.services.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,7 +20,7 @@ import java.io.IOException;
 @Component
 public class JwtFilter extends OncePerRequestFilter {
     @Autowired
-    private JwtServiceImpl jwtServiceImpl;
+    private JwtService jwtService;
 
     @Autowired
     private UserServiceImpl userDetailsService;
@@ -34,12 +34,12 @@ public class JwtFilter extends OncePerRequestFilter {
 
         if(authHeader != null && authHeader.startsWith(JwtTokenData.JWT_PREFIX)) {
             token = authHeader.substring(JwtTokenData.JWT_STARTING_INDEX);
-            email = jwtServiceImpl.extractEmail(token);
+            email = jwtService.extractEmail(token);
         }
 
         if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-            if (jwtServiceImpl.validateToken(token, userDetails)) {
+            if (jwtService.validateToken(token, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

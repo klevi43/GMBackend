@@ -34,8 +34,8 @@ public class AdminServiceUnitTest {
     private final String VALID_ADMIN_EMAIL = "admin@test.com";
     private final String VALID_ADMIN_PASSWORD = "password123";
     private final String VALID_ADMIN_ROLE = "ROLE_ADMIN";
-    User user1;
-    User user2;
+    private User user1;
+    private User user2;
 
     @BeforeEach
     public void init() {

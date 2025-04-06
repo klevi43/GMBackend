@@ -81,7 +81,7 @@ public class WorkoutServiceUnitTest {
         workoutDto = new WorkoutDto();
         workoutDto.setName(VALID_WORKOUT_NAME);
         workoutDto.setDate(VALID_WORKOUT_DATE);
-        context.createSecurityContextWithAuthenticatedUser(user);
+        context.createSecurityContextToReturnAuthenticatedUser(user);
 
     }
 
@@ -146,7 +146,7 @@ public class WorkoutServiceUnitTest {
     public void WorkoutService_GetWorkoutById_ReturnWorkoutDto() {
 
 
-        when(workoutRepository.findByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong())).thenReturn(Optional.ofNullable(workout));
+        when(workoutRepository.findByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong())).thenReturn(Optional.of(workout));
 
         WorkoutDto saveWorkout = workoutService.getWorkoutById(VALID_WORKOUT_ID);
 
@@ -167,7 +167,7 @@ public class WorkoutServiceUnitTest {
     @Test
     public void WorkoutService_UpdateWorkoutById_ReturnsUpdatedWorkout() {
 
-        when(workoutRepository.findByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong())).thenReturn(Optional.ofNullable(workout));
+        when(workoutRepository.findByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong())).thenReturn(Optional.of(workout));
         when(workoutRepository.save(ArgumentMatchers.any(Workout.class))).thenReturn(workout);
 
         // Act
