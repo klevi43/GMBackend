@@ -32,7 +32,7 @@ public class ExerciseController {
     @PostMapping("/workouts/exercises/create")
     public ResponseEntity<ExerciseDto> createExerciseForWorkout(@Valid @RequestBody ExerciseDto exerciseDto,
                                                                 @RequestParam Long workoutId) {
-        ExerciseDto newExercise = exerciseService.createExercise(exerciseDto, workoutId);
+        ExerciseDto newExercise = exerciseService.createExerciseInWorkout(exerciseDto, workoutId);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .queryParam("workoutId={workoutId}")

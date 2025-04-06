@@ -134,7 +134,7 @@ public class ExerciseControllerTest {
     }
     @Test
     public void ExerciseController_CreateExerciseInWorkout_ReturnCreatedExercise() throws Exception {
-        given(exerciseService.createExercise(ArgumentMatchers.any(), ArgumentMatchers.anyLong())).willAnswer((invocationOnMock -> invocationOnMock.getArgument(0)));
+        given(exerciseService.createExerciseInWorkout(ArgumentMatchers.any(), ArgumentMatchers.anyLong())).willAnswer((invocationOnMock -> invocationOnMock.getArgument(0)));
 
         ResultActions response = mockMvc
                 .perform(MockMvcRequestBuilders.post("/workouts/exercises/create?workoutId={workoutId}", VALID_WORKOUT_ID_1.toString())

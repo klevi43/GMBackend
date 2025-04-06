@@ -97,13 +97,13 @@ public class ExerciseServiceUnitTest {
 
 
     @Test
-    public void ExerciseService_CreateExercise_ReturnExercise() {
+    public void ExerciseService_CreateExercise_ReturnExerciseInWorkout() {
 
 
         when(workoutRepository.findByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(workout));
         when(exerciseRepository.save(Mockito.any())).thenReturn(exercise);
 
-        ExerciseDto savedExerciseDto = mockExerciseService.createExercise(exerciseDto, VALID_WORKOUT_ID);
+        ExerciseDto savedExerciseDto = mockExerciseService.createExerciseInWorkout(exerciseDto, VALID_WORKOUT_ID);
 
 
         assertThat(savedExerciseDto).isNotNull();
@@ -112,14 +112,14 @@ public class ExerciseServiceUnitTest {
 
     }
     @Test
-    public void ExerciseService_CreateExercise_ThrowsWorkoutNotFoundException() {
+    public void ExerciseService_CreateExercise_InWorkout_ThrowsWorkoutNotFoundException() {
 
         when(SecurityUtil.getPrincipalFromSecurityContext()).thenReturn(user);
 
         mockExerciseService = mock(ExerciseServiceImpl.class);
-        when(mockExerciseService.createExercise(exerciseDto, workout.getId())).thenThrow(WorkoutNotFoundException.class);
+        when(mockExerciseService.createExerciseInWorkout(exerciseDto, workout.getId())).thenThrow(WorkoutNotFoundException.class);
 
-        assertThrows(WorkoutNotFoundException.class, () -> mockExerciseService.createExercise(exerciseDto, workout.getId()));
+        assertThrows(WorkoutNotFoundException.class, () -> mockExerciseService.createExerciseInWorkout(exerciseDto, workout.getId()));
     }
 
 

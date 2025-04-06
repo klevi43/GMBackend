@@ -54,7 +54,7 @@ public class ExerciseServiceImpl implements ExerciseService{
     }
 
     @Override
-    public ExerciseDto createExercise(ExerciseDto exerciseDto, Long workoutId) {
+    public ExerciseDto createExerciseInWorkout(ExerciseDto exerciseDto, Long workoutId) {
         User user = SecurityUtil.getPrincipalFromSecurityContext();
         Optional<Workout> workout = Optional.of(workoutRepository.findByIdAndUserId(workoutId, user.getId())
                 .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.PUT_REQUEST_FAILURE)));
