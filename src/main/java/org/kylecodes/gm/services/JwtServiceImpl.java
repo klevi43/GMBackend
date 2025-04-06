@@ -1,5 +1,6 @@
 package org.kylecodes.gm.services;
 
+import com.nimbusds.jose.util.Base64URL;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -12,26 +13,25 @@ import org.springframework.stereotype.Service;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 @Service
 public class JwtServiceImpl implements JwtService{
-    private String secretKey;
+    private final String secretKey;
     public JwtServiceImpl() {
         try {
             KeyGenerator keyGen = KeyGenerator.getInstance("HmacSHA256");
             SecretKey sk = keyGen.generateKey();
-            secretKey = Base64.getEncoder().encodeToString(sk.getEncoded());// convert generated key to string
+            secretKey = String.valueOf(Base64URL.encode(sk.getEncoded()));
+            //secretKey = Base64.getEncoder().encodeToString(sk.getEncoded());// convert generated key to string
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
     }
     @Override
     public String generateToken(String email) {
-        System.out.println(getKey());
         Map<String, Object> claims = new HashMap<>();
         return Jwts.builder()
                 .claims()
@@ -46,8 +46,7 @@ public class JwtServiceImpl implements JwtService{
     }
 
     private SecretKey getKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-
+        byte[] keyBytes = Decoders.BASE64URL.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 

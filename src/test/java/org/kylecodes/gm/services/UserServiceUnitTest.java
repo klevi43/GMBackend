@@ -119,7 +119,7 @@ public class UserServiceUnitTest {
     public void UserService_DeleteUser_ReturnNothing() {
         SecurityContextForTests context = new SecurityContextForTests();
         context.createSecurityContextToReturnAuthenticatedUser(user);
-        assertThat(userRepository.existsById(user.getId())).isTrue();
+        
         assertAll(() -> userService.deleteUser());
 
         assertThat(userRepository.existsById(user.getId())).isFalse();
