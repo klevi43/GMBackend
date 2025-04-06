@@ -1,4 +1,4 @@
-package org.kylecodes.gm.services;
+package org.kylecodes.gm.services.unitTests;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,6 +11,8 @@ import org.kylecodes.gm.entities.User;
 import org.kylecodes.gm.exceptions.AlreadyLoggedInException;
 import org.kylecodes.gm.exceptions.EmailAlreadyExistsException;
 import org.kylecodes.gm.repositories.UserRepository;
+import org.kylecodes.gm.services.UserService;
+import org.kylecodes.gm.services.UserServiceImpl;
 import org.kylecodes.gm.utils.SecurityUtil;
 import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;

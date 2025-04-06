@@ -1,4 +1,4 @@
-package org.kylecodes.gm.services;
+package org.kylecodes.gm.services.unitTests;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,6 +16,8 @@ import org.kylecodes.gm.mappers.ExerciseToExerciseDtoMapper;
 import org.kylecodes.gm.mappers.UserToUserDtoMapper;
 import org.kylecodes.gm.repositories.ExerciseRepository;
 import org.kylecodes.gm.repositories.WorkoutRepository;
+import org.kylecodes.gm.services.ExerciseService;
+import org.kylecodes.gm.services.ExerciseServiceImpl;
 import org.kylecodes.gm.utils.SecurityUtil;
 import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;

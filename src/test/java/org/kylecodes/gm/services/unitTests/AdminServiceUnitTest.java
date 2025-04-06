@@ -1,4 +1,4 @@
-package org.kylecodes.gm.services;
+package org.kylecodes.gm.services.unitTests;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -6,6 +6,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.kylecodes.gm.dtos.UserDto;
 import org.kylecodes.gm.entities.User;
 import org.kylecodes.gm.repositories.UserRepository;
+import org.kylecodes.gm.services.AdminService;
+import org.kylecodes.gm.services.AdminServiceImpl;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;

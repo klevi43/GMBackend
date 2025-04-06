@@ -1,4 +1,4 @@
-package org.kylecodes.gm.services;
+package org.kylecodes.gm.services.unitTests;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +19,9 @@ import org.kylecodes.gm.mappers.SetToSetDtoMapper;
 import org.kylecodes.gm.repositories.ExerciseRepository;
 import org.kylecodes.gm.repositories.SetRepository;
 import org.kylecodes.gm.repositories.WorkoutRepository;
+import org.kylecodes.gm.services.SetService;
+import org.kylecodes.gm.services.SetServiceImpl;
+import org.kylecodes.gm.utils.SecurityUtil;
 import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -79,6 +82,7 @@ public class SetServiceUnitTest {
     private final Long VALID_ID_2 = 2L;
     private final Long INVALID_ID = -1L;
     private SecurityContextForTests context = new SecurityContextForTests();
+    private SecurityUtil securityUtil = mock(SecurityUtil.class);
     @BeforeEach
     public void init() {
         user = new User();
@@ -243,6 +247,7 @@ public class SetServiceUnitTest {
 
     @Test
     public void SetService_UpdateSetForExerciseInWorkout_ReturnUpdatedSet() {
+
         when(workoutRepository.existsByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(true);
         when(exerciseRepository.findByIdAndWorkoutId(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(exercise));
         when(setRepository.findByIdAndExerciseId(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong())).thenReturn(Optional.of(set));

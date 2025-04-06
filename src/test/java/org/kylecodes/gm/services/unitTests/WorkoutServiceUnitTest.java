@@ -1,4 +1,4 @@
-package org.kylecodes.gm.services;
+package org.kylecodes.gm.services.unitTests;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,6 +10,8 @@ import org.kylecodes.gm.entities.User;
 import org.kylecodes.gm.entities.Workout;
 import org.kylecodes.gm.exceptions.WorkoutNotFoundException;
 import org.kylecodes.gm.repositories.WorkoutRepository;
+import org.kylecodes.gm.services.WorkoutService;
+import org.kylecodes.gm.services.WorkoutServiceImpl;
 import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
