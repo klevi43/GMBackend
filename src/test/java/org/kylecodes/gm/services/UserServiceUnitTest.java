@@ -10,6 +10,7 @@ import org.kylecodes.gm.dtos.UserDto;
 import org.kylecodes.gm.entities.User;
 import org.kylecodes.gm.exceptions.AlreadyLoggedInException;
 import org.kylecodes.gm.repositories.UserRepository;
+import org.kylecodes.gm.utils.SecurityUtil;
 import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -86,6 +87,18 @@ public class UserServiceUnitTest {
     }
 
     @Test
+    public void UserService_GetUserDetails_ReturnLogginUserDto() {
+        SecurityContextForTests context = new SecurityContextForTests();
+        context.createSecurityContextToReturnAuthenticatedUser(user);
+
+        when(SecurityUtil.getPrincipalFromSecurityContext()).thenReturn(user);
+
+        UserDto foundUser = userService.getUserInfo();
+
+        assertThat(foundUser.getEmail()).isEqualTo(user.getUsername());
+    }
+
+    @Test
     public void UserService_UpdateUserEmailAndPassword_ReturnUpdatedUserDto() {
         SecurityContextForTests context = new SecurityContextForTests();
         context.createSecurityContextToReturnAuthenticatedUser(user);
@@ -119,7 +132,7 @@ public class UserServiceUnitTest {
     public void UserService_DeleteUser_ReturnNothing() {
         SecurityContextForTests context = new SecurityContextForTests();
         context.createSecurityContextToReturnAuthenticatedUser(user);
-        
+
         assertAll(() -> userService.deleteUser());
 
         assertThat(userRepository.existsById(user.getId())).isFalse();
