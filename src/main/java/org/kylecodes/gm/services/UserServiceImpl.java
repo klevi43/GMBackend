@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -60,8 +59,12 @@ public class UserServiceImpl implements UserService {
     public UserDto updateUserInfo(AuthUserDto updateUser) {
         User currentUser = SecurityUtil.getPrincipalFromSecurityContext();
         if (updateUser.getEmail() != null) {
+            if (userRepository.existsByEmail(updateUser.getEmail())) {
+                throw new EmailAlreadyExistsException();
+            }
             currentUser.setEmail(updateUser.getEmail());
         }
+
         if(updateUser.getPassword() != null) {
             currentUser.setPassword(passwordEncoder.encode(updateUser.getPassword()));
         }
@@ -76,7 +79,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public User loadUserByUsername(String email) throws UsernameNotFoundException {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException(email + NotFoundMsg.EMAIL_NOT_FOUND_MSG));
 

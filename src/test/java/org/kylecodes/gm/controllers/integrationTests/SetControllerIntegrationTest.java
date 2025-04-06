@@ -48,24 +48,16 @@ public class SetControllerIntegrationTest {
     private final String VALID_WORKOUT_NAME = "Test Workout";
     private final String VALID_EXERCISE_NAME = "Test Exercise";
     private final Long VALID_EXERCISE_ID = 1L;
-
-
-
-
-
     private final Long VALID_SET_ID = 1L;
-
-
     private final Long INVALID_ID = -1L;
 
     private static MockHttpServletRequest request;
+
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
     private ObjectMapper objectMapper;
-
-
 
     @Autowired
     SetRepository setRepository;
@@ -115,10 +107,6 @@ public class SetControllerIntegrationTest {
         context.createSecurityContextToReturnAuthenticatedUser(user);
     }
 
-    @Test
-    public void placeholder() {
-
-    }
 
     @Test
     public void SetController_CreateSetForExerciseInWorkout_ReturnCreatedSet() throws Exception {

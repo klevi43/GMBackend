@@ -12,7 +12,7 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @PostMapping("/sign-up")
+    @PostMapping("/register")
     public UserDto register(@RequestBody RegisterDto registerDto) {
         System.out.println(registerDto.getEmail());
 

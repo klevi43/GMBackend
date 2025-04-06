@@ -1,7 +1,7 @@
 package org.kylecodes.gm.constants;
 
 public final class Roles {
-    public Roles() {
+    private Roles() {
     }
 
     public static final String USER = "USER";

@@ -1,6 +1,10 @@
 package org.kylecodes.gm.constants;
 
 public final class InvalidInputData {
+
+    private InvalidInputData() {
+    }
+
     public static final String INVALID_EMPTY_DATE_MSG = "The date field cannot be empty.\n";
     public static final String INVALID_EMPTY_NAME_MSG = "The name field cannot be empty.\n";
 

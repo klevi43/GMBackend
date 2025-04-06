@@ -3,7 +3,6 @@ package org.kylecodes.gm.constants;
 public final class RequestFailure {
 
     private RequestFailure() {
-
     }
 
     public static final String GET_REQUEST_FAILURE = "Get request unsuccessful. ";

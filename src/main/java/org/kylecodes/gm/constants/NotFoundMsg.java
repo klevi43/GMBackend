@@ -2,8 +2,9 @@ package org.kylecodes.gm.constants;
 
 public final class NotFoundMsg {
 
-    public NotFoundMsg() {
+    private NotFoundMsg() {
     }
+
     public static final String EMAIL_NOT_FOUND_MSG = " not found.";
     public static final String WORKOUT_NOT_FOUND_MSG = "No workout found with given id.";
     public static final String EXERCISE_NOT_FOUND_MSG = "No exercise found with given id.";

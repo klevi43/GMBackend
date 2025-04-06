@@ -1,6 +1,6 @@
 package org.kylecodes.gm.exceptions;
 
-import org.kylecodes.gm.constants.AlreadyLoggedInMsg;
+import org.kylecodes.gm.constants.AlreadyLoggedIn;
 
 public class AlreadyLoggedInException extends RuntimeException {
 
@@ -10,6 +10,6 @@ public class AlreadyLoggedInException extends RuntimeException {
     }
 
     public AlreadyLoggedInException() {
-        super(AlreadyLoggedInMsg.MSG);
+        super(AlreadyLoggedIn.ERROR_MSG);
     }
 }

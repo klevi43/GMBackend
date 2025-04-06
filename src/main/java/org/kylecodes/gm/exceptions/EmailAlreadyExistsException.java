@@ -9,6 +9,6 @@ public class EmailAlreadyExistsException extends RuntimeException{
     }
 
     public EmailAlreadyExistsException() {
-        super(EmailAlreadyExists.MSG);
+        super(EmailAlreadyExists.ERROR_MSG);
     }
 }
