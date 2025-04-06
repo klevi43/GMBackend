@@ -5,8 +5,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
-import org.kylecodes.gm.constants.InvalidInputData;
 import org.kylecodes.gm.constants.InvalidWorkoutData;
+import org.kylecodes.gm.constants.NotNullMsg;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -16,13 +16,16 @@ public class WorkoutDto {
 
     private Long id;
 
-    @NotNull(message = InvalidInputData.INVALID_EMPTY_NAME_MSG)
+    @NotNull(message = NotNullMsg.EMPTY_NAME)
     @Size(min = 2, max = 50, message = InvalidWorkoutData.INVALID_NAME_MSG)
     private String name;
-    @NotNull(message = InvalidInputData.INVALID_EMPTY_DATE_MSG)
+
+    @NotNull(message = NotNullMsg.EMPTY_DATE)
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @PastOrPresent(message = InvalidWorkoutData.INVALID_DATE_MSG)
     private LocalDate date;
+
+    @NotNull
     private Long userId;
 
     private List<ExerciseDto> exerciseDtos;
@@ -46,27 +49,27 @@ public class WorkoutDto {
         this.id = id;
     }
 
-    public @NotNull(message = InvalidInputData.INVALID_EMPTY_NAME_MSG) @Size(min = 2, max = 50, message = InvalidWorkoutData.INVALID_NAME_MSG) String getName() {
+    public @NotNull(message = NotNullMsg.EMPTY_NAME) @Size(min = 2, max = 50, message = InvalidWorkoutData.INVALID_NAME_MSG) String getName() {
         return name;
     }
 
-    public void setName(@NotNull(message = InvalidInputData.INVALID_EMPTY_NAME_MSG) @Size(min = 2, max = 50, message = InvalidWorkoutData.INVALID_NAME_MSG) String name) {
+    public void setName(@NotNull(message = NotNullMsg.EMPTY_NAME) @Size(min = 2, max = 50, message = InvalidWorkoutData.INVALID_NAME_MSG) String name) {
         this.name = name;
     }
 
-    public @NotNull(message = InvalidInputData.INVALID_EMPTY_DATE_MSG) @PastOrPresent(message = InvalidWorkoutData.INVALID_DATE_MSG) LocalDate getDate() {
+    public @NotNull(message = NotNullMsg.EMPTY_DATE) @PastOrPresent(message = InvalidWorkoutData.INVALID_DATE_MSG) LocalDate getDate() {
         return date;
     }
 
-    public void setDate(@NotNull(message = InvalidInputData.INVALID_EMPTY_DATE_MSG) @PastOrPresent(message = InvalidWorkoutData.INVALID_DATE_MSG) LocalDate date) {
+    public void setDate(@NotNull(message = NotNullMsg.EMPTY_DATE) @PastOrPresent(message = InvalidWorkoutData.INVALID_DATE_MSG) LocalDate date) {
         this.date = date;
     }
 
-    public Long getUserId() {
+    public @NotNull Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(@NotNull Long userId) {
         this.userId = userId;
     }
 

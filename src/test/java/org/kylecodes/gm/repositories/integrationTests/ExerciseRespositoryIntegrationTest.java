@@ -9,7 +9,6 @@ import org.kylecodes.gm.repositories.WorkoutRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -29,8 +28,6 @@ public class ExerciseRespositoryIntegrationTest {
     @Autowired
     private ExerciseRepository exerciseRepository;
 
-    @Autowired
-    private JdbcTemplate jdbc;
     private Workout workout;
     private List<Exercise> exerciseList;
     private Exercise exercise;

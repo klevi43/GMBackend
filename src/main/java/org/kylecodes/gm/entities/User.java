@@ -28,14 +28,14 @@ public class User implements UserDetails {
     @Size(min = PasswordLen.MIN_LENGTH, max = PasswordLen.MAX_LENGTH)
     private String password;
 
-
+    @NotNull
     private String role;
 
     @OneToMany(orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "user", cascade = {CascadeType.ALL})
     @JsonIgnore
     private List<Workout> workouts;
 
-    public User(Long id, String email, String password, String role, List<Workout> workouts) {
+    public User( Long id,  String email,  String password, String role, List<Workout> workouts) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -75,7 +75,7 @@ public class User implements UserDetails {
         this.id = id;
     }
 
-    public void setEmail(@NotNull String email) {
+    public void setEmail(@NotNull @Email String email) {
         this.email = email;
     }
 
@@ -83,7 +83,7 @@ public class User implements UserDetails {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(@NotNull String role) {
         this.role = role;
     }
 
@@ -100,7 +100,7 @@ public class User implements UserDetails {
     }
 
     @Override
-    public String getUsername() {
+    public @Email @NotNull String getUsername() {
         return this.email;
     }
 

@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import org.kylecodes.gm.constants.InvalidInputData;
 import org.kylecodes.gm.constants.InvalidSetData;
+import org.kylecodes.gm.constants.NotNullMsg;
 
 @Entity
 @Table(name = "ex_set")
@@ -13,11 +14,11 @@ public class Set {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @NotNull(message = InvalidInputData.INVALID_EMPTY_WEIGHT_MSG)
+    @NotNull(message = NotNullMsg.EMPTY_WEIGHT)
     @Min(value = 0, message = InvalidSetData.INVALID_WEIGHT_MSG)
     private Integer weight;
 
-    @NotNull(message = InvalidInputData.INVALID_EMPTY_REPS_MSG)
+    @NotNull(message = NotNullMsg.EMPTY_REPS)
     @Min(value = 0, message = InvalidSetData.INVALID_REPS_MSG)
     private Integer reps;
 
@@ -43,19 +44,19 @@ public class Set {
         this.id = id;
     }
 
-    public @NotNull(message = InvalidInputData.INVALID_EMPTY_WEIGHT_MSG) @Min(value = 0, message = InvalidSetData.INVALID_WEIGHT_MSG) Integer getWeight() {
+    public @NotNull(message = NotNullMsg.EMPTY_WEIGHT) @Min(value = 0, message = InvalidSetData.INVALID_WEIGHT_MSG) Integer getWeight() {
         return weight;
     }
 
-    public void setWeight(@NotNull(message = InvalidInputData.INVALID_EMPTY_WEIGHT_MSG) @Min(value = 0, message = InvalidSetData.INVALID_WEIGHT_MSG) Integer weight) {
+    public void setWeight(@NotNull(message = NotNullMsg.EMPTY_WEIGHT) @Min(value = 0, message = InvalidSetData.INVALID_WEIGHT_MSG) Integer weight) {
         this.weight = weight;
     }
 
-    public @NotNull(message = InvalidInputData.INVALID_EMPTY_REPS_MSG) @Min(value = 0, message = InvalidSetData.INVALID_REPS_MSG) Integer getReps() {
+    public @NotNull(message = NotNullMsg.EMPTY_REPS) @Min(value = 0, message = InvalidSetData.INVALID_REPS_MSG) Integer getReps() {
         return reps;
     }
 
-    public void setReps(@NotNull(message = InvalidInputData.INVALID_EMPTY_REPS_MSG) @Min(value = 0, message = InvalidSetData.INVALID_REPS_MSG) Integer reps) {
+    public void setReps(@NotNull(message = NotNullMsg.EMPTY_REPS) @Min(value = 0, message = InvalidSetData.INVALID_REPS_MSG) Integer reps) {
         this.reps = reps;
     }
 
