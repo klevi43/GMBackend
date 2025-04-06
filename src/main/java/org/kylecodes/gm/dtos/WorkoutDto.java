@@ -25,7 +25,7 @@ public class WorkoutDto {
     @PastOrPresent(message = InvalidWorkoutData.INVALID_DATE_MSG)
     private LocalDate date;
 
-    @NotNull
+
     private Long userId;
 
     private List<ExerciseDto> exerciseDtos;
@@ -65,11 +65,11 @@ public class WorkoutDto {
         this.date = date;
     }
 
-    public @NotNull Long getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(@NotNull Long userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
