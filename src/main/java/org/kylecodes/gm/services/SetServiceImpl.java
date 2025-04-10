@@ -8,8 +8,8 @@ import org.kylecodes.gm.entities.User;
 import org.kylecodes.gm.exceptions.ExerciseNotFoundException;
 import org.kylecodes.gm.exceptions.SetNotFoundException;
 import org.kylecodes.gm.exceptions.WorkoutNotFoundException;
-import org.kylecodes.gm.mappers.EntityToDtoMapper;
-import org.kylecodes.gm.mappers.SetToSetDtoMapper;
+import org.kylecodes.gm.mappers.singleEntityMappers.EntityToDtoMapper;
+import org.kylecodes.gm.mappers.singleEntityMappers.SetToSetDtoMapper;
 import org.kylecodes.gm.repositories.ExerciseRepository;
 import org.kylecodes.gm.repositories.SetRepository;
 import org.kylecodes.gm.repositories.WorkoutRepository;
@@ -69,7 +69,6 @@ public class SetServiceImpl implements SetService {
         if (!workoutRepository.existsByIdAndUserId(workoutId, user.getId())) {
             throw new WorkoutNotFoundException(RequestFailure.POST_REQUEST_FAILURE);
         }
-
 
         Optional<Exercise> exercise = Optional.of(exerciseRepository.findByIdAndWorkoutId(exerciseId, workoutId)
                 .orElseThrow(() -> new ExerciseNotFoundException(RequestFailure.POST_REQUEST_FAILURE)));

@@ -24,11 +24,11 @@ public class Exercise {
 
 
     @NotNull(message = InvalidInputData.INVALID_WORKOUT_MSG)
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
     Workout workout;
 
-    @OneToMany(orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "exercise", cascade = {CascadeType.ALL})
+    @OneToMany(orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "exercise", cascade = {CascadeType.REMOVE})
     @JsonIgnore
     List<Set> sets;
 

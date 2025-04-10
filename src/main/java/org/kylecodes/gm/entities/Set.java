@@ -23,7 +23,7 @@ public class Set {
     private Integer reps;
 
     @NotNull(message = InvalidInputData.INVALID_EXERCISE_MSG)
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Exercise exercise;
 
     public Set(Long id, Integer weight, Integer reps, Exercise exercise) {

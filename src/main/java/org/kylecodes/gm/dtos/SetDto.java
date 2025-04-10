@@ -2,7 +2,6 @@ package org.kylecodes.gm.dtos;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import org.kylecodes.gm.constants.InvalidInputData;
 import org.kylecodes.gm.constants.InvalidSetData;
 import org.kylecodes.gm.constants.NotNullMsg;
 
@@ -51,11 +50,11 @@ public class SetDto {
         this.reps = reps;
     }
 
-    public @NotNull(message = InvalidInputData.INVALID_EXERCISE_ID_MSG) Long getExerciseId() {
+    public Long getExerciseId() {
         return exerciseId;
     }
 
-    public void setExerciseId(@NotNull(message = InvalidInputData.INVALID_EXERCISE_ID_MSG) Long exerciseId) {
+    public void setExerciseId(Long exerciseId) {
         this.exerciseId = exerciseId;
     }
 }

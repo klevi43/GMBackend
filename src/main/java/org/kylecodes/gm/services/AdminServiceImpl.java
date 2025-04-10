@@ -2,8 +2,8 @@ package org.kylecodes.gm.services;
 
 import org.kylecodes.gm.dtos.UserDto;
 import org.kylecodes.gm.entities.User;
-import org.kylecodes.gm.mappers.EntityToDtoMapper;
-import org.kylecodes.gm.mappers.UserToUserDtoMapper;
+import org.kylecodes.gm.mappers.singleEntityMappers.EntityToDtoMapper;
+import org.kylecodes.gm.mappers.singleEntityMappers.UserToUserDtoMapper;
 import org.kylecodes.gm.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
