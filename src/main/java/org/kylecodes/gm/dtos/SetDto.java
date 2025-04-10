@@ -15,7 +15,6 @@ public class SetDto {
     @Min(value = 0, message = InvalidSetData.INVALID_REPS_MSG)
     private Integer reps;
 
-    @NotNull(message = InvalidInputData.INVALID_EXERCISE_ID_MSG)
     private Long exerciseId;
 
     public SetDto(Long id, Integer weight, Integer reps, Long exerciseId) {
