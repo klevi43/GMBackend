@@ -138,7 +138,8 @@ public class WorkoutServiceIntegrationTest {
     @Test
     public void WorkoutService_UpdateWorkout_ReturnNonUpdatedWorkoutDto() {
         assertThat(workoutRepository.existsByIdAndUserId(VALID_WORKOUT_ID, VALID_USER_ID_1)).isTrue();
-
+        workoutDto.setName(null);
+        workoutDto.setDate(null);
         WorkoutDto updatedWorkoutDto = workoutService.updateWorkoutById(workoutDto, VALID_WORKOUT_ID);
         assertThat(updatedWorkoutDto).isNotNull();
         assertThat(updatedWorkoutDto.getName()).isNotEqualTo(VALID_WORKOUT_NAME_UPDATE);

@@ -28,7 +28,7 @@ public class Exercise {
     @JoinColumn
     Workout workout;
 
-    @OneToMany(orphanRemoval = true, mappedBy = "exercise", cascade = {CascadeType.ALL})
+    @OneToMany(orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "exercise", cascade = {CascadeType.ALL})
     @JsonIgnore
     List<Set> sets;
 

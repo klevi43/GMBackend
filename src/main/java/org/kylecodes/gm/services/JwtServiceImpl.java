@@ -5,6 +5,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.kylecodes.gm.constants.NotNullMsg;
 import org.kylecodes.gm.constants.TokenDuration;
 import org.springframework.cglib.core.internal.Function;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,6 +33,9 @@ public class JwtServiceImpl implements JwtService{
     }
     @Override
     public String generateToken(String email) {
+        if (email == null) {
+            throw new IllegalArgumentException(NotNullMsg.EMPTY_EMAIL);
+        }
         Map<String, Object> claims = new HashMap<>();
         return Jwts.builder()
                 .claims()
@@ -52,7 +56,10 @@ public class JwtServiceImpl implements JwtService{
 
     @Override
     public String extractEmail(String token) {
-    return extractClaim(token, Claims::getSubject);
+        if (token == null) {
+            throw new IllegalArgumentException(NotNullMsg.EMPTY_TOKEN);
+        }
+        return extractClaim(token, Claims::getSubject);
     }
 
 

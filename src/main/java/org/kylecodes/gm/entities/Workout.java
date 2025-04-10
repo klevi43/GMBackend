@@ -37,7 +37,7 @@ public class Workout {
     @NotNull(message = NotNullMsg.EMPTY_USER)
     private User user;
 
-    @OneToMany( orphanRemoval = true, mappedBy = "workout", cascade = {CascadeType.ALL})
+    @OneToMany( orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "workout", cascade = {CascadeType.ALL})
     @JsonIgnore
     List<Exercise> exercises;
 
