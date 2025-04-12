@@ -6,10 +6,6 @@ import org.kylecodes.gm.dtos.WorkoutDto;
 import org.kylecodes.gm.entities.Exercise;
 import org.kylecodes.gm.entities.Set;
 import org.kylecodes.gm.entities.Workout;
-import org.kylecodes.gm.utils.SecurityUtil;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class WorkoutToWorkoutDtoMapper implements EntityToDtoMapper<Workout, WorkoutDto> {
 
@@ -22,16 +18,12 @@ public class WorkoutToWorkoutDtoMapper implements EntityToDtoMapper<Workout, Wor
         workoutDto.setId(workout.getId());
         workoutDto.setName(workout.getName());
         workoutDto.setDate(workout.getDate());
-        workoutDto.setExerciseDtos(getExerciseDtoListForWorkout(workout));
-        workoutDto.setUserId(SecurityUtil.getPrincipalFromSecurityContext().getId());
+        //workoutDto.setExerciseDtos(getExerciseDtoListForWorkout(workout));
+        //workoutDto.setUserId(SecurityUtil.getPrincipalFromSecurityContext().getId());
         return workoutDto;
     }
 
-    private List<ExerciseDto> getExerciseDtoListForWorkout(Workout workout) {
-        return workout.getExercises() != null ?
-                workout.getExercises().stream().map(exercise -> exerciseMapper.mapToDto(exercise)).toList()
-                : new ArrayList<>();
-    }
+
 
 
 }
