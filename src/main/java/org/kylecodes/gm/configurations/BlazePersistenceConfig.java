@@ -9,6 +9,7 @@ import com.blazebit.persistence.view.spi.EntityViewConfiguration;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.PersistenceUnit;
 import org.kylecodes.gm.entityViews.ExerciseView;
+import org.kylecodes.gm.entityViews.SetView;
 import org.kylecodes.gm.entityViews.WorkoutView;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
@@ -36,6 +37,7 @@ public class BlazePersistenceConfig {
         EntityViewConfiguration entityViewConfiguration = EntityViews.createDefaultConfiguration();
         entityViewConfiguration.addEntityView(WorkoutView.class);
         entityViewConfiguration.addEntityView(ExerciseView.class);
+        entityViewConfiguration.addEntityView(SetView.class);
         return entityViewConfiguration;
     }
 
