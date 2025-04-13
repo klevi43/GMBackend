@@ -24,6 +24,6 @@ public interface WorkoutRepository extends JpaRepository<Workout, Long>, FullWor
 //    @Query(value = "FROM Workout w JOIN FETCH w.exercises as e " +
 //            " WHERE w.id = :id AND w.user.id = :userId")
 
-    WorkoutView findByIdBlaze(Long id);
+    Optional<WorkoutView> findByIdBlaze(Long id, Long userId);
     boolean existsByIdAndUserId(Long id, Long userId);
 }

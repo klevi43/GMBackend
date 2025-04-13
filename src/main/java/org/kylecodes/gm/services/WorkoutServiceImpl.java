@@ -67,18 +67,15 @@ public class WorkoutServiceImpl implements WorkoutService {
     @Transactional
     public WorkoutView getWorkoutById(Long id) {
         User user = SecurityUtil.getPrincipalFromSecurityContext();
-//        Optional<Workout> workout = Optional.of(workoutRepository.findById(id)
-//                .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.GET_REQUEST_FAILURE)));
-//        if (!workoutRepository.existsByIdAndUserId(id, user.getId())) {
-//            throw new WorkoutNotFoundException(RequestFailure.GET_REQUEST_FAILURE);
-//        }
-        WorkoutView workout = workoutRepository.findByIdBlaze(id);
-        System.out.println(workout.toString());
-        System.out.println(workout.getName());
-        System.out.println(workout.getExercises());
+//
+
+        Optional<WorkoutView> workout = Optional.of(workoutRepository.findByIdBlaze(id, user.getId())
+                .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.GET_REQUEST_FAILURE)));
+
+
 
        // WorkoutDto workoutDto = parentMapper.mapAllToDto(workout.get());
-        return workout;
+        return workout.get();
 
     }
 
