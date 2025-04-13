@@ -8,6 +8,7 @@ import org.kylecodes.gm.contexts.SecurityContextForTests;
 import org.kylecodes.gm.dtos.WorkoutDto;
 import org.kylecodes.gm.entities.User;
 import org.kylecodes.gm.entities.Workout;
+import org.kylecodes.gm.entityViews.WorkoutView;
 import org.kylecodes.gm.exceptions.WorkoutNotFoundException;
 import org.kylecodes.gm.repositories.WorkoutRepository;
 import org.kylecodes.gm.services.WorkoutService;
@@ -150,7 +151,7 @@ public class WorkoutServiceUnitTest {
 
         when(workoutRepository.findByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong())).thenReturn(Optional.of(workout));
 
-        WorkoutDto saveWorkout = workoutService.getWorkoutById(VALID_WORKOUT_ID);
+        WorkoutView saveWorkout = workoutService.getWorkoutById(VALID_WORKOUT_ID);
 
 
         assertThat(saveWorkout).isNotNull();

@@ -28,7 +28,7 @@ public class Exercise {
     @JoinColumn
     Workout workout;
 
-    @OneToMany(orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "exercise", cascade = {CascadeType.REMOVE})
+    @OneToMany(orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "exercise", cascade = {CascadeType.ALL})
     @JsonIgnore
     List<Set> sets;
 
@@ -73,5 +73,14 @@ public class Exercise {
 
     public void setSets(List<Set> sets) {
         this.sets = sets;
+    }
+
+    @Override
+    public String toString() {
+        return "Exercise{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                //", sets=" + sets +
+                '}';
     }
 }

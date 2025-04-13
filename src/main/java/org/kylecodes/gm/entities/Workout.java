@@ -37,7 +37,7 @@ public class Workout {
     @NotNull(message = NotNullMsg.EMPTY_USER)
     private User user;
 
-    @OneToMany( orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "workout", cascade = {CascadeType.REMOVE})
+    @OneToMany( orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "workout", cascade = {CascadeType.ALL})
     @JsonIgnore
     List<Exercise> exercises;
 
@@ -89,5 +89,16 @@ public class Workout {
 
     public void setExercises(List<Exercise> exercises) {
         this.exercises = exercises;
+    }
+
+    @Override
+    public String toString() {
+        return "Workout{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", date=" + date +
+                ", user=" + user +
+                ", exercises=" + exercises +
+                '}';
     }
 }

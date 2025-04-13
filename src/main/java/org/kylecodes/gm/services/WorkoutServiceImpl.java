@@ -5,13 +5,13 @@ import org.kylecodes.gm.constants.RequestFailure;
 import org.kylecodes.gm.dtos.WorkoutDto;
 import org.kylecodes.gm.entities.User;
 import org.kylecodes.gm.entities.Workout;
+import org.kylecodes.gm.entityViews.WorkoutView;
 import org.kylecodes.gm.exceptions.WorkoutNotFoundException;
 import org.kylecodes.gm.mappers.parentAndChildMappers.ParentAndAllChildrenToDtoMapper;
 import org.kylecodes.gm.mappers.parentAndChildMappers.WorkoutAndAllChildrenToDtoMapper;
 import org.kylecodes.gm.mappers.singleEntityMappers.EntityToDtoMapper;
 import org.kylecodes.gm.mappers.singleEntityMappers.WorkoutToWorkoutDtoMapper;
 import org.kylecodes.gm.repositories.ExerciseRepository;
-import org.kylecodes.gm.repositories.SetRepository;
 import org.kylecodes.gm.repositories.WorkoutRepository;
 import org.kylecodes.gm.utils.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +32,6 @@ public class WorkoutServiceImpl implements WorkoutService {
     ParentAndAllChildrenToDtoMapper<Workout, WorkoutDto> parentMapper = new WorkoutAndAllChildrenToDtoMapper();
     @Autowired
     private ExerciseRepository exerciseRepository;
-    @Autowired
-    private SetRepository setRepository;
 
     @Override
     public List<WorkoutDto> getAllMostRecentWorkouts() {
@@ -67,14 +65,20 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Override
     @Transactional
-    public WorkoutDto getWorkoutById(Long id) {
+    public WorkoutView getWorkoutById(Long id) {
         User user = SecurityUtil.getPrincipalFromSecurityContext();
-        Optional<Workout> workout = Optional.of(workoutRepository.findParentAndChildrenByIdAndUserId(id, user.getId())
-                .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.GET_REQUEST_FAILURE)));
+//        Optional<Workout> workout = Optional.of(workoutRepository.findById(id)
+//                .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.GET_REQUEST_FAILURE)));
+//        if (!workoutRepository.existsByIdAndUserId(id, user.getId())) {
+//            throw new WorkoutNotFoundException(RequestFailure.GET_REQUEST_FAILURE);
+//        }
+        WorkoutView workout = workoutRepository.findByIdBlaze(id);
+        System.out.println(workout.toString());
+        System.out.println(workout.getName());
+        System.out.println(workout.getExercises());
 
-
-        WorkoutDto workoutDto = parentMapper.mapAllToDto(workout.get());
-        return workoutDto;
+       // WorkoutDto workoutDto = parentMapper.mapAllToDto(workout.get());
+        return workout;
 
     }
 

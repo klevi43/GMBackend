@@ -3,6 +3,7 @@ package org.kylecodes.gm.controllers;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.kylecodes.gm.dtos.WorkoutDto;
+import org.kylecodes.gm.entityViews.WorkoutView;
 import org.kylecodes.gm.services.WorkoutService;
 import org.kylecodes.gm.services.WorkoutServiceImpl;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +29,8 @@ public class WorkoutController {
     }
 
     @GetMapping("/workouts/workout")
-    public WorkoutDto getWorkoutById(@RequestParam Long workoutId) {
-        WorkoutDto workoutDto = workoutService.getWorkoutById(workoutId);
+    public WorkoutView getWorkoutById(@RequestParam Long workoutId) {
+        WorkoutView workoutDto = workoutService.getWorkoutById(workoutId);
 
         return workoutDto;
     }
