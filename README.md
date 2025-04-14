@@ -47,25 +47,25 @@ In order to make requests to the api
 
 ### 1. Create a New Account
 ```
-URL: http://localhost:8080/register</br>
-REQUEST TYPE: POST</br>
-FIELDS:</br>
-{</br>
-  "email": "your-email",</br>
-  "password": "your-password"</br>
-}</br>
+URL: http://localhost:8080/register
+REQUEST TYPE: POST
+FIELDS:
+{
+  "email": "your-email",
+  "password": "your-password"
+}
 ```
 
 
 ### 2. Login 
 ```
-URL: http://localhost:8080/login</br>
-REQUEST TYPE: POST</br>
-FIELDS:</br>
-{</br>
-  "email": "your-email", </br>
-  "password": "your-password" </br>
-}</br>
+URL: http://localhost:8080/login
+REQUEST TYPE: POST
+FIELDS:
+{
+  "email": "your-email",
+  "password": "your-password"
+}
 ```
 
 The server will send a 200 status code response with your JWT (valid for 3 hours).
@@ -77,33 +77,33 @@ Enter "Authorization" for the key and then enter "Bearer [your_jwt_token]"
 
 ### 4. Create a Workout
 ```
-URL: http://localhost:8080/workouts/create</br>
-REQUEST TYPE: POST</br>
-FIELDS:</br>
-{</br>
-  "name": "your-workout-name", </br>
-  "date": "YYYY-MM-DD"</br>
-}</br>
+URL: http://localhost:8080/workouts/create
+REQUEST TYPE: POST
+FIELDS:
+{
+  "name": "your-workout-name",
+  "date": "YYYY-MM-DD"
+}
 ```
 
 ### 5. Get All Most Recent Workouts
 ```
-URL: http://localhost:8080/workouts</br>
-REQUEST TYPE: GET</br>
-FIELDS:</br>
-{</br>
-  "name": "your-workout-name", </br>
-  "date": "YYYY-MM-DD"</br>
-}</br>
+URL: http://localhost:8080/workouts
+REQUEST TYPE: GET
+FIELDS:
+{
+  "name": "your-workout-name",
+  "date": "YYYY-MM-DD"
+}
 ```
 
 ### 5. Get Workout History
 ```
-URL: http://localhost:8080/workouts</br>
-REQUEST TYPE: GET</br>
-FIELDS:</br>
-{</br>
-  "name": "your-workout-name", </br>
-  "date": "YYYY-MM-DD"</br>
-}</br>
+URL: http://localhost:8080/workouts
+REQUEST TYPE: GET
+FIELDS:
+{
+  "name": "your-workout-name",
+  "date": "YYYY-MM-DD"
+}
 ```
