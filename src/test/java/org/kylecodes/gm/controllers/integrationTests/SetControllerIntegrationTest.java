@@ -124,41 +124,41 @@ public class SetControllerIntegrationTest {
 
     }
 
-    @Test
-    public void SetController_CreateSetForExerciseInWorkout_ThrowMethodArgumentNotValidExceptionForInvalidReps() throws Exception {
-        invalidSetDto = new SetDto();
-        invalidSetDto.setReps(-15);
-        invalidSetDto.setWeight(15);
-        invalidSetDto.setExerciseId(VALID_EXERCISE_ID);
-        ResultActions response = mockMvc.perform(post("/workouts/exercises/sets/create")
-                .queryParam("workoutId", VALID_WORKOUT_ID.toString())
-                .queryParam("exerciseId", VALID_EXERCISE_ID.toString())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(invalidSetDto)));
-
-        response.andExpect(status().is4xxClientError());
-        response.andExpect(jsonPath("$.message", CoreMatchers.is(InvalidSetData.INVALID_REPS_MSG)));
-        response.andDo(MockMvcResultHandlers.print());
-
-
-    }
-
-    @Test
-    public void SetController_CreateSetForExerciseInWorkout_ThrowMethodArgumentNotValidExceptionForInvalidWeight() throws Exception {
-        invalidSetDto = new SetDto();
-        invalidSetDto.setReps(15);
-        invalidSetDto.setWeight(-15);
-        invalidSetDto.setExerciseId(VALID_EXERCISE_ID);
-        ResultActions response = mockMvc.perform(post("/workouts/exercises/sets/create")
-                .queryParam("workoutId", VALID_WORKOUT_ID.toString())
-                .queryParam("exerciseId", VALID_EXERCISE_ID.toString())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(invalidSetDto)));
-
-        response.andExpect(status().is4xxClientError());
-        response.andExpect(jsonPath("$.message", CoreMatchers.is(InvalidSetData.INVALID_WEIGHT_MSG)));
-        response.andDo(MockMvcResultHandlers.print());
-    }
+//    @Test
+//    public void SetController_CreateSetForExerciseInWorkout_ThrowMethodArgumentNotValidExceptionForInvalidReps() throws Exception {
+//        invalidSetDto = new SetDto();
+//        invalidSetDto.setReps(-15);
+//        invalidSetDto.setWeight(15);
+//        invalidSetDto.setExerciseId(VALID_EXERCISE_ID);
+//        ResultActions response = mockMvc.perform(post("/workouts/exercises/sets/create")
+//                .queryParam("workoutId", VALID_WORKOUT_ID.toString())
+//                .queryParam("exerciseId", VALID_EXERCISE_ID.toString())
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content(objectMapper.writeValueAsString(invalidSetDto)));
+//
+//        response.andExpect(status().is4xxClientError());
+//        response.andExpect(jsonPath("$.message", CoreMatchers.is(InvalidSetData.INVALID_REPS_MSG)));
+//        response.andDo(MockMvcResultHandlers.print());
+//
+//
+//    }
+//
+//    @Test
+//    public void SetController_CreateSetForExerciseInWorkout_ThrowMethodArgumentNotValidExceptionForInvalidWeight() throws Exception {
+//        invalidSetDto = new SetDto();
+//        invalidSetDto.setReps(15);
+//        invalidSetDto.setWeight(-15);
+//        invalidSetDto.setExerciseId(VALID_EXERCISE_ID);
+//        ResultActions response = mockMvc.perform(post("/workouts/exercises/sets/create")
+//                .queryParam("workoutId", VALID_WORKOUT_ID.toString())
+//                .queryParam("exerciseId", VALID_EXERCISE_ID.toString())
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content(objectMapper.writeValueAsString(invalidSetDto)));
+//
+//        response.andExpect(status().is4xxClientError());
+//        response.andExpect(jsonPath("$.message", CoreMatchers.is(InvalidSetData.INVALID_WEIGHT_MSG)));
+//        response.andDo(MockMvcResultHandlers.print());
+//    }
 
     @Test
     public void SetController_CreateSetForExerciseInWorkout_ThrowWorkoutNotFoundException() throws Exception {

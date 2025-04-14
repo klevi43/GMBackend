@@ -1,14 +1,16 @@
 package org.kylecodes.gm.repositories.integrationTests;
 
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kylecodes.gm.constants.Roles;
+import org.kylecodes.gm.contexts.SecurityContextForTests;
 import org.kylecodes.gm.entities.User;
 import org.kylecodes.gm.entities.Workout;
 import org.kylecodes.gm.repositories.WorkoutRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -18,10 +20,11 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DataJpaTest
-@AutoConfigureTestDatabase(replace =AutoConfigureTestDatabase.Replace.NONE )
 @TestPropertySource("classpath:application-test.properties")
-@Sql(scripts = {"classpath:/insertWorkouts.sql", "classpath:/insertExercises.sql", "classpath:/insertSets.sql"})
+@SpringBootTest
+@AutoConfigureMockMvc(addFilters = false) // circumvent spring sec so that we don't have to add tokens
+@Transactional
+@Sql(scripts = {"classpath:/insertWorkouts.sql", "classpath:/insertExercises.sql", "classpath:/insertSets.sql"})//  this removes the need for setup and teardown
 public class WorkoutRepositoryIntegrationTest {
     @Autowired
     private WorkoutRepository workoutRepository;
@@ -37,6 +40,7 @@ public class WorkoutRepositoryIntegrationTest {
     private final String VALID_USER_ROLE = Roles.USER;
     private Workout workout1;
     private Workout workout2;
+    SecurityContextForTests context = new SecurityContextForTests();
     @BeforeEach
     public void init() {
         user = new User();
@@ -55,6 +59,7 @@ public class WorkoutRepositoryIntegrationTest {
         workout2.setName(VALID_WORKOUT_NAME_2);
         workout2.setDate(VALID_WORKOUT_DATE);
         workout2.setUser(user);
+        context.createSecurityContextToReturnAuthenticatedUser(user);
     }
 
         @Test

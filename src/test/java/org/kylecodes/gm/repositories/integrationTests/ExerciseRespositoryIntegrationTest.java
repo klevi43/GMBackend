@@ -1,14 +1,17 @@
 package org.kylecodes.gm.repositories.integrationTests;
 
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.kylecodes.gm.contexts.SecurityContextForTests;
 import org.kylecodes.gm.entities.Exercise;
+import org.kylecodes.gm.entities.User;
 import org.kylecodes.gm.entities.Workout;
 import org.kylecodes.gm.repositories.ExerciseRepository;
 import org.kylecodes.gm.repositories.WorkoutRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -17,10 +20,11 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DataJpaTest
-@AutoConfigureTestDatabase(replace =AutoConfigureTestDatabase.Replace.NONE )
 @TestPropertySource("classpath:application-test.properties")
-@Sql(scripts = {"classpath:/insertWorkouts.sql", "classpath:/insertExercises.sql", "classpath:/insertSets.sql"})
+@SpringBootTest
+@AutoConfigureMockMvc(addFilters = false) // circumvent spring sec so that we don't have to add tokens
+@Transactional
+@Sql(scripts = {"classpath:/insertWorkouts.sql", "classpath:/insertExercises.sql", "classpath:/insertSets.sql"})//  this removes the need for setup and teardown
 public class ExerciseRespositoryIntegrationTest {
     @Autowired
     private WorkoutRepository workoutRepository;
@@ -33,21 +37,31 @@ public class ExerciseRespositoryIntegrationTest {
     private Exercise exercise;
     private Exercise exercise2;
     private Exercise savedExercise;
-
+    private User user;
     private final Long VALID_WORKOUT_ID_1 = 1L;
     private final Long VALID_EXERCISE_ID_1 = 1L;
     private final Long VALID_EXERCISE_ID_2 = 2L;
-
+    private final Long VALID_USER_ID = 1L;
+    private final String VALID_USER_EMAIL = "test@test.com";
+    private final String VALID_USER_PASSWORD = "password";
+    private final String VALID_USER_ROLE = "ROLE_USER";
 
     Optional<Exercise> optionalExercise;
+    SecurityContextForTests context = new SecurityContextForTests();
     @BeforeEach
     public void init() {
+        user = new User();
+        user.setId(VALID_USER_ID);
+        user.setEmail(VALID_USER_EMAIL);
+        user.setPassword(VALID_USER_PASSWORD);
+        user.setRole(VALID_USER_ROLE);
         workout = workoutRepository.findById(VALID_WORKOUT_ID_1).get();
         exercise2 = new Exercise();
 
         exercise2.setName("Test Exercise 2");
 
         exercise2.setWorkout(workout);
+        context.createSecurityContextToReturnAuthenticatedUser(user);
     }
 
     @Test

@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface WorkoutRepository extends JpaRepository<Workout, Long>, FullWorkoutRepository {
-    @Query(value = "SELECT id, date, name \n"
+    @Query(value = "SELECT id, date, name, user_id \n"
             + "FROM (SELECT *, ROW_NUMBER() OVER \n"
             + "(PARTITION BY name ORDER BY date DESC) rn \n"
             + "FROM gmdb.workout) temp WHERE rn = 1 and user_id = :#{#userId}", nativeQuery = true)
