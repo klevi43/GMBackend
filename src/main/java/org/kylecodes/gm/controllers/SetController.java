@@ -31,8 +31,6 @@ public class SetController {
     @PostMapping("/workouts/exercises/sets/create")
     public ResponseEntity<SetDto> createSetForExerciseInWorkoutById(@RequestParam Long workoutId, @RequestParam Long exerciseId,
                                                 @Valid @RequestBody SetDto setDto) {
-
-
         SetDto newSet = setService.createSetForExerciseInWorkout(setDto, exerciseId, workoutId);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .queryParam("workoutId={workoutId}")
@@ -48,9 +46,7 @@ public class SetController {
     public SetDto updateSetForExerciseInWorkoutById(@RequestParam Long workoutId, @RequestParam Long exerciseId,
                                                     @RequestParam Long setId,
                                                     @Valid @RequestBody SetDto setDto) {
-        SetDto updatedSetDto = setService.updateSetForExerciseInWorkout(setDto, setId, exerciseId, workoutId);
-
-        return updatedSetDto;
+        return setService.updateSetForExerciseInWorkout(setDto, setId, exerciseId, workoutId);
     }
 
     @DeleteMapping("/workouts/exercises/sets/delete")

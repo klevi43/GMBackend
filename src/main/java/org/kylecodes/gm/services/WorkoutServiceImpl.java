@@ -7,10 +7,10 @@ import org.kylecodes.gm.entities.User;
 import org.kylecodes.gm.entities.Workout;
 import org.kylecodes.gm.entityViews.WorkoutView;
 import org.kylecodes.gm.exceptions.WorkoutNotFoundException;
-import org.kylecodes.gm.mappers.parentAndChildMappers.ParentAndAllChildrenToDtoMapper;
-import org.kylecodes.gm.mappers.parentAndChildMappers.WorkoutAndAllChildrenToDtoMapper;
-import org.kylecodes.gm.mappers.singleEntityMappers.EntityToDtoMapper;
-import org.kylecodes.gm.mappers.singleEntityMappers.WorkoutToWorkoutDtoMapper;
+
+import org.kylecodes.gm.mappers.EntityToDtoMapper;
+import org.kylecodes.gm.mappers.WorkoutToWorkoutDtoMapper;
+import org.kylecodes.gm.mappers.WorkoutViewToWorkoutDtoMapper;
 import org.kylecodes.gm.repositories.ExerciseRepository;
 import org.kylecodes.gm.repositories.WorkoutRepository;
 import org.kylecodes.gm.utils.SecurityUtil;
@@ -29,7 +29,7 @@ public class WorkoutServiceImpl implements WorkoutService {
 
 
     EntityToDtoMapper<Workout, WorkoutDto> workoutMapper = new WorkoutToWorkoutDtoMapper();
-    ParentAndAllChildrenToDtoMapper<Workout, WorkoutDto> parentMapper = new WorkoutAndAllChildrenToDtoMapper();
+    EntityToDtoMapper<WorkoutView, WorkoutDto> workoutViewMapper = new WorkoutViewToWorkoutDtoMapper();
     @Autowired
     private ExerciseRepository exerciseRepository;
 
@@ -65,7 +65,7 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Override
     @Transactional
-    public WorkoutView getWorkoutById(Long id) {
+    public WorkoutDto getWorkoutById(Long id) {
         User user = SecurityUtil.getPrincipalFromSecurityContext();
 //
 
@@ -74,8 +74,7 @@ public class WorkoutServiceImpl implements WorkoutService {
 
 
 
-       // WorkoutDto workoutDto = parentMapper.mapAllToDto(workout.get());
-        return workout.get();
+      return workoutViewMapper.mapToDto(workout.get());
 
     }
 

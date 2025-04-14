@@ -1,4 +1,4 @@
-package org.kylecodes.gm.mappers.singleEntityMappers;
+package org.kylecodes.gm.mappers;
 
 import org.kylecodes.gm.dtos.SetDto;
 import org.kylecodes.gm.entities.Set;
