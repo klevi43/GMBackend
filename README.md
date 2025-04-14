@@ -2,7 +2,7 @@
 This is the backend for Growth Mindset, a REST API that allows a user to log and track their workouts.
 
 ## Table of Contents
-### <a name="Quick-Start">Quick Start<a>
+### 
 ### Install Guide
 ### How to Use Guide
 
@@ -38,4 +38,5 @@ Now let's install MySQL. You can find the latest version [here](https://dev.mysq
 
 In order to make requests to the api
 
+<a name="Quick-Start">Quick Start<a>
 ## How to use
