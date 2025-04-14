@@ -44,6 +44,7 @@ In order to make requests to the api
 ## How to use
 
 ### 1. Create a New Account
+```
 URL: http://localhost:8080/register</br>
 REQUEST TYPE: POST</br>
 FIELDS:</br>
@@ -51,9 +52,11 @@ FIELDS:</br>
   "email": "your-email",</br>
   "password": "your-password"</br>
 }</br>
+```
 
 
 ### 2. Login 
+```
 URL: http://localhost:8080/login</br>
 REQUEST TYPE: POST</br>
 FIELDS:</br>
@@ -61,6 +64,7 @@ FIELDS:</br>
   "email": "your-email", </br>
   "password": "your-password" </br>
 }</br>
+```
 
 The server will send a 200 status code response with your JWT (valid for 3 hours).
 ***You will need this JWT to do any of the subsequent operations***
@@ -70,6 +74,7 @@ In Talend API Tester, go to the "Headers" section. Click "Add Authorizaion."
 Enter "Authorization" for the key and then enter "Bearer [your_jwt_token]"
 
 ### 4. Create a Workout
+```
 URL: http://localhost:8080/workouts/create</br>
 REQUEST TYPE: POST</br>
 FIELDS:</br>
@@ -77,8 +82,10 @@ FIELDS:</br>
   "name": "your-workout-name", </br>
   "date": "YYYY-MM-DD"</br>
 }</br>
+```
 
 ### 5. Get All Most Recent Workouts
+```
 URL: http://localhost:8080/workouts</br>
 REQUEST TYPE: GET</br>
 FIELDS:</br>
@@ -86,8 +93,10 @@ FIELDS:</br>
   "name": "your-workout-name", </br>
   "date": "YYYY-MM-DD"</br>
 }</br>
+```
 
 ### 5. Get Workout History
+```
 URL: http://localhost:8080/workouts</br>
 REQUEST TYPE: GET</br>
 FIELDS:</br>
@@ -95,3 +104,4 @@ FIELDS:</br>
   "name": "your-workout-name", </br>
   "date": "YYYY-MM-DD"</br>
 }</br>
+```
