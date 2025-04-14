@@ -12,7 +12,9 @@ This is the backend for Growth Mindset, a REST API that allows a user to log and
 
 Command to clone this repository:
 
-``` git clone https://github.com/klevi43/GMBackend ```
+``` 
+git clone https://github.com/klevi43/GMBackend
+```
 
 
 ### <a name="Install-Guide">2. Install Guide<a>
