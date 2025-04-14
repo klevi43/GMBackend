@@ -2,7 +2,7 @@
 This is the backend for Growth Mindset, a REST API that allows a user to log and track their workouts.
 
 ## Table of Contents
-### [Setup Guide](#Setup-Guide)
+### Setup Guide
 ### How to Use Guide
 
 
@@ -10,8 +10,8 @@ This is the backend for Growth Mindset, a REST API that allows a user to log and
 
 ### Install Java 17 
 
-Install the Java Development Kit (JDK) and Java 17 by following the link below. The Java Runtime Environment (JRE) is included in Java 17, so there is no need to download and install that separately. 
-https://www.oracle.com/java/technologies/javase/jdk17-0-13-later-archive-downloads.html
+Install the Java Development Kit (JDK) and [Java 17][https://www.oracle.com/java/technologies/javase/jdk17-0-13-later-archive-downloads.html]. The Java Runtime Environment (JRE) is included in Java 17, so there is no need to download and install that separately. 
+
 
 WINDOWS JAVA 17 INSTALL VIDEO:
 https://www.youtube.com/watch?v=cL4GcZ6GJV8
