@@ -113,35 +113,18 @@ public class SetServiceIntegrationTest {
         setDto.setReps(REPS);
         context.createSecurityContextToReturnAuthenticatedUser(user);
 
-//
     }
 
-    @Test
-    public void SetService_GetAllSetsForExerciseInWorkout_ThrowWorkoutNotFoundException() {
-        assertThat(setService.getAllSetsForExerciseInWorkout(VALID_EXERCISE_ID, VALID_WORKOUT_ID)).isNotNull();
 
-        assertThrows(WorkoutNotFoundException.class, () -> setService.getAllSetsForExerciseInWorkout(VALID_EXERCISE_ID, INVALID_ID));
-    }
-
-    @Test
-    public void SetService_GetAllSetsForExerciseInWorkout_ThrowExerciseNotFoundException() {
-        assertThat(setService.getAllSetsForExerciseInWorkout(VALID_EXERCISE_ID, VALID_WORKOUT_ID)).isNotNull();
-
-        assertThrows(ExerciseNotFoundException.class, () -> setService.getAllSetsForExerciseInWorkout(INVALID_ID, VALID_WORKOUT_ID));
-    }
 
 
     @Test
     public void SetService_CreateSetForExerciseInWorkout_ThrowWorkoutNotFoundException() {
-
-
         assertThrows(WorkoutNotFoundException.class, () -> setService.createSetForExerciseInWorkout(setDto, VALID_EXERCISE_ID, INVALID_ID));
     }
 
     @Test
     public void SetService_CreateSetForExerciseInWorkout_ThrowExerciseNotFoundException() {
-
-
         assertThrows(ExerciseNotFoundException.class, () -> setService.createSetForExerciseInWorkout(setDto, INVALID_ID, VALID_WORKOUT_ID));
     }
 

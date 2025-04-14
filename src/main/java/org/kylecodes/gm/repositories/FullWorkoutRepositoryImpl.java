@@ -24,7 +24,7 @@ public class FullWorkoutRepositoryImpl implements FullWorkoutRepository {
     }
 
     @Override
-    public Optional<WorkoutView> findByIdBlaze(Long id, Long userId) {
+    public Optional<WorkoutView> findByIdAndUserIdBlaze(Long id, Long userId) {
         try {
             return Optional.of(entityViewManager.applySetting(EntityViewSetting.create(WorkoutView.class),
                             criteriaBuilderFactory.create(entityManager, Workout.class))

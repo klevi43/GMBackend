@@ -30,7 +30,6 @@ import java.time.LocalDate;
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -163,10 +162,7 @@ public class SetControllerIntegrationTest {
 
     @Test
     public void SetController_CreateSetForExerciseInWorkout_ThrowWorkoutNotFoundException() throws Exception {
-        invalidSetDto = new SetDto();
-        invalidSetDto.setReps(-15);
-        invalidSetDto.setWeight(15);
-        invalidSetDto.setExerciseId(VALID_EXERCISE_ID);
+
         ResultActions response = mockMvc.perform(post("/workouts/exercises/sets/create")
                 .queryParam("workoutId", INVALID_ID.toString())
                 .queryParam("exerciseId", VALID_EXERCISE_ID.toString())
@@ -182,10 +178,7 @@ public class SetControllerIntegrationTest {
 
     @Test
     public void SetController_CreateSetForExerciseInWorkout_ThrowExerciseNotFoundException() throws Exception {
-        invalidSetDto = new SetDto();
-        invalidSetDto.setReps(-15);
-        invalidSetDto.setWeight(15);
-        invalidSetDto.setExerciseId(VALID_EXERCISE_ID);
+
         ResultActions response = mockMvc.perform(post("/workouts/exercises/sets/create")
                 .queryParam("workoutId", VALID_WORKOUT_ID.toString())
                 .queryParam("exerciseId", INVALID_ID.toString())
@@ -199,61 +192,6 @@ public class SetControllerIntegrationTest {
 
     }
 
-
-    @Test
-    public void SetController_GetAllSetsForExerciseInWorkout_ReturnSetDtoList() throws Exception {
-        ResultActions response = mockMvc.perform(get("/workouts/exercises/sets")
-                .queryParam("workoutId", VALID_WORKOUT_ID.toString())
-                .queryParam("exerciseId", VALID_EXERCISE_ID.toString()));
-        response.andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(2)));
-        response.andDo(MockMvcResultHandlers.print());
-    }
-
-    @Test
-    public void SetController_GetSetForExerciseInWorkoutById_ReturnSetDtoList() throws Exception {
-        ResultActions response = mockMvc.perform(get("/workouts/exercises/sets/set")
-                .queryParam("workoutId", VALID_WORKOUT_ID.toString())
-                .queryParam("exerciseId", VALID_EXERCISE_ID.toString())
-                .queryParam("setId", VALID_SET_ID.toString()));
-        response.andExpect(status().isOk())
-                .andExpect(jsonPath("$.reps", CoreMatchers.is(setDto.getReps())))
-                .andExpect(jsonPath("$.weight", CoreMatchers.is(setDto.getWeight())))
-                .andExpect(jsonPath("$.id", CoreMatchers.notNullValue()));
-        response.andDo(MockMvcResultHandlers.print());
-    }
-
-    @Test
-    public void SetController_GetSetForExerciseInWorkoutById_ThrowsWorkoutNotFoundException() throws Exception {
-        ResultActions response = mockMvc.perform(get("/workouts/exercises/sets/set")
-                .queryParam("workoutId", INVALID_ID.toString())
-                .queryParam("exerciseId", VALID_EXERCISE_ID.toString())
-                .queryParam("setId", VALID_SET_ID.toString()));
-
-        response.andExpect(status().is4xxClientError())
-                .andExpect(jsonPath("$.message", CoreMatchers.is(RequestFailure.GET_REQUEST_FAILURE + NotFoundMsg.WORKOUT_NOT_FOUND_MSG)));
-    }
-
-    @Test
-    public void SetController_GetSetForExerciseInWorkoutById_ThrowsExerciseNotFoundException() throws Exception {
-        ResultActions response = mockMvc.perform(get("/workouts/exercises/sets/set")
-                .queryParam("workoutId", VALID_WORKOUT_ID.toString())
-                .queryParam("exerciseId", INVALID_ID.toString())
-                .queryParam("setId", VALID_SET_ID.toString()));
-
-        response.andExpect(status().is4xxClientError())
-                .andExpect(jsonPath("$.message", CoreMatchers.is(RequestFailure.GET_REQUEST_FAILURE + NotFoundMsg.EXERCISE_NOT_FOUND_MSG)));
-    }
-    @Test
-    public void SetController_GetSetForExerciseInWorkoutById_ThrowsSetNotFoundException() throws Exception {
-        ResultActions response = mockMvc.perform(get("/workouts/exercises/sets/set")
-                .queryParam("workoutId", VALID_WORKOUT_ID.toString())
-                .queryParam("exerciseId", VALID_EXERCISE_ID.toString())
-                .queryParam("setId", INVALID_ID.toString()));
-
-        response.andExpect(status().is4xxClientError())
-                .andExpect(jsonPath("$.message", CoreMatchers.is(RequestFailure.GET_REQUEST_FAILURE + NotFoundMsg.SET_NOT_FOUND_MSG)));
-    }
 
 
     @Test

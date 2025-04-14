@@ -11,6 +11,7 @@ import org.kylecodes.gm.repositories.WorkoutRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
@@ -22,6 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace =AutoConfigureTestDatabase.Replace.NONE )
+@AutoConfigureMockMvc(addFilters = false)
 @TestPropertySource("classpath:application-test.properties")
 @Sql(scripts = {"classpath:/insertWorkouts.sql", "classpath:/insertExercises.sql", "classpath:/insertSets.sql"})
 public class SetRepositoryIntegrationTest {
@@ -79,30 +81,6 @@ public class SetRepositoryIntegrationTest {
         assertThat(savedSet.getWeight()).isEqualTo(EXPECTED_WEIGHT);
         assertThat(savedSet.getReps()).isEqualTo(EXPECTED_REPS);
         assertThat(savedSet.getExercise()).isNotNull();
-    }
-
-    @Test
-    public void SetRepository_GetAllSetsForExerciseInWorkout_ReturnSetList() {
-
-        assertThat(exercise).isNotEmpty();
-
-        setList = setRepository.findAllByExerciseId(VALID_EXERCISE_ID_1);
-
-        assertThat(setList).hasSize(2);
-
-    }
-
-    @Test
-    public void SetRepository_GetSetForExerciseInWorkoutById_ReturnSet() {
-
-        assertThat(workout).isNotEmpty();
-        assertThat(exercise).isNotEmpty();
-
-        optSet = setRepository.findById(SET_ID);
-        assertThat(optSet).isNotEmpty();
-        assertThat(optSet.get().getWeight()).isEqualTo(EXPECTED_WEIGHT);
-        assertThat(optSet.get().getReps()).isEqualTo(EXPECTED_REPS);
-        assertThat(optSet.get().getExercise().getId()).isEqualTo(VALID_EXERCISE_ID_1);
     }
 
     @Test

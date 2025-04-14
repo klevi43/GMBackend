@@ -32,7 +32,6 @@ import java.util.Arrays;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -42,7 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 //@AutoConfigureMockMvc(addFilters = false) // circumvent spring sec so that we don't have to add tokens
 //@Transactional
 @ExtendWith(MockitoExtension.class)
-public class ExerciseControllerTest {
+public class ExerciseControllerUnitTest {
     @InjectMocks
     private ExerciseController exerciseController;
 
@@ -112,26 +111,6 @@ public class ExerciseControllerTest {
 
     }
 
-
-    @Test
-    public void ExerciseController_GetAllExercisesInWorkout_ReturnExerciseDtoList() throws Exception {
-        when(exerciseService.getAllExercisesInWorkout(ArgumentMatchers.anyLong())).thenReturn(Arrays.asList(exerciseDto, exerciseDto2));
-        mockMvc.perform(MockMvcRequestBuilders.get("/workouts/exercises")
-                .queryParam("workoutId", VALID_WORKOUT_ID_1.toString()))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()", CoreMatchers.is(2)));
-    }
-
-    @Test
-    public void ExerciseController_GetExerciseInWorkoutById_ReturnExerciseDto() throws Exception {
-        when(exerciseService.getExerciseInWorkoutById(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong())).thenReturn(exerciseDto);
-        mockMvc.perform(MockMvcRequestBuilders.get("/workouts/exercises/exercise")
-                        .queryParam("workoutId", VALID_WORKOUT_ID_1.toString())
-                        .queryParam("exerciseId", VALID_EXERCISE_ID_1.toString()))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(status().isOk());
-    }
     @Test
     public void ExerciseController_CreateExerciseInWorkout_ReturnCreatedExercise() throws Exception {
         given(exerciseService.createExerciseInWorkout(ArgumentMatchers.any(), ArgumentMatchers.anyLong())).willAnswer((invocationOnMock -> invocationOnMock.getArgument(0)));

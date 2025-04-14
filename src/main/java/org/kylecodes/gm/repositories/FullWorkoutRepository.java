@@ -7,5 +7,5 @@ import java.util.Optional;
 
 @Repository
 public interface FullWorkoutRepository {
-    Optional<WorkoutView> findByIdBlaze(Long id, Long userId);
+    Optional<WorkoutView> findByIdAndUserIdBlaze(Long id, Long userId);
 }

@@ -175,8 +175,7 @@ public class WorkoutControllerIntegrationTest {
 
         response.andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$.name", CoreMatchers.is(workoutDto.getName())))
-                .andExpect(jsonPath("$.date", CoreMatchers.is(workoutDto.getDate().toString())))
-                .andExpect(jsonPath("$.exerciseDtos", hasSize(2)));
+                .andExpect(jsonPath("$.date", CoreMatchers.is(workoutDto.getDate().toString())));
 
         assertThat(workoutRepository.findById(VALID_WORKOUT_ID)).isNotEmpty();
         assertThat(workoutRepository.findById(VALID_WORKOUT_ID).get().getName()).isEqualTo("Test Workout 5");

@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 
 @RestController
 public class ExerciseController {
@@ -18,17 +17,17 @@ public class ExerciseController {
 
 
 
-    @GetMapping("/workouts/exercises")
-    public List<ExerciseDto> getAllExercisesInWorkout(@RequestParam Long workoutId) {
-        List<ExerciseDto> allExercisesInWorkout = exerciseService.getAllExercisesInWorkout(workoutId);
-
-        return allExercisesInWorkout;
-    }
-
-    @GetMapping("/workouts/exercises/exercise")
-    public ExerciseDto getExerciseInWorkoutById(@RequestParam Long workoutId, @RequestParam Long exerciseId) {
-        return exerciseService.getExerciseInWorkoutById(exerciseId, workoutId);
-    }
+//    @GetMapping("/workouts/exercises")
+//    public List<ExerciseDto> getAllExercisesInWorkout(@RequestParam Long workoutId) {
+//        List<ExerciseDto> allExercisesInWorkout = exerciseService.getAllExercisesInWorkout(workoutId);
+//
+//        return allExercisesInWorkout;
+//    }
+//
+//    @GetMapping("/workouts/exercises/exercise")
+//    public ExerciseDto getExerciseInWorkoutById(@RequestParam Long workoutId, @RequestParam Long exerciseId) {
+//        return exerciseService.getExerciseInWorkoutById(exerciseId, workoutId);
+//    }
     @PostMapping("/workouts/exercises/create")
     public ResponseEntity<ExerciseDto> createExerciseForWorkout(@Valid @RequestBody ExerciseDto exerciseDto,
                                                                 @RequestParam Long workoutId) {
@@ -36,7 +35,6 @@ public class ExerciseController {
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .queryParam("workoutId={workoutId}")
-                .queryParam("exerciseId={id}")
                 .buildAndExpand(workoutId, newExercise.getId())
                 .toUri();
         return ResponseEntity.created(location).body(newExercise);
@@ -46,7 +44,6 @@ public class ExerciseController {
     @PutMapping("/workouts/exercises/update")
     public ExerciseDto updateExerciseInWorkout(@Valid @RequestBody ExerciseDto exerciseDto, @RequestParam Long workoutId, @RequestParam Long exerciseId) {
         ExerciseDto updatedExercise = exerciseService.updateExerciseInWorkoutById(exerciseDto, exerciseId, workoutId);
-
         return updatedExercise;
     }
 

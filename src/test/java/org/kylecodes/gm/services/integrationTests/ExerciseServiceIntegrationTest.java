@@ -24,7 +24,6 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -120,53 +119,6 @@ public class ExerciseServiceIntegrationTest {
         setDto.setWeight(WEIGHT);
         setDto.setReps(REPS);
         context.createSecurityContextToReturnAuthenticatedUser(user);
-    }
-
-    @Test
-    public void ExerciseService_GetAllExercisesInWorkout_ReturnExerciseList() {
-        assertThat(workoutRepository.existsByIdAndUserId(VALID_WORKOUT_ID, VALID_USER_ID)).isTrue();
-        final int EXPECTED_SIZE = 2;
-        List<ExerciseDto> exerciseDtoList = exerciseService.getAllExercisesInWorkout(VALID_WORKOUT_ID);
-        assertThat(exerciseDtoList).isNotNull();
-        assertThat(exerciseDtoList.size()).isEqualTo(EXPECTED_SIZE);
-    }
-
-
-    @Test
-    public void ExerciseService_GetAllExercisesInWorkout_ThrowWorkoutNotFoundException() {
-        assertThat(workoutRepository.existsByIdAndUserId(INVALID_ID, VALID_USER_ID)).isFalse();
-
-        assertThrows(WorkoutNotFoundException.class, () -> exerciseService.getAllExercisesInWorkout(INVALID_ID));
-
-    }
-
-    @Test
-    public void ExerciseService_GetExerciseInWorkoutById_ReturnExerciseDto() {
-        assertThat(workoutRepository.existsByIdAndUserId(VALID_WORKOUT_ID, VALID_USER_ID)).isTrue();
-
-        ExerciseDto exerciseDto = exerciseService.getExerciseInWorkoutById(VALID_EXERCISE_ID, VALID_WORKOUT_ID);
-        assertThat(exerciseDto).isNotNull();
-        assertThat(exerciseDto.getId()).isEqualTo(VALID_EXERCISE_ID);
-        assertThat(exerciseDto.getName()).isEqualTo(VALID_EXERCISE_NAME);
-        assertThat(exerciseDto.getSetDtoList()).isNotNull();
-    }
-
-    @Test
-    public void ExerciseService_GetExerciseInWorkoutById_ThrowWorkoutNotFoundException() {
-        assertThat(workoutRepository.existsByIdAndUserId(INVALID_ID, VALID_USER_ID)).isFalse();
-
-        assertThrows(WorkoutNotFoundException.class,
-                () -> exerciseService.getExerciseInWorkoutById(VALID_EXERCISE_ID, INVALID_ID));
-
-    }
-
-    @Test
-    public void ExerciseService_GetExerciseInWorkoutById_ThrowExerciseNotFoundException() {
-        assertThat(workoutRepository.existsByIdAndUserId(VALID_WORKOUT_ID, VALID_USER_ID)).isTrue();
-        assertThat(exerciseRepository.findByIdAndWorkoutId(INVALID_ID, VALID_WORKOUT_ID)).isEmpty();
-        assertThrows(ExerciseNotFoundException.class,
-                () -> exerciseService.getExerciseInWorkoutById(INVALID_ID, VALID_WORKOUT_ID));
-
     }
 
     @Test

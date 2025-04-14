@@ -3,11 +3,12 @@ package org.kylecodes.gm.services.unitTests;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.kylecodes.gm.constants.RequestFailure;
 import org.kylecodes.gm.contexts.SecurityContextForTests;
 import org.kylecodes.gm.dtos.WorkoutDto;
 import org.kylecodes.gm.entities.User;
 import org.kylecodes.gm.entities.Workout;
+import org.kylecodes.gm.entityViews.ExerciseView;
+import org.kylecodes.gm.entityViews.WorkoutView;
 import org.kylecodes.gm.exceptions.WorkoutNotFoundException;
 import org.kylecodes.gm.repositories.WorkoutRepository;
 import org.kylecodes.gm.services.WorkoutService;
@@ -19,6 +20,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -45,7 +47,7 @@ public class WorkoutServiceUnitTest {
     private final String VALID_USER_EMAIL = "test@test.com";
     private final String VALID_USER_PASSWORD = "password";
     private final String VALID_USER_ROLE = "ROLE_USER";
-
+    private final Long INVALID_WORKOUT_ID = -1L;
     private final Long VALID_WORKOUT_ID = 1L;
     private final String VALID_WORKOUT_NAME = "Test Workout";
     private final LocalDate VALID_WORKOUT_DATE = LocalDate.of(2025, 02, 18);
@@ -59,6 +61,7 @@ public class WorkoutServiceUnitTest {
     private Workout workout;
     private Workout workout2;
     private WorkoutDto workoutDto;
+    private WorkoutView workoutView;
     private SecurityContextForTests context = new SecurityContextForTests();
     @BeforeEach
     public void init() {
@@ -84,6 +87,30 @@ public class WorkoutServiceUnitTest {
         workoutDto.setName(VALID_WORKOUT_NAME);
         workoutDto.setDate(VALID_WORKOUT_DATE);
         context.createSecurityContextToReturnAuthenticatedUser(user);
+
+        workoutView = new WorkoutView() {
+            @Override
+            public Long getId() {
+                return VALID_WORKOUT_ID;
+            }
+
+            @Override
+            public String getName() {
+                return VALID_WORKOUT_NAME;
+            }
+
+            @Override
+            public LocalDate getDate() {
+                return VALID_WORKOUT_DATE;
+            }
+
+            @Override
+            public List<ExerciseView> getExercises() {
+                return new ArrayList<>();
+            }
+        };
+
+
 
     }
 
@@ -148,21 +175,23 @@ public class WorkoutServiceUnitTest {
     public void WorkoutService_GetWorkoutById_ReturnWorkoutDto() {
 
 
-        when(workoutRepository.findByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong())).thenReturn(Optional.of(workout));
+        when(workoutRepository.findByIdAndUserIdBlaze(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong())).thenReturn(Optional.of(workoutView));
 
-        WorkoutDto saveWorkout = workoutService.getWorkoutById(VALID_WORKOUT_ID);
+        WorkoutDto foundWorkout = workoutService.getWorkoutById(VALID_WORKOUT_ID);
 
 
-        assertThat(saveWorkout).isNotNull();
+        assertThat(foundWorkout).isNotNull();
+        assertThat(foundWorkout.getId()).isEqualTo(VALID_WORKOUT_ID);
+        assertThat(foundWorkout.getName()).isEqualTo(VALID_WORKOUT_NAME);
+        assertThat(foundWorkout.getDate()).isEqualTo(VALID_WORKOUT_DATE);
+        assertThat(foundWorkout.getExerciseDtos()).isNotNull();
     }
 
     @Test
     public void WorkoutService_GetWorkoutById_ThrowsWorkoutNotFoundException() {
-        when(workoutRepository.findByIdAndUserId(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong()))
-                .thenThrow(new WorkoutNotFoundException(RequestFailure.GET_REQUEST_FAILURE));
 
         assertThrows(WorkoutNotFoundException.class,
-                () -> workoutService.getWorkoutById(VALID_WORKOUT_ID));
+                () -> workoutService.getWorkoutById(INVALID_WORKOUT_ID));
 
     }
 

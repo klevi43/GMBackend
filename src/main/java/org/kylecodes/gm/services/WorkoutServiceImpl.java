@@ -69,7 +69,7 @@ public class WorkoutServiceImpl implements WorkoutService {
         User user = SecurityUtil.getPrincipalFromSecurityContext();
 //
 
-        Optional<WorkoutView> workout = Optional.of(workoutRepository.findByIdBlaze(id, user.getId())
+        Optional<WorkoutView> workout = Optional.of(workoutRepository.findByIdAndUserIdBlaze(id, user.getId())
                 .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.GET_REQUEST_FAILURE)));
 
 
