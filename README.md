@@ -39,15 +39,9 @@ You can confirm that Java is correctly installed on your system by typing the co
 ```
 java --version
 ```
-### Install MySQL
-
-***WINDOWS USERS First install the latest Microsoft Visual C++ Redistributable Version found [here](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170#latest-microsoft-visual-c-redistributable-version). MySQL can't be installed without it.***
-
-
-
+### Install MySQL </br>
+***WINDOWS USERS First install the latest Microsoft Visual C++ Redistributable Version found [here](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170#latest-microsoft-visual-c-redistributable-version). MySQL can't be installed without it.*** </br>
 Now let's install MySQL. You can find the latest version [here](https://dev.mysql.com/downloads/mysql/)
-
-In order to make requests to the api
 
 <a name="How-to-Use-Guide"></a>
 ## How to use
@@ -110,7 +104,7 @@ REQUEST TYPE: GET
 ```
 <a name="Get-Workout-By-Id"></a>
 ### 7. Get a Single Workout 
-***Shows a single workout. You can see all your created exercises and sets here as well.***
+Shows a single workout. You can see all your created exercises and sets here as well.
 ```
 URL: http://localhost:8080/workouts/workout?workoutId=[workout-id]
 REQUEST TYPE: GET
@@ -135,7 +129,7 @@ REQUEST TYPE: DELETE
 ```
 
 ## Exercise Related Functionality
-***Looking for a GET method to see your exercises? Go [here](#Get-Workout-By-Id)***
+Looking for a GET method to see your exercises? Go [here](#Get-Workout-By-Id)
 ### 1. Create an Exercise
 ***Create an exercise within an existing workout.***
 
