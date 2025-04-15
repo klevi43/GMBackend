@@ -108,7 +108,7 @@ REQUEST TYPE: GET
 URL: http://localhost:8080/workouts/history
 REQUEST TYPE: GET
 ```
-
+<a name="Get-Workout-By-Id"></a>
 ### 7. Get a Single Workout 
 ***Shows a single workout. You can see all your created exercises and sets here as well.***
 ```
@@ -135,6 +135,7 @@ REQUEST TYPE: DELETE
 ```
 
 ## Exercise Related Functionality
+***Looking for a GET method to see your exercises? Go [here](#Get-Workout-Id)***
 ### 1. Create an Exercise
 ***Create an exercise within an existing workout.***
 
@@ -165,6 +166,7 @@ REQUEST TYPE: DELETE
 ```
 
 ## Set Related Functionality
+***Looking for a GET method to see your sets? Go [here](#Get-Workout-Id)***
 ### 1. Create a Set
 ***Create a set for an existing exercise within an existing workout.***
 ```
