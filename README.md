@@ -84,7 +84,7 @@ Enter "Authorization" for the key and then enter "Bearer [your_jwt_token]"
 
 ## Workout Related Functionality
 ### 4. Create a Workout
-*** NOTE: You must do this first before adding an exercise or a set. Exercises and sets cannot exist without a workout. ***
+***NOTE: You must do this first before adding an exercise or a set. Exercises and sets cannot exist without a workout.***
 ```
 URL: http://localhost:8080/workouts/create
 REQUEST TYPE: POST
@@ -96,28 +96,28 @@ FIELDS:
 ```
 
 ### 5. Get All Your Most Recent Workouts
-*** Shows all the most recently created workouts for a given name. ***
+***Shows all the most recently logged workouts only.***
 ```
 URL: http://localhost:8080/workouts
 REQUEST TYPE: GET
 ```
 
 ### 6. Get Your Workout History
-*** Shows all the workouts you've logged ***
+***Shows all the workouts you've logged.***
 ```
 URL: http://localhost:8080/workouts/history
 REQUEST TYPE: GET
 ```
 
 ### 7. Get a Single Workout 
-*** Shows a single workout. You can see all your created exercises and sets here as well ***
+***Shows a single workout. You can see all your created exercises and sets here as well.***
 ```
 URL: http://localhost:8080/workouts/workout?workoutId=[workout-id]
 REQUEST TYPE: GET
 ```
 
 ### 8. Update a Workout 
-*** The name and date fields are optional ***
+***The name and date fields are optional.***
 ```
 URL: http://localhost:8080/workouts/update
 REQUEST TYPE: PUT
@@ -128,7 +128,7 @@ FIELDS:
 }
 ```
 ### 9. Delete an Existing Workout\
-*** NOTE: THIS DELETES ALL ASSOCIATED EXERCISES AND THEIR SETS AS WELL. ***
+***NOTE: THIS DELETES ALL ASSOCIATED EXERCISES AND THEIR SETS AS WELL.***
 ```
 URL: http://localhost:8080/workouts/delete
 REQUEST TYPE: DELETE
@@ -136,7 +136,7 @@ REQUEST TYPE: DELETE
 
 ## Exercise Related Functionality
 ### 1. Create an Exercise
-*** Create an exercise within an existing workout. ***
+***Create an exercise within an existing workout.***
 
 ```
 URL: http://localhost:8080/workouts/exercises/create?workoutId=[workout-id]
@@ -147,7 +147,7 @@ FIELDS:
 }
 ```
 ### 2. Update an Exercise
-*** Update an exercise within an existing workout. ***
+***Update an exercise within an existing workout.***
 ```
 URL: http://localhost:8080/workouts/exercises/update?workoutId=[workout-id]&exerciseId=[exercise-id]
 REQUEST TYPE: PUT
@@ -158,7 +158,7 @@ FIELDS:
 ```
 
 ### 3. Delete an Exercise
-*** Delete an existing exercise from an existing workout. NOTE: THIS DELETES ALL SETS ASSOCIATED WITH THIS EXERCISE AS WELL. ***
+***Delete an existing exercise from an existing workout. NOTE: THIS DELETES ALL SETS ASSOCIATED WITH THIS EXERCISE AS WELL.***
 ```
 URL: http://localhost:8080/workouts/exercises/update?workoutId=[workout-id]&exerciseId=[exercise-id]
 REQUEST TYPE: DELETE
@@ -166,7 +166,7 @@ REQUEST TYPE: DELETE
 
 ## Set Related Functionality
 ### 1. Create a Set
-*** Create a set for an existing exercise within an existing workout. ***
+***Create a set for an existing exercise within an existing workout.***
 ```
 URL: http://localhost:8080/workouts/exercises/sets/create?workoutId=[workout-id]&exerciseId=[exercise-id]
 REQUEST TYPE: POST
@@ -178,7 +178,7 @@ FIELDS:
 ```
 
 ### 2. Update a Set
-*** Update an existing set for an existing exercise with an existing workout. NOTE: Fields are optional. ***
+***Update an existing set for an existing exercise with an existing workout. NOTE: Fields are optional.***
 ```
 URL: http://localhost:8080/workouts/exercises/sets/update?workoutId=[workout-id]&exerciseId=[exercise-id]*setId=[set-id]
 REQUEST TYPE: PUT
@@ -190,7 +190,7 @@ FIELDS:
 ```
 
 ### 2. Delete a Set
-*** Delete an existing set for an existing exercise with an existing workout.***
+***Delete an existing set for an existing exercise with an existing workout.***
 ```
 URL: http://localhost:8080/workouts/exercises/sets/delete?workoutId=[workout-id]&exerciseId=[exercise-id]*setId=[set-id]
 REQUEST TYPE: DELETE
