@@ -15,7 +15,6 @@ import org.kylecodes.gm.utils.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,30 +27,7 @@ public class ExerciseServiceImpl implements ExerciseService{
 
 
     EntityToDtoMapper<Exercise, ExerciseDto> exerciseMapper = new ExerciseToExerciseDtoMapper();
-
-
-
-    @Override
-    public List<ExerciseDto> getAllExercisesInWorkout(Long workoutId) {
-        User user = SecurityUtil.getPrincipalFromSecurityContext();
-
-        if (!workoutRepository.existsByIdAndUserId(workoutId, user.getId())) {
-            throw new WorkoutNotFoundException(RequestFailure.GET_REQUEST_FAILURE);
-        }
-
-        List<Exercise> exercisesInWorkout = exerciseRepository.findAllByWorkoutId(workoutId);
-        return exercisesInWorkout.stream().map((exercise) -> exerciseMapper.mapToDto(exercise)).toList();
-    }
-
-    @Override
-    public ExerciseDto getExerciseInWorkoutById(Long exerciseId, Long workoutId) {
-        User user = SecurityUtil.getPrincipalFromSecurityContext();
-        if (!workoutRepository.existsByIdAndUserId(workoutId, user.getId())) {
-            throw new WorkoutNotFoundException(RequestFailure.GET_REQUEST_FAILURE);
-        }
-        Exercise exercise = exerciseRepository.findByIdAndWorkoutId(exerciseId, workoutId).orElseThrow(() -> new ExerciseNotFoundException(RequestFailure.GET_REQUEST_FAILURE));
-        return exerciseMapper.mapToDto(exercise);
-    }
+    
 
     @Override
     public ExerciseDto createExerciseInWorkout(ExerciseDto exerciseDto, Long workoutId) {

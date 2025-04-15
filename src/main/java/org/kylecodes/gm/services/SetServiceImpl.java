@@ -17,7 +17,6 @@ import org.kylecodes.gm.utils.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,35 +32,7 @@ public class SetServiceImpl implements SetService {
     EntityToDtoMapper<Set, SetDto> setMapper = new SetToSetDtoMapper();
 
 
-    @Override
-    public List<SetDto> getAllSetsForExerciseInWorkout(Long exerciseId, Long workoutId) {
-        User user = SecurityUtil.getPrincipalFromSecurityContext();
-        if (!workoutRepository.existsByIdAndUserId(workoutId, user.getId())) {
-            throw new WorkoutNotFoundException(RequestFailure.GET_REQUEST_FAILURE);
-        }
 
-        if (!exerciseRepository.existsByIdAndWorkoutId(exerciseId, workoutId)) {
-            throw new ExerciseNotFoundException(RequestFailure.GET_REQUEST_FAILURE);
-        }
-
-        List<Set> sets = setRepository.findAllByExerciseId(exerciseId);
-        return sets.stream().map((set) -> setMapper.mapToDto(set)).toList();
-    }
-
-    @Override
-    public SetDto getSetForExerciseInWorkout(Long setId, Long exerciseId, Long workoutId) {
-        User user = SecurityUtil.getPrincipalFromSecurityContext();
-        if (!workoutRepository.existsByIdAndUserId(workoutId, user.getId())) {
-            throw new WorkoutNotFoundException(RequestFailure.GET_REQUEST_FAILURE);
-        }
-
-        if (!exerciseRepository.existsByIdAndWorkoutId(exerciseId, workoutId)) {
-            throw new ExerciseNotFoundException(RequestFailure.GET_REQUEST_FAILURE);
-        }
-        Optional<Set> set = Optional.of(setRepository.findByIdAndExerciseId(setId, exerciseId)
-                .orElseThrow(() -> new SetNotFoundException(RequestFailure.GET_REQUEST_FAILURE)));
-        return setMapper.mapToDto(set.get());
-    }
 
     @Override
     public SetDto createSetForExerciseInWorkout(SetDto setDto, Long exerciseId, Long workoutId) {

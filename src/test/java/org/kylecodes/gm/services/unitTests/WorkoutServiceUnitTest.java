@@ -4,7 +4,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.kylecodes.gm.contexts.SecurityContextForTests;
+import org.kylecodes.gm.dtos.FullWorkoutDto;
 import org.kylecodes.gm.dtos.WorkoutDto;
+import org.kylecodes.gm.dtos.WorkoutPageDto;
 import org.kylecodes.gm.entities.User;
 import org.kylecodes.gm.entities.Workout;
 import org.kylecodes.gm.entityViews.ExerciseView;
@@ -18,6 +20,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -52,6 +55,12 @@ public class WorkoutServiceUnitTest {
     private final String VALID_WORKOUT_NAME = "Test Workout";
     private final LocalDate VALID_WORKOUT_DATE = LocalDate.of(2025, 02, 18);
     private final LocalDate INVALID_WORKOUT_DATE = LocalDate.of(2026, 02, 18);
+    private final Integer FIRST_PAGE = 1;
+    private final Integer TOTAL_PAGES = 1;
+    private final Integer PAGE_SIZE = 10;
+    private final Long TOTAL_ELEMENTS = 1L;
+    private final Boolean IS_LAST = true;
+
 
     @Mock
     private WorkoutRepository workoutRepository;
@@ -128,21 +137,7 @@ public class WorkoutServiceUnitTest {
 
     }
 
-    @Test
-    public void WorkoutService_GetAllWorkouts_ReturnWorkoutList() {
-        // Arrange
-        List<Workout> workoutList = Arrays.asList(workout, workout2);
-        when(workoutRepository.findAllByUserId(user.getId())).thenReturn(workoutList);
 
-        //Act
-        List<WorkoutDto> saveWorkoutDtoList = workoutService.getAllWorkouts();
-        List<WorkoutDto> convertedList = workoutList.stream().map(this::mapToDt0).toList();
-
-        // Assert
-        assertThat(saveWorkoutDtoList).isNotNull();
-        assertThat(saveWorkoutDtoList.size()).isEqualTo(convertedList.size());
-
-    }
 
 
     @Test
@@ -160,24 +155,24 @@ public class WorkoutServiceUnitTest {
         assertThat(saveWorkoutDtoList.size()).isEqualTo(convertedList.size());
 
     }
-//    @Test
-//    public void WorkoutService_GetAllWorkouts_ReturnResponseDto() {
-//        Page workouts = Mockito.mock(Page.class);
-//
-//        when(workoutRepository.findAll(Mockito.any(Pageable.class))).thenReturn(workouts);
-//
-//        WorkoutResponse saveWorkout = workoutServiceImpl.getAllWorkouts(1, 10);
-//
-//        assertThat(saveWorkout).isNotNull();
-//
-//    }
+    @Test
+    public void WorkoutService_GetAllWorkouts_ReturnResponseDto() {
+        Page workouts = Mockito.mock(Page.class);
+
+        when(workoutRepository.findAllByUserId(Mockito.anyLong(), Mockito.any())).thenReturn(workouts);
+
+        WorkoutPageDto foundWorkout = workoutService.getAllWorkouts(1, 10);
+
+        assertThat(foundWorkout).isNotNull();
+
+    }
     @Test
     public void WorkoutService_GetWorkoutById_ReturnWorkoutDto() {
 
 
         when(workoutRepository.findByIdAndUserIdBlaze(ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong())).thenReturn(Optional.of(workoutView));
 
-        WorkoutDto foundWorkout = workoutService.getWorkoutById(VALID_WORKOUT_ID);
+        FullWorkoutDto foundWorkout = workoutService.getWorkoutById(VALID_WORKOUT_ID);
 
 
         assertThat(foundWorkout).isNotNull();

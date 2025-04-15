@@ -2,19 +2,22 @@ package org.kylecodes.gm.services;
 
 import jakarta.transaction.Transactional;
 import org.kylecodes.gm.constants.RequestFailure;
+import org.kylecodes.gm.dtos.FullWorkoutDto;
 import org.kylecodes.gm.dtos.WorkoutDto;
+import org.kylecodes.gm.dtos.WorkoutPageDto;
 import org.kylecodes.gm.entities.User;
 import org.kylecodes.gm.entities.Workout;
 import org.kylecodes.gm.entityViews.WorkoutView;
 import org.kylecodes.gm.exceptions.WorkoutNotFoundException;
-
 import org.kylecodes.gm.mappers.EntityToDtoMapper;
 import org.kylecodes.gm.mappers.WorkoutToWorkoutDtoMapper;
-import org.kylecodes.gm.mappers.WorkoutViewToWorkoutDtoMapper;
+import org.kylecodes.gm.mappers.WorkoutViewToFullWorkoutDtoMapper;
 import org.kylecodes.gm.repositories.ExerciseRepository;
 import org.kylecodes.gm.repositories.WorkoutRepository;
 import org.kylecodes.gm.utils.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -29,7 +32,7 @@ public class WorkoutServiceImpl implements WorkoutService {
 
 
     EntityToDtoMapper<Workout, WorkoutDto> workoutMapper = new WorkoutToWorkoutDtoMapper();
-    EntityToDtoMapper<WorkoutView, WorkoutDto> workoutViewMapper = new WorkoutViewToWorkoutDtoMapper();
+    EntityToDtoMapper<WorkoutView, FullWorkoutDto> workoutViewMapper = new WorkoutViewToFullWorkoutDtoMapper();
     @Autowired
     private ExerciseRepository exerciseRepository;
 
@@ -49,30 +52,35 @@ public class WorkoutServiceImpl implements WorkoutService {
     }
 
     @Override
-    public List<WorkoutDto> getAllWorkouts() {
+    public WorkoutPageDto getAllWorkouts(Integer pageNo, Integer pageSize) {
         User user = SecurityUtil.getPrincipalFromSecurityContext();
-        List<Workout> workoutList = workoutRepository.findAllByUserId(user.getId());
-        if (workoutList.isEmpty()) {
-            return new ArrayList<>();
-        }
+        Page<Workout> workouts = workoutRepository.findAllByUserId(user.getId(), PageRequest.of(pageNo, pageSize));
+        List<Workout> workoutList = workouts.getContent();
+
         List<WorkoutDto> workoutDtoList = new ArrayList<>();
-        for (Workout workout : workoutList) {
+        if (!workoutList.isEmpty()) {
+            for (Workout workout : workoutList) {
                 WorkoutDto workoutDto = workoutMapper.mapToDto(workout);
                 workoutDtoList.add(workoutDto);
+            }
         }
-        return workoutDtoList;
+        WorkoutPageDto workoutPageDto = new WorkoutPageDto();
+        workoutPageDto.setContent(workoutDtoList);
+        workoutPageDto.setPageNo(workouts.getNumber());
+        workoutPageDto.setPageSize(workouts.getSize());
+        workoutPageDto.setTotalPages(workouts.getTotalPages());
+        workoutPageDto.setTotalElements(workouts.getTotalElements());
+        workoutPageDto.setLastPage(workouts.isLast());
+        return workoutPageDto;
     }
 
     @Override
     @Transactional
-    public WorkoutDto getWorkoutById(Long id) {
+    public FullWorkoutDto getWorkoutById(Long id) {
         User user = SecurityUtil.getPrincipalFromSecurityContext();
-//
 
         Optional<WorkoutView> workout = Optional.of(workoutRepository.findByIdAndUserIdBlaze(id, user.getId())
                 .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.GET_REQUEST_FAILURE)));
-
-
 
       return workoutViewMapper.mapToDto(workout.get());
 
@@ -92,6 +100,7 @@ public class WorkoutServiceImpl implements WorkoutService {
             updateWorkout.setDate(workoutDto.getDate());
         }
         Workout savedWorkout = workoutRepository.save(updateWorkout);
+
         return workoutMapper.mapToDto(savedWorkout);
     }
 

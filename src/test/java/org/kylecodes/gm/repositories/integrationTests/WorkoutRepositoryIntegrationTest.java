@@ -15,7 +15,6 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -75,22 +74,6 @@ public class WorkoutRepositoryIntegrationTest {
 
     }
 
-    @Test
-    public void WorkoutRepository_FindAll_ReturnMoreThanOneWorkout() {
-
-        // Arrange
-        final int EXPECTED_SIZE = 2;
-
-        workoutRepository.save(workout1);
-        workoutRepository.save(workout2);
-
-        // Act
-        List<Workout> workoutList = workoutRepository.findAll();
-
-        // Assert
-        assertThat(workoutList).isNotNull();
-        assertThat(workoutList.size()).isEqualTo(EXPECTED_SIZE);
-    }
 
 
 
@@ -101,7 +84,7 @@ public class WorkoutRepositoryIntegrationTest {
         Workout savedWorkout = workoutRepository.save(workout1);
 
         // Act
-        Workout foundWorkout = workoutRepository.findById(VALID_WORKOUT_ID_1).get();
+        Workout foundWorkout = workoutRepository.findByIdAndUserId(VALID_WORKOUT_ID_1, VALID_USER_ID).get();
 
         // Assert
         assertThat(foundWorkout).isNotNull();

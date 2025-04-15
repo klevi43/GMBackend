@@ -1,6 +1,5 @@
 package org.kylecodes.gm.dtos;
 
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
@@ -11,9 +10,7 @@ import org.kylecodes.gm.constants.NotNullMsg;
 import java.time.LocalDate;
 import java.util.List;
 
-
-public class WorkoutDto {
-
+public class FullWorkoutDto {
     private Long id;
 
     @NotNull(message = NotNullMsg.EMPTY_NAME)
@@ -27,7 +24,7 @@ public class WorkoutDto {
 
     private List<ExerciseDto> exerciseDtos;
 
-    public WorkoutDto(Long id, String name, LocalDate date, List<ExerciseDto> exerciseDtos) {
+    public FullWorkoutDto(Long id, String name, LocalDate date, List<ExerciseDto> exerciseDtos) {
         this.id = id;
         this.name = name;
         this.date = date;
@@ -35,7 +32,7 @@ public class WorkoutDto {
         this.exerciseDtos = exerciseDtos;
     }
 
-    public WorkoutDto() {
+    public FullWorkoutDto() {
     }
 
     public Long getId() {

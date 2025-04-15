@@ -5,9 +5,6 @@ import org.kylecodes.gm.dtos.SetDto;
 import java.util.List;
 
 public interface SetService {
-    List<SetDto> getAllSetsForExerciseInWorkout( Long exerciseId, Long workoutId);
-
-    SetDto getSetForExerciseInWorkout(Long setId,  Long exerciseId, Long workoutId);
 
     SetDto createSetForExerciseInWorkout(SetDto setDto, Long exerciseId, Long workoutId);
 

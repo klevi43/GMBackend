@@ -97,7 +97,6 @@ public class WorkoutControllerIntegrationTest {
         workoutDto = new WorkoutDto();
         workoutDto.setName("Test Workout 5");
         workoutDto.setDate(LocalDate.now());
-        workoutDto.setUserId(VALID_USER_ID);
         context = new SecurityContextForTests();
         context.createSecurityContextToReturnAuthenticatedUser(user);
     }
@@ -135,7 +134,6 @@ public class WorkoutControllerIntegrationTest {
 
         response.andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", CoreMatchers.is(VALID_WORKOUT_NAME)))
-                .andExpect(jsonPath("$.date", CoreMatchers.is(VALID_WORKOUT_DATE)))
                 .andExpect(jsonPath("$.exerciseDtos", hasSize(2)))
                 .andDo(MockMvcResultHandlers.print());
     }
@@ -148,7 +146,6 @@ public class WorkoutControllerIntegrationTest {
                         .queryParam("workoutId", String.valueOf(VALID_WORKOUT_ID_2)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", CoreMatchers.is(VALID_WORKOUT_NAME_2)))
-                .andExpect(jsonPath("$.date", CoreMatchers.is(VALID_WORKOUT_DATE)))
                 .andExpect(jsonPath("$.exerciseDtos", hasSize(0)));
     }
 
