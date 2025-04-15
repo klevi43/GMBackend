@@ -2,20 +2,30 @@
 This is the backend for Growth Mindset, a REST API that allows a user to log and track their workouts.
 
 ## Table of Contents
-### [1. Quick Start](#Quick-Start)
-### [2. Install Guide](#Install-Guide)
-### [3. How to Use Guide](#How-to-Use-Guide)
+  1. [Quick Start](#Quick-Start) </br>
+  2. [Install Guide](#Install-Guide) </br>
+  3. [How to Use Guide](#How-to-Use-Guide) </br>
 
 ***Assuming you have Java 17, MySQL, an IDE, and an api tester installed, you can clone the repository and skip the Install Guide Section.***
 
 ### <a name="Quick-Start">1. Quick Start<a>
+  1. Clone this repository
 
-Command to clone this repository:
-
-``` 
-git clone https://github.com/klevi43/GMBackend
-```
-
+    ``` 
+      git clone https://github.com/klevi43/GMBackend
+    ```
+  2. Set up a database connection. Tutorial [here](https://www.youtube.com/watch?v=ImqxBiv5yIY)
+  3. Add the following properties application.properties file. Be sure to add your database connection url, database username, and database password.
+     ```
+       spring.application.name=GM
+       spring.jpa.hibernate.ddl-auto=update
+       spring.datasource.url=${DB_URL}
+       spring.datasource.username=${USERNAME}
+       spring.datasource.password=${PASSWORD}
+       spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+       spring.jpa.show-sql=true
+     ```
+  4. You're all set!
 
 ### <a name="Install-Guide">2. Install Guide<a>
 
