@@ -25,6 +25,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional
 @Sql(scripts = {"classpath:/insertWorkouts.sql", "classpath:/insertExercises.sql", "classpath:/insertSets.sql"})//  this removes the need for setup and teardown
 public class WorkoutRepositoryIntegrationTest {
+    /*
+   NOTE: This file was used to learn how to write basic tests and does not affect the code coverage.
+    */
     @Autowired
     private WorkoutRepository workoutRepository;
     private User user;
@@ -78,7 +81,7 @@ public class WorkoutRepositoryIntegrationTest {
 
 
     @Test
-    public void WorkoutRepository_FindById_ReturnWorkout() {
+    public void WorkoutRepository_FindByIdAndUserId_ReturnWorkout() {
         // Arrange
 
         Workout savedWorkout = workoutRepository.save(workout1);
@@ -93,12 +96,12 @@ public class WorkoutRepositoryIntegrationTest {
     }
 
     @Test
-    public void WorkoutRepository_UpdateWorkoutName_ReturnUpdatedWorkout() {
+    public void WorkoutRepository_UpdateWorkoutNameByIdAndUserId_ReturnUpdatedWorkout() {
         // Arrange
 
 
 
-        Workout workoutSave = workoutRepository.findById(VALID_WORKOUT_ID_1).get();
+        Workout workoutSave = workoutRepository.findByIdAndUserId(VALID_WORKOUT_ID_1, VALID_USER_ID).get();
         workoutSave.setName("Shoulder Day");
 
         // Act
@@ -115,12 +118,12 @@ public class WorkoutRepositoryIntegrationTest {
 
 
     @Test
-    public void WorkoutRepository_DeleteWorkout_ReturnWorkoutIsEmpty() {
+    public void WorkoutRepository_DeleteWorkoutByIdAndUserId_ReturnWorkoutIsEmpty() {
         // Arrange
 
 
         // Act
-        workoutRepository.deleteById(VALID_WORKOUT_ID_1);
+        workoutRepository.deleteByIdAndUserId(VALID_WORKOUT_ID_1, VALID_USER_ID);
         Optional<Workout> workoutReturn = workoutRepository.findById(VALID_WORKOUT_ID_1);
 
         // Assert

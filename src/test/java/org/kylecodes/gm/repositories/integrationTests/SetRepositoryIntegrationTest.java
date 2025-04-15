@@ -29,7 +29,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional
 @Sql(scripts = {"classpath:/insertWorkouts.sql", "classpath:/insertExercises.sql", "classpath:/insertSets.sql"})//  this removes the need for setup and teardown
 public class SetRepositoryIntegrationTest {
-
+    /*
+   NOTE: This file was used to learn how to write basic tests and does not affect the code coverage.
+    */
     @Autowired
     private WorkoutRepository workoutRepository;
 
