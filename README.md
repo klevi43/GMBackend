@@ -4,11 +4,12 @@ This is the backend for Growth Mindset, a REST API that allows a user to log and
 ## Table of Contents
    1. [Quick Start](#Quick-Start) </br>
    2. [Install Guide](#Install-Guide) </br>
-   3, [How to Use Guide](#How-to-Use-Guide) </br> 
+   3. [How to Use Guide](#How-to-Use-Guide) </br> 
 
 ***Assuming you have Java 17, MySQL, an IDE, and an api tester installed, you can clone the repository and skip the Install Guide Section.***
 
-### 1. <a name="#Quick-Start">Quick Start<a>
+<a name="Quick-Start"><a>
+### 1. Quick Start
   1. Clone this repository </br>
     ``` 
       git clone https://github.com/klevi43/GMBackend
@@ -30,12 +31,9 @@ This is the backend for Growth Mindset, a REST API that allows a user to log and
 
 ### Install Java 17 
 
-Install the Java Development Kit (JDK) and Java 17 by clicking [here](https://www.oracle.com/java/technologies/javase/jdk17-0-13-later-archive-downloads.html). The Java Runtime Environment (JRE) is included in Java 17, so there is no need to download and install that separately. 
-
-
-WINDOWS JAVA 17 [INSTALL VIDEO](https://www.youtube.com/watch?v=cL4GcZ6GJV8)
-MAC JAVA 17 [INSTALL VIDEO](https://www.youtube.com/watch?v=SdKIBGnkhDY)
-UBUNTU JAVA 17 [INSTALL VIDEO](https://www.youtube.com/watch?v=vVrIDJ--GOA)
+   1. Install the Java Development Kit (JDK) and Java 17 by clicking [here](https://www.oracle.com/java/technologies/javase/jdk17-0-13-later-archive-downloads.html). The Java Runtime Environment (JRE) is included in Java 17, so there is no need to download and install that separately. 
+   - WINDOWS JAVA 17 [INSTALL VIDEO](https://www.youtube.com/watch?v=cL4GcZ6GJV8)
+   - MAC JAVA 17 [INSTALL VIDEO](https://www.youtube.com/watch?v=SdKIBGnkhDY)
 You can confirm that Java is correctly installed on your system by typing the command below on the command line.
 ```
 java --version
