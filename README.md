@@ -104,7 +104,7 @@ REQUEST TYPE: GET
 ```
 <a name="Get-Workout-By-Id"></a>
 ### 7. Get a Single Workout 
-Shows a single workout. You can see all your created exercises and sets here as well.
+   - Shows a single workout. You can see all your created exercises and sets here as well.
 ```
 URL: http://localhost:8080/workouts/workout?workoutId=[workout-id]
 REQUEST TYPE: GET
