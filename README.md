@@ -2,13 +2,13 @@
 This is the backend for Growth Mindset, a REST API that allows a user to log and track their workouts.
 
 ## Table of Contents
-   [1. Quick Start](#Quick-Start) </br>
-   [2. Install Guide](#Install-Guide) </br>
-   [3. How to Use Guide](#How-to-Use-Guide) </br> 
+   1. [Quick Start](#Quick-Start) </br>
+   2. [Install Guide](#Install-Guide) </br>
+   3. [How to Use Guide](#How-to-Use-Guide) </br> 
 
 ***Assuming you have Java 17, MySQL, an IDE, and an api tester installed, you can clone the repository and skip the Install Guide Section.***
 
-### <a name="Quick-Start">1. Quick Start<a>
+### <a name="Quick-Start">Quick Start<a>
   1. Clone this repository </br>
     ``` 
       git clone https://github.com/klevi43/GMBackend
