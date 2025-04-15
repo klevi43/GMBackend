@@ -49,7 +49,7 @@ Now let's install MySQL. You can find the latest version [here](https://dev.mysq
 
 In order to make requests to the api
 
-
+<a name="How-to-Use-Guide"></a>
 ## How to use
 
 ### 1. Create a New Account
@@ -166,7 +166,7 @@ REQUEST TYPE: DELETE
 ```
 
 ## Set Related Functionality
-***Looking for a GET method to see your sets? Go [here](#Get-Workout-Id)***
+***Looking for a GET method to see your sets? Go [here](#Get-Workout-By-Id)***
 ### 1. Create a Set
 ***Create a set for an existing exercise within an existing workout.***
 ```
