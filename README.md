@@ -9,12 +9,11 @@ This is the backend for Growth Mindset, a REST API that allows a user to log and
 ***Assuming you have Java 17, MySQL, an IDE, and an api tester installed, you can clone the repository and skip the Install Guide Section.***
 
 ### <a name="Quick-Start">1. Quick Start<a>
-  1. Clone this repository
-
+  1. Clone this repository </br>
     ``` 
       git clone https://github.com/klevi43/GMBackend
     ```
-  2. Set up a database connection. Tutorial [here](https://www.youtube.com/watch?v=ImqxBiv5yIY)
+  2. Set up a database connection. (Tutorial [here](https://www.youtube.com/watch?v=ImqxBiv5yIY))
   3. Add the following properties application.properties file. Be sure to add your database connection url, database username, and database password.
      ```
        spring.application.name=GM
