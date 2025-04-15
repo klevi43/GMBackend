@@ -8,7 +8,7 @@ This is the backend for Growth Mindset, a REST API that allows a user to log and
 
 ***Assuming you have Java 17, MySQL, an IDE, and an api tester installed, you can clone the repository and skip the Install Guide Section.***
 
-### 1. <a name="Quick-Start">Quick Start<a>
+### 1. [Quick Start](#Quick-Start)
   1. Clone this repository </br>
     ``` 
       git clone https://github.com/klevi43/GMBackend
