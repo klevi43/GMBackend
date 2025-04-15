@@ -135,7 +135,7 @@ REQUEST TYPE: DELETE
 ```
 
 ## Exercise Related Functionality
-***Looking for a GET method to see your exercises? Go [here](#Get-Workout-Id)***
+***Looking for a GET method to see your exercises? Go [here](#Get-Workout-By-Id)***
 ### 1. Create an Exercise
 ***Create an exercise within an existing workout.***
 
