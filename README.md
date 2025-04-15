@@ -2,13 +2,13 @@
 This is the backend for Growth Mindset, a REST API that allows a user to log and track their workouts.
 
 ## Table of Contents
-   - [Quick Start](#Quick-Start) </br>
-   - [Install Guide](#Install-Guide) </br>
-   - [How to Use Guide](#How-to-Use-Guide) </br> 
+   1. [Quick Start](#Quick-Start) </br>
+   2. [Install Guide](#Install-Guide) </br>
+   3, [How to Use Guide](#How-to-Use-Guide) </br> 
 
 ***Assuming you have Java 17, MySQL, an IDE, and an api tester installed, you can clone the repository and skip the Install Guide Section.***
 
-### 1. [Quick Start](#Quick-Start)
+### 1. <a name="#Quick-Start">Quick Start<a>
   1. Clone this repository </br>
     ``` 
       git clone https://github.com/klevi43/GMBackend
@@ -36,14 +36,13 @@ Install the Java Development Kit (JDK) and Java 17 by clicking [here](https://ww
 WINDOWS JAVA 17 [INSTALL VIDEO](https://www.youtube.com/watch?v=cL4GcZ6GJV8)
 MAC JAVA 17 [INSTALL VIDEO](https://www.youtube.com/watch?v=SdKIBGnkhDY)
 UBUNTU JAVA 17 [INSTALL VIDEO](https://www.youtube.com/watch?v=vVrIDJ--GOA)
-
 You can confirm that Java is correctly installed on your system by typing the command below on the command line.
-
+```
 java --version
-
+```
 ### Install MySQL
 
-WINDOWS USERS First install the latest Microsoft Visual C++ Redistributable Version found [here](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170#latest-microsoft-visual-c-redistributable-version). MySQL can't be installed without it.
+***WINDOWS USERS First install the latest Microsoft Visual C++ Redistributable Version found [here](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170#latest-microsoft-visual-c-redistributable-version). MySQL can't be installed without it.***
 
 
 
