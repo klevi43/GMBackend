@@ -6,6 +6,7 @@ import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kylecodes.gm.constants.EmailAlreadyExists;
+import org.kylecodes.gm.constants.PasswordAndConfirmPasswordNotEqual;
 import org.kylecodes.gm.constants.Roles;
 import org.kylecodes.gm.contexts.SecurityContextForTests;
 import org.kylecodes.gm.dtos.AuthUserDto;
@@ -31,6 +32,8 @@ public class UserControllerIntegrationTest {
 
     private final String EMAIL = "user@email.com";
     private final String PASSWORD = "password123";
+    private final String DIFFERENT_PASSWORD = "DifferentPassword";
+    private final String CONFIRM_PASSWORD = PASSWORD;
     private final String UPDATE_EMAIL = "updated@email.com";
     private final String UPDATE_PASSWORD = "updatePassword";
     private final String ALREADY_EXISTENT_EMAIL = EMAIL;
@@ -53,6 +56,7 @@ public class UserControllerIntegrationTest {
         registerDto = new RegisterDto();
         registerDto.setEmail(NEW_USER_EMAIL);
         registerDto.setPassword(PASSWORD);
+        registerDto.setConfirmPassword(CONFIRM_PASSWORD);
         validUser = new AuthUserDto();
         validUser.setId(1L);
         validUser.setEmail(EMAIL);
@@ -82,6 +86,7 @@ public class UserControllerIntegrationTest {
 
     @Test
     public void UserController_Register_ReturnNewRegisteredUserDto() throws Exception {
+        registerDto.setConfirmPassword(CONFIRM_PASSWORD);
         ResultActions resultActions = mockMvc.perform(post("/register")
                 .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(registerDto)));
 
@@ -99,6 +104,16 @@ public class UserControllerIntegrationTest {
 
         resultActions.andExpect(status().is4xxClientError())
                 .andExpect(jsonPath("$.message", CoreMatchers.is(EmailAlreadyExists.ERROR_MSG)));
+    }
+
+    @Test
+    public void UserController_Register_ThrowPasswordAndConfirmPasswordNotEqualException() throws Exception {
+        registerDto.setConfirmPassword(DIFFERENT_PASSWORD);
+        ResultActions resultActions = mockMvc.perform(post("/register")
+                .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(registerDto)));
+
+        resultActions.andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.message", CoreMatchers.is(PasswordAndConfirmPasswordNotEqual.ERROR_MSG)));
     }
 
     @Test

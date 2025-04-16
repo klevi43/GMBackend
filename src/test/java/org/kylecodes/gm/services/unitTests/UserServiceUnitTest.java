@@ -44,6 +44,7 @@ public class UserServiceUnitTest {
     private final String VALID_USER_EMAIL = "test@test.com";
     private final String VALID_USER_NEW_EMAIL = "newTest@test.com";
     private final String VALID_USER_PASSWORD = "password";
+    private final String VALID_USER_CONFIRM_PASSWORD = VALID_USER_PASSWORD;
     private final String VALID_USER_NEW_PASSWORD = "newPassword";
     private final String VALID_USER_ROLE = "ROLE_USER";
 
@@ -63,6 +64,7 @@ public class UserServiceUnitTest {
 
         registerDto.setEmail(VALID_USER_EMAIL);
         registerDto.setPassword(VALID_USER_PASSWORD);
+        registerDto.setConfirmPassword(VALID_USER_CONFIRM_PASSWORD);
         SecurityContextHolder.setContext(SecurityContextHolder.createEmptyContext());
 
     }

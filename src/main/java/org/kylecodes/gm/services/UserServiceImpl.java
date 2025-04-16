@@ -8,6 +8,7 @@ import org.kylecodes.gm.dtos.UserDto;
 import org.kylecodes.gm.entities.User;
 import org.kylecodes.gm.exceptions.AlreadyLoggedInException;
 import org.kylecodes.gm.exceptions.EmailAlreadyExistsException;
+import org.kylecodes.gm.exceptions.PasswordAndConfirmPasswordNotEqualException;
 import org.kylecodes.gm.mappers.EntityToDtoMapper;
 import org.kylecodes.gm.mappers.UserToUserDtoMapper;
 import org.kylecodes.gm.repositories.UserRepository;
@@ -40,6 +41,9 @@ public class UserServiceImpl implements UserService {
         registerDto.setEmail(registerDto.getEmail().trim());
         if (userRepository.existsByEmail(registerDto.getEmail())) {
             throw new EmailAlreadyExistsException();
+        }
+        if (!registerDto.getPassword().equals(registerDto.getConfirmPassword())) {
+            throw new PasswordAndConfirmPasswordNotEqualException();
         }
         User newUser = new User();
 
