@@ -50,6 +50,7 @@ git clone https://github.com/klevi43/GMBackend
 <a name="How-to-Use-Guide"></a>
 ## 3. How to Use Guide
 To do any of the actions below, please enter the following information into the correct fields in your API tester. </br> 
+## Registration and Login
 ### 1. Create a New Account
 ```
 URL: http://localhost:8080/register
