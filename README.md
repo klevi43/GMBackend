@@ -5,7 +5,7 @@ This is the backend for Growth Mindset, a REST API that allows a user to log and
    1. [Prerequisites](#Install-Guide) </br>
    2. [Getting the Project Up and Running](#Quick-Start) </br>
    3. [How to Use Guide](#How-to-Use-Guide) </br>
-      - [Registration and Login](#Reg-Log)
+      - [Registration and Login](#How-to-Use-Guide)
       - [Workout Related Functionality](#Workout)
       - [Exercise Related Functionality](#Exercise)
       - [Set Related Functionality](#Set)
@@ -49,7 +49,6 @@ If you already have the prerequisites installed, then please move on to next [se
 
 <a name="How-to-Use-Guide"></a>
 ## How to use
-<a name="Reg-Log"></a>
 To do any of the actions below, please enter the following information into the correct fields in your API tester. </br> 
 ### 1. Create a New Account
 ```
