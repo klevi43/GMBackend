@@ -5,6 +5,10 @@ This is the backend for Growth Mindset, a REST API that allows a user to log and
    1. [Prerequisites](#Install-Guide) </br>
    2. [Getting the Project Up and Running](#Quick-Start) </br>
    3. [How to Use Guide](#How-to-Use-Guide) </br>
+      - [Registration and Login](#Reg-Log)
+      - [Workout Related Functionality](#Workout)
+      - [Exercise Related Functionality](#Exercise)
+      - [Set Related Functionality](#Set)
 
 <a name="Install-Guide"><a>
 ## 1. Prerequisites
@@ -23,8 +27,8 @@ If you already have the prerequisites installed, then please move on to next [se
    2. Download the Talend API Tester Chrome extension | [Video tutorial](https://www.youtube.com/watch?v=Sclw3AdvqJs)
 
 <a name="Quick-Start"><a>
-### 2. Getting the Project up and running
-***NOTE: Use this section if you already have Java 17, MySQL, an IDE, and an API tester installed. Otherwise, go to the [Prerequisites](#Install-Guide) section.***
+### 2. Getting the Project Up and Running
+***NOTE: Use this section if you already have Java 17, MySQL, an IDE, and an API tester installed. Otherwise, go back to the [Prerequisites](#Install-Guide) section.***
   1. Clone this repository by entering the following command in the terminal in your IDE. </br>
     ``` 
       git clone https://github.com/klevi43/GMBackend
@@ -45,6 +49,7 @@ If you already have the prerequisites installed, then please move on to next [se
 
 <a name="How-to-Use-Guide"></a>
 ## How to use
+<a name="Reg-Log"></a>
 To do any of the actions below, please enter the following information into the correct fields in your API tester. </br> 
 ### 1. Create a New Account
 ```
@@ -69,10 +74,12 @@ BODY:
 }
 ```
 
-The server will send a 200 status code response with your JWT (valid for 3 hours).
-Add the JWT to the authorization header field in the following format: </br>
+The server will send a 200 status code response with your JSON Web Token (JWT) (valid for 3 hours).</br>
+In Talend, add the JWT by clicking the "Add headers" button in the Headers section and add the following: </br>
 Authorization | Bearer [your-JWT-here]
 
+
+<a name="Workout"></a>
 ## Workout Related Functionality
 ### 1. Create a Workout
 ***NOTE: You must do this first before adding an exercise or a set. Exercises and sets cannot exist without a workout.***
@@ -102,7 +109,7 @@ REQUEST TYPE: GET
 ```
 <a name="Get-Workout-By-Id"></a>
 ### 4. Get a Workout By Id
-Shows a single workout. You can see all your created exercises and sets here as well.
+Retrieves the workout based on the Id provided. You can see all your created exercises and sets here as well.
 ```
 URL: http://localhost:8080/workouts/workout?workoutId=[workout-id]
 REQUEST TYPE: GET
@@ -126,6 +133,7 @@ URL: http://localhost:8080/workouts/delete?workoutId=[workout-id]
 REQUEST TYPE: DELETE
 ```
 
+<a name="Exercise"></a>
 ## Exercise Related Functionality
 Looking for a GET method to see your exercises? Go to the [Get a Workout By Id](#Get-Workout-By-Id) section.
 ### 1. Create an Exercise
@@ -157,6 +165,7 @@ URL: http://localhost:8080/workouts/exercises/update?workoutId=[workout-id]&exer
 REQUEST TYPE: DELETE
 ```
 
+<a name="Set"></a>
 ## Set Related Functionality
 Looking for a GET method to see your sets?  Go to the [Get a Workout By Id](#Get-Workout-By-Id) section.
 ### 1. Create a Set
