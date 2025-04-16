@@ -1,5 +1,5 @@
 # Welcome!
-This is the backend for Growth Mindset, a REST API that allows a user to log workouts. This app is made for anyone who wants to keep a record of their completed workouts so that they can more effectively track their progess in the gym. It was made using Java 17, Spring Boot, Hibernate, JPA, Blaze Persistence, Maven.
+This is the backend for Growth Mindset, a REST API that allows a user to log their workouts. This app is made for anyone who wants to keep a record of their completed workouts so that they can more effectively track their progess in the gym. It was made using Java 17, Spring Boot, Hibernate, JPA, Blaze Persistence, Maven.
 
 ## Table of Contents
    1. [Prerequisites](#Install-Guide) </br>
