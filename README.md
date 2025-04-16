@@ -23,17 +23,17 @@ If you already have the prerequisites installed, then please move on to next [se
 ### 3. Install an IDE
    1. Download and install Eclipse by clicking [here](https://www.eclipse.org/downloads/packages/installer) | [Windows video tutorial](https://www.youtube.com/watch?v=wMTdB7ElrIQ) | [Mac video tutorial](https://www.youtube.com/watch?v=V7ggAMY2ybU) | [Ubuntu 24 video tutorial](https://www.youtube.com/watch?v=GVgwCRnz_EI)
 ### 4. Install an API tester
-   1. Download and install Google Chrome by clicking [here](https://script.google.com/macros/s/AKfycbz2fFu-Yl-4nNYW8GsCcChd9NeZF0M1_Tbibp892wgj9WWm1JN-8r2OFIyHYi2AJhqs/exec?af_r=https://www.google.com/chrome%3Fgad_source%3D1&gclid=Cj0KCQjwh_i_BhCzARIsANimeoHD2FZPWBKYfJawBU1Iy7DYT9XpP0N6sm9Sunp1J81lj4aj1aBQ6FkaAreDEALw_wcB)
+   1. Download and install Google Chrome by clicking [here](https://script.google.com/macros/s/AKfycbz2fFu-Yl-4nNYW8GsCcChd9NeZF0M1_Tbibp892wgj9WWm1JN-8r2OFIyHYi2AJhqs/exec?af_r=https://www.google.com/chrome%3Fgad_source%3D1&gclid=Cj0KCQjwh_i_BhCzARIsANimeoHD2FZPWBKYfJawBU1Iy7DYT9XpP0N6sm9Sunp1J81lj4aj1aBQ6FkaAreDEALw_wcB) | [Windows video tutorial](https://www.youtube.com/watch?v=ThQAkabE0J8) | [Mac video tutorial](https://www.youtube.com/watch?v=WlAeem2BoBw) | [Ubuntu 24 video tutorial](https://www.youtube.com/watch?v=6Rq2IWu2Wng)
    2. Download the Talend API Tester Chrome extension | [Video tutorial](https://www.youtube.com/watch?v=Sclw3AdvqJs)
 
 <a name="Quick-Start"><a>
-### 2. Getting the Project Up and Running
+## 2. Getting the Project Up and Running
 ***NOTE: Use this section if you already have Java 17, MySQL, an IDE, and an API tester installed. Otherwise, go back to the [Prerequisites](#Install-Guide) section.***
   1. Clone this repository by entering the following command in the terminal in your IDE. </br>
     ``` 
       git clone https://github.com/klevi43/GMBackend
     ```
-  2. Set up a database/schema in MySQL Workbench. | [Video tutorial here](https://www.youtube.com/watch?v=ImqxBiv5yIY)
+  2. Set up a database/schema in MySQL Workbench. | [Video tutorial](https://www.youtube.com/watch?v=ImqxBiv5yIY)
   3. Back in your IDE, add the following properties application.properties file. Be sure to add your database connection url, database username, and database password.
      ```
        spring.application.name=GM
