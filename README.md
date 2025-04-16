@@ -30,7 +30,7 @@ This is the backend for Growth Mindset, a REST API that allows a user to log and
 
 <a name="Install-Guide"><a>
 ## 2. Install Guide
-### Install Java 17 
+### 1. Install Java 17 
 
    1. Download and install the Java Development Kit (JDK) and Java 17 by clicking [here](https://www.oracle.com/java/technologies/javase/jdk17-0-13-later-archive-downloads.html). The Java Runtime Environment (JRE) is included in Java 17, so there is no need to download and install that separately. 
       - WINDOWS JAVA 17 [INSTALL VIDEO](https://www.youtube.com/watch?v=cL4GcZ6GJV8)
@@ -39,9 +39,9 @@ You can confirm that Java is correctly installed on your system by typing the co
 ```
 java --version
 ```
-### Install MySQL </br>
-***WINDOWS USERS First install the latest Microsoft Visual C++ Redistributable Version found [here](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170#latest-microsoft-visual-c-redistributable-version). MySQL can't be installed without it.*** </br>
-Now let's install MySQL. You can find the latest version [here](https://dev.mysql.com/downloads/mysql/)
+### 2. Install MySQL </br>
+Download and install MySQL by clicking [here](https://dev.mysql.com/downloads/mysql/)</br>
+***WINDOWS USERS First install the latest Microsoft Visual C++ Redistributable Version found [here](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170#latest-microsoft-visual-c-redistributable-version). MySQL can't be installed without it.*** 
 
 <a name="How-to-Use-Guide"></a>
 ## How to use
