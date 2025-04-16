@@ -45,12 +45,12 @@ Now let's install MySQL. You can find the latest version [here](https://dev.mysq
 
 <a name="How-to-Use-Guide"></a>
 ## How to use
-
+To do any of the actions below, please enter the following information into the correct fields in your API tester. </br> 
 ### 1. Create a New Account
 ```
 URL: http://localhost:8080/register
 REQUEST TYPE: POST
-FIELDS:
+BODY:
 {
   "email": "your-email",
   "password": "your-password"
@@ -62,7 +62,7 @@ FIELDS:
 ```
 URL: http://localhost:8080/login
 REQUEST TYPE: POST
-FIELDS:
+BODY:
 {
   "email": "your-email",
   "password": "your-password"
@@ -70,50 +70,48 @@ FIELDS:
 ```
 
 The server will send a 200 status code response with your JWT (valid for 3 hours).
-***You will need this JWT to do any of the subsequent operations***
-
-### 3. Adding the JWT
-In Talend API Tester, go to the "Headers" section. Click "Add Authorizaion."
-Enter "Authorization" for the key and then enter "Bearer [your_jwt_token]"
+Add the JWT to the authorization header field in the following format: </br>
+Authorization | Bearer [your-JWT-here]
 
 ## Workout Related Functionality
-### 4. Create a Workout
+### 1. Create a Workout
 ***NOTE: You must do this first before adding an exercise or a set. Exercises and sets cannot exist without a workout.***
 ```
 URL: http://localhost:8080/workouts/create
 REQUEST TYPE: POST
-FIELDS:
+BODY:
 {
   "name": "your-workout-name",
   "date": "YYYY-MM-DD"
 }
 ```
 
-### 5. Get All Your Most Recent Workouts
-***Shows all the most recently logged workouts only.***
+### 2. Get All Your Most Recent Workouts
+Shows all the most recently logged version of your workouts.
 ```
 URL: http://localhost:8080/workouts
 REQUEST TYPE: GET
 ```
 
-### 6. Get Your Workout History
-***Shows all the workouts you've logged.***
+### 3. Get Your Workout History
+Shows all the workouts you've logged.
 ```
 URL: http://localhost:8080/workouts/history
+OPTIONAL REQUEST PARAMS: pageNo=[page-no]&pageSize=[page-size]
 REQUEST TYPE: GET
 ```
 <a name="Get-Workout-By-Id"></a>
-### 7. Get a Single Workout 
-   - Shows a single workout. You can see all your created exercises and sets here as well.
+### 4. Get a Single Workout 
+Shows a single workout. You can see all your created exercises and sets here as well.
 ```
 URL: http://localhost:8080/workouts/workout?workoutId=[workout-id]
 REQUEST TYPE: GET
 ```
 
-### 8. Update a Workout 
-***The name and date fields are optional.***
+### 5. Update a Workout 
+The name and date fields are optional.
 ```
-URL: http://localhost:8080/workouts/update
+URL: http://localhost:8080/workouts/update?workoutId=[workout-id]
 REQUEST TYPE: PUT
 FIELDS:
 {
@@ -121,10 +119,10 @@ FIELDS:
   "date": "YYYY-MM-DD"
 }
 ```
-### 9. Delete an Existing Workout\
+### 6. Delete an Existing Workout
 ***NOTE: THIS DELETES ALL ASSOCIATED EXERCISES AND THEIR SETS AS WELL.***
 ```
-URL: http://localhost:8080/workouts/delete
+URL: http://localhost:8080/workouts/delete?workoutId=[workout-id]
 REQUEST TYPE: DELETE
 ```
 
@@ -136,24 +134,24 @@ Looking for a GET method to see your exercises? Go [here](#Get-Workout-By-Id)
 ```
 URL: http://localhost:8080/workouts/exercises/create?workoutId=[workout-id]
 REQUEST TYPE: POST
-FIELDS:
+BODY:
 {
   "name": "your-exercise-name"
 }
 ```
 ### 2. Update an Exercise
-***Update an exercise within an existing workout.***
+Update an exercise within an existing workout.
 ```
 URL: http://localhost:8080/workouts/exercises/update?workoutId=[workout-id]&exerciseId=[exercise-id]
 REQUEST TYPE: PUT
-FIELDS:
+BODY:
 {
   "name": "your-exercise-name"
 }
 ```
 
 ### 3. Delete an Exercise
-***Delete an existing exercise from an existing workout. NOTE: THIS DELETES ALL SETS ASSOCIATED WITH THIS EXERCISE AS WELL.***
+Delete an existing exercise from an existing workout. ***NOTE: THIS DELETES ALL SETS ASSOCIATED WITH THIS EXERCISE AS WELL.***
 ```
 URL: http://localhost:8080/workouts/exercises/update?workoutId=[workout-id]&exerciseId=[exercise-id]
 REQUEST TYPE: DELETE
@@ -162,11 +160,11 @@ REQUEST TYPE: DELETE
 ## Set Related Functionality
 ***Looking for a GET method to see your sets? Go [here](#Get-Workout-By-Id)***
 ### 1. Create a Set
-***Create a set for an existing exercise within an existing workout.***
+Create a set for an existing exercise within an existing workout.
 ```
 URL: http://localhost:8080/workouts/exercises/sets/create?workoutId=[workout-id]&exerciseId=[exercise-id]
 REQUEST TYPE: POST
-FIELDS:
+BODY:
 {
   "weight": [Weight},
   "Reps": [Reps]
@@ -174,7 +172,7 @@ FIELDS:
 ```
 
 ### 2. Update a Set
-***Update an existing set for an existing exercise with an existing workout. NOTE: Fields are optional.***
+Update an existing set for an existing exercise with an existing workout. NOTE: Fields are optional.
 ```
 URL: http://localhost:8080/workouts/exercises/sets/update?workoutId=[workout-id]&exerciseId=[exercise-id]*setId=[set-id]
 REQUEST TYPE: PUT
@@ -186,7 +184,7 @@ FIELDS:
 ```
 
 ### 2. Delete a Set
-***Delete an existing set for an existing exercise with an existing workout.***
+Delete an existing set for an existing exercise with an existing workout.
 ```
 URL: http://localhost:8080/workouts/exercises/sets/delete?workoutId=[workout-id]&exerciseId=[exercise-id]*setId=[set-id]
 REQUEST TYPE: DELETE
