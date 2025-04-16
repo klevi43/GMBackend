@@ -30,11 +30,11 @@ If you already have the prerequisites installed, then please move on to next [se
 ## 2. Getting the Project Up and Running
 ***NOTE: Use this section if you already have Java 17, MySQL, an IDE, and an API tester installed. Otherwise, go back to the [Prerequisites](#Install-Guide) section.***
   1. Clone this repository by entering the following command in the terminal in your IDE. </br>
-    ``` 
-      git clone https://github.com/klevi43/GMBackend
-    ```
-  2. Set up a database/schema in MySQL Workbench. | [Video tutorial](https://www.youtube.com/watch?v=ImqxBiv5yIY)
-  3. Back in your IDE, add the following properties application.properties file. Be sure to add your database connection url, database username, and database password.
+``` 
+git clone https://github.com/klevi43/GMBackend
+```
+  3. Set up a database/schema in MySQL Workbench. | [Video tutorial](https://www.youtube.com/watch?v=ImqxBiv5yIY)
+  4. Back in your IDE, add the following properties application.properties file. Be sure to add your database connection url, database username, and database password.
      ```
        spring.application.name=GM
        spring.jpa.hibernate.ddl-auto=update
@@ -44,7 +44,7 @@ If you already have the prerequisites installed, then please move on to next [se
        spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
        spring.jpa.show-sql=true
      ```
-  4. You're all set! Click the run button in your IDE (the green play button in Eclipse) the application, and let's start logging your workouts!
+  5. You're all set! Click the run button in your IDE (the green play button in Eclipse) the application, and let's start logging your workouts!
 
 
 <a name="How-to-Use-Guide"></a>
