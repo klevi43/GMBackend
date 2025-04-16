@@ -1,35 +1,13 @@
 # Welcome!
-This is the backend for Growth Mindset, a REST API that allows a user to log and track their workouts.
+This is the backend for Growth Mindset, a REST API that allows a user to log and track their workouts. It was made using Java 17, Spring Boot, Hibernate, JPA, Blaze Persistence, Maven.
 
 ## Table of Contents
    1. [Quick Start](#Quick-Start) </br>
    2. [Install Guide](#Install-Guide) </br>
-   3. [How to Use Guide](#How-to-Use-Guide) </br> 
-
-
-
-<a name="Quick-Start"><a>
-### 1. Quick Start
-***NOTE: Use this section if you already have Java 17, MySQL, an API tester, and an IDE installed. Otherwise, go to the [Install Guide](#Install-Guide) section.***
-  1. Clone this repository </br>
-    ``` 
-      git clone https://github.com/klevi43/GMBackend
-    ```
-  2. Set up a database connection. (Tutorial [here](https://www.youtube.com/watch?v=ImqxBiv5yIY))
-  3. Add the following properties application.properties file. Be sure to add your database connection url, database username, and database password.
-     ```
-       spring.application.name=GM
-       spring.jpa.hibernate.ddl-auto=update
-       spring.datasource.url=${DB_URL}
-       spring.datasource.username=${USERNAME}
-       spring.datasource.password=${PASSWORD}
-       spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
-       spring.jpa.show-sql=true
-     ```
-  4. You're all set!
+   3. [How to Use Guide](#How-to-Use-Guide) </br>
 
 <a name="Install-Guide"><a>
-## 2. Install Guide
+## 1. Install Guide
 ### 1. Install Java 17 
 
    1. Download and install the Java Development Kit (JDK) and Java 17 by clicking [here](https://www.oracle.com/java/technologies/javase/jdk17-0-13-later-archive-downloads.html). The Java Runtime Environment (JRE) is included in Java 17, so there is no need to download and install that separately. 
@@ -42,6 +20,29 @@ java --version
 ### 2. Install MySQL </br>
 Download and install MySQL by clicking [here](https://dev.mysql.com/downloads/mysql/)</br>
 ***WINDOWS USERS First install the latest Microsoft Visual C++ Redistributable Version found [here](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170#latest-microsoft-visual-c-redistributable-version). MySQL can't be installed without it.*** 
+
+
+
+<a name="Quick-Start"><a>
+### 2. Quick Start
+***NOTE: Use this section if you already have Java 17, MySQL, an API tester, and an IDE installed. Otherwise, go to the [Install Guide](#Install-Guide) section.***
+  1. Clone this repository </br>
+    ``` 
+      git clone https://github.com/klevi43/GMBackend
+    ```
+  2. Set up a database/schema. (Tutorial [here](https://www.youtube.com/watch?v=ImqxBiv5yIY))
+  3. Add the following properties application.properties file. Be sure to add your database connection url, database username, and database password.
+     ```
+       spring.application.name=GM
+       spring.jpa.hibernate.ddl-auto=update
+       spring.datasource.url=${DB_URL}
+       spring.datasource.username=${USERNAME}
+       spring.datasource.password=${PASSWORD}
+       spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+       spring.jpa.show-sql=true
+     ```
+  4. You're all set!
+
 
 <a name="How-to-Use-Guide"></a>
 ## How to use
