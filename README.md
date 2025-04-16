@@ -94,7 +94,7 @@ BODY:
 ```
 
 ### 2. Get All Your Most Recent Workouts
-Shows all the most recently logged version of your workouts.
+Shows all the most recently logged record of each of your workouts.
 ```
 URL: http://localhost:8080/workouts
 REQUEST TYPE: GET
@@ -109,7 +109,7 @@ REQUEST TYPE: GET
 ```
 <a name="Get-Workout-By-Id"></a>
 ### 4. Get a Workout By Id
-Retrieves the workout based on the Id provided. You can see all your created exercises and sets here as well.
+Shows the workout based on the Id provided. You can see all your created exercises and sets here as well.
 ```
 URL: http://localhost:8080/workouts/workout?workoutId=[workout-id]
 REQUEST TYPE: GET
