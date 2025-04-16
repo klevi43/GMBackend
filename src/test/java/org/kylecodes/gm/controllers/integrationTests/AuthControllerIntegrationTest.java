@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -44,7 +45,8 @@ public class AuthControllerIntegrationTest {
         badPwUser.setPassword("password12");
     }
     @Test
-    public void AuthContoller_Login_ReturnJwtDto() throws Exception {
+    public void AuthController_Login_ReturnJwtDto() throws Exception {
+        SecurityContextHolder.setContext(SecurityContextHolder.createEmptyContext());
         ResultActions result = mockMvc.perform(post("/login")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(validUser)));
@@ -55,7 +57,7 @@ public class AuthControllerIntegrationTest {
     }
 
     @Test
-    public void AuthContoller_LoginWithNonExistentEmail_ThrowBadCredentialsException() throws Exception {
+    public void AuthController_LoginWithNonExistentEmail_ThrowBadCredentialsException() throws Exception {
         ResultActions result = mockMvc.perform(post("/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(nonexistentUser)));

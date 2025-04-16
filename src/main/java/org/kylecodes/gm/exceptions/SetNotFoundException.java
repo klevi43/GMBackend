@@ -8,16 +8,4 @@ public class SetNotFoundException extends RuntimeException {
     public SetNotFoundException(String message) {
         super(message + NotFoundMsg.SET_NOT_FOUND_MSG); // pass string to parent (RuntimeException class)
     }
-
-    public SetNotFoundException(String message, Throwable cause) {
-        super(message + NotFoundMsg.SET_NOT_FOUND_MSG, cause);
-    }
-
-    public SetNotFoundException(Throwable cause) {
-        super(cause);
-    }
-
-    public SetNotFoundException() {
-        super(NotFoundMsg.SET_NOT_FOUND_MSG);
-    }
 }

@@ -2,7 +2,9 @@ package org.kylecodes.gm.controllers;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import org.kylecodes.gm.dtos.FullWorkoutDto;
 import org.kylecodes.gm.dtos.WorkoutDto;
+import org.kylecodes.gm.dtos.WorkoutPageDto;
 import org.kylecodes.gm.services.WorkoutService;
 import org.kylecodes.gm.services.WorkoutServiceImpl;
 import org.springframework.http.ResponseEntity;
@@ -23,15 +25,13 @@ public class WorkoutController {
     }
 
     @GetMapping("/workouts/history")
-    public List<WorkoutDto>getAllWorkouts() {
-        return workoutService.getAllWorkouts();
+    public WorkoutPageDto getAllWorkouts(@RequestParam(defaultValue = "0", required = false) Integer pageNo, @RequestParam(defaultValue = "10", required = false) Integer pageSize) {
+        return workoutService.getAllWorkouts(pageNo, pageSize);
     }
 
     @GetMapping("/workouts/workout")
-    public WorkoutDto getWorkoutById(@RequestParam Long workoutId) {
-        WorkoutDto workoutDto = workoutService.getWorkoutById(workoutId);
-
-        return workoutDto;
+    public FullWorkoutDto getWorkoutById(@RequestParam Long workoutId) {
+        return workoutService.getWorkoutById(workoutId);
     }
 
     @GetMapping("/workouts")

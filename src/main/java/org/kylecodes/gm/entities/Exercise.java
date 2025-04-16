@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.kylecodes.gm.constants.InvalidExerciseData;
 import org.kylecodes.gm.constants.InvalidInputData;
+import org.kylecodes.gm.constants.NotNullMsg;
 
 import java.util.List;
 
@@ -17,13 +18,13 @@ public class Exercise {
     @Min(0)
     private Long id;
 
-    @NotNull(message = InvalidInputData.INVALID_EMPTY_NAME_MSG)
+    @NotNull(message = NotNullMsg.EMPTY_NAME)
     @Size(min = 2, max = 50, message = InvalidExerciseData.INVALID_NAME_MSG)
     private String name;
 
 
     @NotNull(message = InvalidInputData.INVALID_WORKOUT_MSG)
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
     Workout workout;
 
@@ -50,11 +51,11 @@ public class Exercise {
         this.id = id;
     }
 
-    public @NotNull(message = InvalidInputData.INVALID_EMPTY_NAME_MSG) @Size(min = 2, max = 50, message = InvalidExerciseData.INVALID_NAME_MSG) String getName() {
+    public @NotNull(message = NotNullMsg.EMPTY_NAME) @Size(min = 2, max = 50, message = InvalidExerciseData.INVALID_NAME_MSG) String getName() {
         return name;
     }
 
-    public void setName(@NotNull(message = InvalidInputData.INVALID_EMPTY_NAME_MSG) @Size(min = 2, max = 50, message = InvalidExerciseData.INVALID_NAME_MSG) String name) {
+    public void setName(@NotNull(message = NotNullMsg.EMPTY_NAME) @Size(min = 2, max = 50, message = InvalidExerciseData.INVALID_NAME_MSG) String name) {
         this.name = name;
     }
 
@@ -72,5 +73,14 @@ public class Exercise {
 
     public void setSets(List<Set> sets) {
         this.sets = sets;
+    }
+
+    @Override
+    public String toString() {
+        return "Exercise{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                //", sets=" + sets +
+                '}';
     }
 }

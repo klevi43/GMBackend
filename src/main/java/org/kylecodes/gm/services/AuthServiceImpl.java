@@ -24,12 +24,11 @@ public class AuthServiceImpl implements AuthService {
 
     public JwtDto verify(AuthUserDto authUserDto) throws AuthenticationException {
 
-        if (!(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)) {
+        if (SecurityContextHolder.getContext().getAuthentication() != null && !(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)) {
             throw new AlreadyLoggedInException();
         }
-        Authentication authentication;
 
-        authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(authUserDto.getEmail(), authUserDto.getPassword()));
+        Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(authUserDto.getEmail(), authUserDto.getPassword()));
 
         if (authentication.isAuthenticated()) {
             return new JwtDto(jwtServiceImpl.generateToken(authUserDto.getEmail()));

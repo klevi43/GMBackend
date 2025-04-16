@@ -3,14 +3,14 @@ package org.kylecodes.gm.dtos;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.kylecodes.gm.constants.InvalidExerciseData;
-import org.kylecodes.gm.constants.InvalidInputData;
+import org.kylecodes.gm.constants.NotNullMsg;
 
 import java.util.List;
 
 public class ExerciseDto {
     private Long id;
 
-    @NotNull(message = InvalidInputData.INVALID_EMPTY_NAME_MSG)
+    @NotNull(message = NotNullMsg.EMPTY_NAME)
     @Size(min = 2, max = 50, message = InvalidExerciseData.INVALID_NAME_MSG)
     private String name;
 

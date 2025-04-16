@@ -8,21 +8,22 @@ import org.kylecodes.gm.dtos.UserDto;
 import org.kylecodes.gm.entities.User;
 import org.kylecodes.gm.exceptions.AlreadyLoggedInException;
 import org.kylecodes.gm.exceptions.EmailAlreadyExistsException;
+import org.kylecodes.gm.exceptions.PasswordAndConfirmPasswordNotEqualException;
 import org.kylecodes.gm.mappers.EntityToDtoMapper;
 import org.kylecodes.gm.mappers.UserToUserDtoMapper;
 import org.kylecodes.gm.repositories.UserRepository;
 import org.kylecodes.gm.utils.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserServiceImpl implements UserService, UserDetailsService {
+public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
@@ -32,12 +33,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserDto registerNewUser(RegisterDto registerDto) {
-        if (!(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()
+                && !(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)) {
             throw new AlreadyLoggedInException();
         }
         registerDto.setEmail(registerDto.getEmail().trim());
-        if (userRepository.findByEmail(registerDto.getEmail()).isPresent()) {
+        if (userRepository.existsByEmail(registerDto.getEmail())) {
             throw new EmailAlreadyExistsException();
+        }
+        if (!registerDto.getPassword().equals(registerDto.getConfirmPassword())) {
+            throw new PasswordAndConfirmPasswordNotEqualException();
         }
         User newUser = new User();
 
@@ -58,8 +64,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public UserDto updateUserInfo(AuthUserDto updateUser) {
         User currentUser = SecurityUtil.getPrincipalFromSecurityContext();
         if (updateUser.getEmail() != null) {
+            if (userRepository.existsByEmail(updateUser.getEmail())) {
+                throw new EmailAlreadyExistsException();
+            }
             currentUser.setEmail(updateUser.getEmail());
         }
+
         if(updateUser.getPassword() != null) {
             currentUser.setPassword(passwordEncoder.encode(updateUser.getPassword()));
         }
@@ -73,12 +83,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         userRepository.delete(user);
     }
 
-
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email)
+        return userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException(email + NotFoundMsg.EMAIL_NOT_FOUND_MSG));
-        return user;
 
     }
 

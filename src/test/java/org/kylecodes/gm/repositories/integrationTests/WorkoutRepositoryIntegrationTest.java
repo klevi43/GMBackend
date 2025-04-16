@@ -1,44 +1,67 @@
 package org.kylecodes.gm.repositories.integrationTests;
 
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.kylecodes.gm.constants.Roles;
+import org.kylecodes.gm.contexts.SecurityContextForTests;
+import org.kylecodes.gm.entities.User;
 import org.kylecodes.gm.entities.Workout;
 import org.kylecodes.gm.repositories.WorkoutRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DataJpaTest
-@AutoConfigureTestDatabase(replace =AutoConfigureTestDatabase.Replace.NONE )
 @TestPropertySource("classpath:application-test.properties")
-@Sql(scripts = {"classpath:/insertWorkouts.sql", "classpath:/insertExercises.sql", "classpath:/insertSets.sql"})
+@SpringBootTest
+@AutoConfigureMockMvc(addFilters = false) // circumvent spring sec so that we don't have to add tokens
+@Transactional
+@Sql(scripts = {"classpath:/insertWorkouts.sql", "classpath:/insertExercises.sql", "classpath:/insertSets.sql"})//  this removes the need for setup and teardown
 public class WorkoutRepositoryIntegrationTest {
+    /*
+     * NOTE: This file was used to learn how to write basic tests and does not affect the code coverage.
+     */
     @Autowired
     private WorkoutRepository workoutRepository;
+    private User user;
     private final Long VALID_WORKOUT_ID_1 = 1L;
+    private final String VALID_WORKOUT_NAME_1 = "Test Workout 1";
+    private final String VALID_WORKOUT_NAME_2 = "Test Workout 2";
+    private final LocalDate VALID_WORKOUT_DATE = LocalDate.now();
     private final Long VALID_WORKOUT_ID_2 = 2L;
-
+    private final Long VALID_USER_ID = 1L;
+    private final String VALID_USER_EMAIL = "user@email.com";
+    private final String VALID_USER_PASSWORD = "password";
+    private final String VALID_USER_ROLE = Roles.USER;
     private Workout workout1;
     private Workout workout2;
+    SecurityContextForTests context = new SecurityContextForTests();
     @BeforeEach
     public void init() {
+        user = new User();
+        user.setId(VALID_USER_ID);
+        user.setEmail(VALID_USER_EMAIL);
+        user.setPassword(VALID_USER_PASSWORD);
+        user.setRole(VALID_USER_ROLE);
+
         workout1 = new Workout();
         workout1.setId(VALID_WORKOUT_ID_1);
-        workout1.setName("Test Workout");
-        workout1.setDate(LocalDate.now());
-
+        workout1.setName(VALID_WORKOUT_NAME_1);
+        workout1.setDate(VALID_WORKOUT_DATE);
+        workout1.setUser(user);
         workout2 = new Workout();
         workout2.setId(VALID_WORKOUT_ID_2);
-        workout2.setName("Test Workout 2");
-        workout2.setDate(LocalDate.now());
+        workout2.setName(VALID_WORKOUT_NAME_2);
+        workout2.setDate(VALID_WORKOUT_DATE);
+        workout2.setUser(user);
+        context.createSecurityContextToReturnAuthenticatedUser(user);
     }
 
         @Test
@@ -54,37 +77,17 @@ public class WorkoutRepositoryIntegrationTest {
 
     }
 
-    @Test
-    public void WorkoutRepository_FindAll_ReturnMoreThanOneWorkout() {
-
-        // Arrange
-
-
-
-
-        final int EXPECTED_SIZE = 2;
-
-        workoutRepository.save(workout1);
-        workoutRepository.save(workout2);
-
-        // Act
-        List<Workout> workoutList = workoutRepository.findAll();
-
-        // Assert
-        assertThat(workoutList).isNotNull();
-        assertThat(workoutList.size()).isEqualTo(EXPECTED_SIZE);
-    }
 
 
 
     @Test
-    public void WorkoutRepository_FindById_ReturnWorkout() {
+    public void WorkoutRepository_FindByIdAndUserId_ReturnWorkout() {
         // Arrange
 
         Workout savedWorkout = workoutRepository.save(workout1);
 
         // Act
-        Workout foundWorkout = workoutRepository.findById(VALID_WORKOUT_ID_1).get();
+        Workout foundWorkout = workoutRepository.findByIdAndUserId(VALID_WORKOUT_ID_1, VALID_USER_ID).get();
 
         // Assert
         assertThat(foundWorkout).isNotNull();
@@ -93,12 +96,12 @@ public class WorkoutRepositoryIntegrationTest {
     }
 
     @Test
-    public void WorkoutRepository_UpdateWorkoutName_ReturnUpdatedWorkout() {
+    public void WorkoutRepository_UpdateWorkoutNameByIdAndUserId_ReturnUpdatedWorkout() {
         // Arrange
 
 
 
-        Workout workoutSave = workoutRepository.findById(VALID_WORKOUT_ID_1).get();
+        Workout workoutSave = workoutRepository.findByIdAndUserId(VALID_WORKOUT_ID_1, VALID_USER_ID).get();
         workoutSave.setName("Shoulder Day");
 
         // Act
@@ -115,12 +118,12 @@ public class WorkoutRepositoryIntegrationTest {
 
 
     @Test
-    public void WorkoutRepository_DeleteWorkout_ReturnWorkoutIsEmpty() {
+    public void WorkoutRepository_DeleteWorkoutByIdAndUserId_ReturnWorkoutIsEmpty() {
         // Arrange
 
 
         // Act
-        workoutRepository.deleteById(VALID_WORKOUT_ID_1);
+        workoutRepository.deleteByIdAndUserId(VALID_WORKOUT_ID_1, VALID_USER_ID);
         Optional<Workout> workoutReturn = workoutRepository.findById(VALID_WORKOUT_ID_1);
 
         // Assert

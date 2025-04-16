@@ -1,24 +1,22 @@
 package org.kylecodes.gm.services;
 
+import org.kylecodes.gm.constants.RequestFailure;
 import org.kylecodes.gm.dtos.SetDto;
 import org.kylecodes.gm.entities.Exercise;
 import org.kylecodes.gm.entities.Set;
 import org.kylecodes.gm.entities.User;
-import org.kylecodes.gm.entities.Workout;
 import org.kylecodes.gm.exceptions.ExerciseNotFoundException;
-import org.kylecodes.gm.constants.RequestFailure;
 import org.kylecodes.gm.exceptions.SetNotFoundException;
 import org.kylecodes.gm.exceptions.WorkoutNotFoundException;
+import org.kylecodes.gm.mappers.EntityToDtoMapper;
+import org.kylecodes.gm.mappers.SetToSetDtoMapper;
 import org.kylecodes.gm.repositories.ExerciseRepository;
 import org.kylecodes.gm.repositories.SetRepository;
 import org.kylecodes.gm.repositories.WorkoutRepository;
-import org.kylecodes.gm.mappers.EntityToDtoMapper;
-import org.kylecodes.gm.mappers.SetToSetDtoMapper;
 import org.kylecodes.gm.utils.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -34,41 +32,16 @@ public class SetServiceImpl implements SetService {
     EntityToDtoMapper<Set, SetDto> setMapper = new SetToSetDtoMapper();
 
 
-    @Override
-    public List<SetDto> getAllSetsForExerciseInWorkout(Long workoutId, Long exerciseId) {
-        User user = SecurityUtil.getPrincipalFromSecurityContext();
-        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUser(workoutId, user)
-                .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.GET_REQUEST_FAILURE)));
 
-        Optional<Exercise> exercise = Optional.ofNullable(exerciseRepository.findByIdAndWorkout(exerciseId, workout.get())
-                .orElseThrow(() -> new ExerciseNotFoundException(RequestFailure.GET_REQUEST_FAILURE)));
-
-        List<Set> sets = setRepository.findAllByExercise_Id(exerciseId);
-        return sets.stream().map((set) -> setMapper.mapToDto(set)).toList();
-    }
 
     @Override
-    public SetDto getSetForExerciseInWorkout(Long workoutId, Long exerciseId, Long setId) {
+    public SetDto createSetForExerciseInWorkout(SetDto setDto, Long exerciseId, Long workoutId) {
         User user = SecurityUtil.getPrincipalFromSecurityContext();
-        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUser(workoutId, user)
-                .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.GET_REQUEST_FAILURE)));
+        if (!workoutRepository.existsByIdAndUserId(workoutId, user.getId())) {
+            throw new WorkoutNotFoundException(RequestFailure.POST_REQUEST_FAILURE);
+        }
 
-        Optional<Exercise> exercise = Optional.ofNullable(exerciseRepository.findByIdAndWorkout(exerciseId, workout.get())
-                .orElseThrow(() -> new ExerciseNotFoundException(RequestFailure.GET_REQUEST_FAILURE)));
-
-        Optional<Set> set = Optional.ofNullable(setRepository.findById(setId)
-                .orElseThrow(() -> new SetNotFoundException(RequestFailure.GET_REQUEST_FAILURE)));
-        SetDto setDto = setMapper.mapToDto(set.get());
-        return setDto;
-    }
-
-    @Override
-    public SetDto createSetForExerciseInWorkout(Long workoutId, Long exerciseId, SetDto setDto) {
-        User user = SecurityUtil.getPrincipalFromSecurityContext();
-        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUser(workoutId, user)
-                .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.POST_REQUEST_FAILURE)));
-
-        Optional<Exercise> exercise = Optional.ofNullable(exerciseRepository.findByIdAndWorkout(exerciseId, workout.get())
+        Optional<Exercise> exercise = Optional.of(exerciseRepository.findByIdAndWorkoutId(exerciseId, workoutId)
                 .orElseThrow(() -> new ExerciseNotFoundException(RequestFailure.POST_REQUEST_FAILURE)));
 
         Set set = new Set();
@@ -77,20 +50,20 @@ public class SetServiceImpl implements SetService {
         set.setExercise(exercise.get());
 
         Set newSet = setRepository.save(set);
-        SetDto response = setMapper.mapToDto(newSet);
-        return response;
+        return setMapper.mapToDto(newSet);
     }
 
     @Override
-    public SetDto updateSetForExerciseInWorkout(Long workoutId, Long exerciseId, Long setId, SetDto setDto) {
+    public SetDto updateSetForExerciseInWorkout(SetDto setDto, Long setId, Long exerciseId, Long workoutId) {
         User user = SecurityUtil.getPrincipalFromSecurityContext();
-        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUser(workoutId, user)
-                .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.PUT_REQUEST_FAILURE)));
+        if (!workoutRepository.existsByIdAndUserId(workoutId, user.getId())) {
+            throw new WorkoutNotFoundException(RequestFailure.PUT_REQUEST_FAILURE);
+        }
 
-        Optional<Exercise> exercise = Optional.ofNullable(exerciseRepository.findByIdAndWorkout(exerciseId, workout.get())
+        Optional<Exercise> exercise = Optional.of(exerciseRepository.findByIdAndWorkoutId(exerciseId, workoutId)
                 .orElseThrow(() -> new ExerciseNotFoundException(RequestFailure.PUT_REQUEST_FAILURE)));
 
-        Optional<Set> set = Optional.ofNullable(setRepository.findByIdAndExercise(setId, exercise.get())
+        Optional<Set> set = Optional.of(setRepository.findByIdAndExerciseId(setId, exerciseId)
                 .orElseThrow(() -> new SetNotFoundException(RequestFailure.PUT_REQUEST_FAILURE)));
 
         Set updateSet = set.get();
@@ -110,16 +83,17 @@ public class SetServiceImpl implements SetService {
     }
 
     @Override
-    public void deleteSetForExerciseInWorkout(Long workoutId, Long exerciseId, Long setId) {
+    public void deleteSetForExerciseInWorkout(Long setId, Long exerciseId, Long workoutId) {
         User user = SecurityUtil.getPrincipalFromSecurityContext();
-        Optional<Workout> workout = Optional.ofNullable(workoutRepository.findByIdAndUser(workoutId, user)
-                .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.DELETE_REQUEST_FAILURE)));
-
-        Optional<Exercise> exercise = Optional.ofNullable(exerciseRepository.findByIdAndWorkout(exerciseId, workout.get())
-                .orElseThrow(() -> new ExerciseNotFoundException(RequestFailure.DELETE_REQUEST_FAILURE)));
-
-        Optional<Set> set = Optional.ofNullable(setRepository.findByIdAndExercise(setId, exercise.get())
-                .orElseThrow(() -> new SetNotFoundException(RequestFailure.DELETE_REQUEST_FAILURE)));
-        setRepository.deleteById(setId);
+        if (!workoutRepository.existsByIdAndUserId(workoutId, user.getId())) {
+            throw new WorkoutNotFoundException(RequestFailure.DELETE_REQUEST_FAILURE);
+        }
+        if (!exerciseRepository.existsByIdAndWorkoutId(exerciseId, workoutId)) {
+            throw new ExerciseNotFoundException(RequestFailure.DELETE_REQUEST_FAILURE);
+        }
+        if (!setRepository.existsByIdAndExerciseId(setId, exerciseId)) {
+            throw new SetNotFoundException(RequestFailure.DELETE_REQUEST_FAILURE);
+        }
+        setRepository.deleteByIdAndExerciseId(setId, exerciseId);
     }
 }

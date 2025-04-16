@@ -33,7 +33,7 @@ public class JwtSecurityConfig {
 
         http.authorizeHttpRequests(
                 auth -> {
-                    auth.requestMatchers("/sign-up", "/login").permitAll()
+                    auth.requestMatchers("/register", "/login").permitAll()
                             .requestMatchers("/admin/**").hasRole("ADMIN");
                     auth.anyRequest().authenticated();
                 });

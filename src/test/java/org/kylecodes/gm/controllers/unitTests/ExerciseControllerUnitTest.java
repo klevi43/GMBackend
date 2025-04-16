@@ -12,8 +12,6 @@ import org.kylecodes.gm.dtos.ExerciseDto;
 import org.kylecodes.gm.dtos.SetDto;
 import org.kylecodes.gm.dtos.WorkoutDto;
 import org.kylecodes.gm.entities.Workout;
-import org.kylecodes.gm.exceptions.ErrorResponse;
-import org.kylecodes.gm.repositories.WorkoutRepository;
 import org.kylecodes.gm.services.ExerciseService;
 import org.kylecodes.gm.services.ExerciseServiceImpl;
 import org.mockito.ArgumentMatchers;
@@ -29,14 +27,11 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -46,29 +41,28 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 //@AutoConfigureMockMvc(addFilters = false) // circumvent spring sec so that we don't have to add tokens
 //@Transactional
 @ExtendWith(MockitoExtension.class)
-public class ExerciseControllerTest {
+public class ExerciseControllerUnitTest {
     @InjectMocks
     private ExerciseController exerciseController;
 
 
     private final ExerciseService exerciseService = Mockito.mock(ExerciseServiceImpl.class);
-    @Mock
-    private WorkoutRepository workoutRepository;
+
     @Mock
     private MockMvc mockMvc;
 
     private ObjectMapper objectMapper;
-    ErrorResponse errorResponse;
+
     private ExerciseDto exerciseDto;
+    private ExerciseDto exerciseDto2;
     private Workout workout;
     private final Long VALID_WORKOUT_ID_1 = 1L;
     private final Long VALID_WORKOUT_ID_2 = 2L;
     private final Long VALID_EXERCISE_ID_1 = 1L;
     private final Long VALID_EXERCISE_ID_2 = 2L;
+
     private final Long VALID_SET_ID_1 = 1L;
     private final Long VALID_SET_ID_2 = 2L;
-    private final Long INVALID_ID = -1L;
-    private List<ExerciseDto> exerciseDtoList = new ArrayList<>();
     private SetDto setDto;
     private SetDto setDto2;
 
@@ -102,6 +96,9 @@ public class ExerciseControllerTest {
         exerciseDto = new ExerciseDto();
         exerciseDto.setId(VALID_EXERCISE_ID_1);
         exerciseDto.setName("Test Dto");
+        exerciseDto2 = new ExerciseDto();
+        exerciseDto2.setId(VALID_EXERCISE_ID_2);
+        exerciseDto2.setName("Test Dto 2");
 
         exerciseDto.setWorkoutId(workout.getId());
         exerciseDto.setSetDtoList(Arrays.asList(setDto, setDto2));
@@ -110,18 +107,13 @@ public class ExerciseControllerTest {
         workoutDto.setId(VALID_WORKOUT_ID_2);
         workoutDto.setName("Test WorkoutDto");
         workoutDto.setDate(LocalDate.now());
-        workoutDto.setExerciseDtos(Arrays.asList(exerciseDto));
-
-    }
-
-    @Test
-    public void placeholder() {
+        workoutDto.setExerciseDtos(Arrays.asList(exerciseDto, exerciseDto2));
 
     }
 
     @Test
     public void ExerciseController_CreateExerciseInWorkout_ReturnCreatedExercise() throws Exception {
-        given(exerciseService.createExercise(ArgumentMatchers.any(), ArgumentMatchers.anyLong())).willAnswer((invocationOnMock -> invocationOnMock.getArgument(0)));
+        given(exerciseService.createExerciseInWorkout(ArgumentMatchers.any(), ArgumentMatchers.anyLong())).willAnswer((invocationOnMock -> invocationOnMock.getArgument(0)));
 
         ResultActions response = mockMvc
                 .perform(MockMvcRequestBuilders.post("/workouts/exercises/create?workoutId={workoutId}", VALID_WORKOUT_ID_1.toString())
@@ -130,7 +122,6 @@ public class ExerciseControllerTest {
 
         response.andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name", CoreMatchers.is("Test Dto")))
-                .andExpect(jsonPath("$.date", CoreMatchers.is(LocalDate.now().toString())))
                 .andExpect(jsonPath("$.workoutId", CoreMatchers.is(VALID_WORKOUT_ID_1.intValue())))
                 .andExpect(jsonPath("$.setDtoList", hasSize(2)))
                 .andDo(MockMvcResultHandlers.print());
@@ -149,34 +140,8 @@ public class ExerciseControllerTest {
     This is a typical unit vs integration tests trade off. You do unit tests even if they don't test everything
     because they give you more control and run faster.
      */
-    @Test
-    public void ExerciseController_GetAllExercises_ReturnEmptyExerciseList() throws Exception {
-        when(exerciseService.getAllExercises()).thenReturn(new ArrayList<>());
-        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.get("/workouts/exercises"));
-
-        response.andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(0)));
-    }
-
-    @Test
-    public void ExerciseController_GetAllExercises_ReturnExerciseList() throws Exception {
-        when(exerciseService.getAllExercises()).thenReturn(Arrays.asList(exerciseDto));
-        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.get("/workouts/exercises"));
-
-        response.andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(1)));
-    }
 
 
-    @Test
-    public void ExerciseController_GetAllExercisesInWorkout_ReturnExerciseList() throws Exception {
-        when(exerciseService.getAllExercises()).thenReturn(Arrays.asList(exerciseDto));
-        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.get("/workouts/exercises")
-                .queryParam("workoutId", VALID_WORKOUT_ID_1.toString()));
-
-        response.andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(1)));
-    }
 
 
 
@@ -200,7 +165,6 @@ public class ExerciseControllerTest {
         response.andDo(print());
         response.andExpect(status().isOk())
                         .andExpect(jsonPath("$.name", CoreMatchers.is(updatedExerciseDto.getName())))
-                .andExpect(jsonPath("$.date", CoreMatchers.is(workout.getDate().toString())))
                 .andExpect(jsonPath("$.setDtoList", hasSize(2)));
 
     }

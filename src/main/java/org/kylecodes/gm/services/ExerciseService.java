@@ -5,13 +5,11 @@ import org.kylecodes.gm.dtos.ExerciseDto;
 import java.util.List;
 
 public interface ExerciseService {
-    List<ExerciseDto> getAllExercises();
 
-    List<ExerciseDto> getAllExercisesInWorkout(Long workoutId);
-    ExerciseDto getExerciseInWorkoutById(Long workoutId, Long exerciseId);
-    ExerciseDto createExercise(ExerciseDto exerciseDto, Long workoutId);
 
-    ExerciseDto updateExerciseInWorkoutById(ExerciseDto exerciseDto, Long workoutId, Long exerciseId);
+    ExerciseDto createExerciseInWorkout(ExerciseDto exerciseDto, Long workoutId);
 
-    void deleteExerciseInWorkoutById(Long workoutId, Long exerciseId);
+    ExerciseDto updateExerciseInWorkoutById(ExerciseDto exerciseDto, Long exerciseId, Long workoutId);
+
+    void deleteExerciseInWorkoutById(Long exerciseId, Long workoutId);
 }

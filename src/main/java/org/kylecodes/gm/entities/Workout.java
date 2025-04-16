@@ -7,8 +7,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
-import org.kylecodes.gm.constants.InvalidInputData;
 import org.kylecodes.gm.constants.InvalidWorkoutData;
+import org.kylecodes.gm.constants.NotNullMsg;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -23,16 +23,18 @@ public class Workout {
 
     @Column(nullable = false, length = 50)
 
-    @NotNull(message = InvalidInputData.INVALID_EMPTY_NAME_MSG)
+    @NotNull(message = NotNullMsg.EMPTY_NAME)
     @Size(min = 2, max = 50, message = InvalidWorkoutData.INVALID_NAME_MSG)
     private String name;
 
-    @NotNull(message = InvalidInputData.INVALID_EMPTY_DATE_MSG)
+    @NotNull(message = NotNullMsg.EMPTY_DATE)
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @PastOrPresent(message = InvalidWorkoutData.INVALID_DATE_MSG)
     private LocalDate date;
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @NotNull(message = NotNullMsg.EMPTY_USER)
     private User user;
 
     @OneToMany( orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "workout", cascade = {CascadeType.ALL})
@@ -57,27 +59,27 @@ public class Workout {
         this.id = id;
     }
 
-    public @NotNull(message = InvalidInputData.INVALID_EMPTY_NAME_MSG) @Size(min = 2, max = 50, message = InvalidWorkoutData.INVALID_NAME_MSG) String getName() {
+    public @NotNull(message = NotNullMsg.EMPTY_NAME) @Size(min = 2, max = 50, message = InvalidWorkoutData.INVALID_NAME_MSG) String getName() {
         return name;
     }
 
-    public void setName(@NotNull(message = InvalidInputData.INVALID_EMPTY_NAME_MSG) @Size(min = 2, max = 50, message = InvalidWorkoutData.INVALID_NAME_MSG) String name) {
+    public void setName(@NotNull(message = NotNullMsg.EMPTY_NAME) @Size(min = 2, max = 50, message = InvalidWorkoutData.INVALID_NAME_MSG) String name) {
         this.name = name;
     }
 
-    public @NotNull(message = InvalidInputData.INVALID_EMPTY_DATE_MSG) @PastOrPresent(message = InvalidWorkoutData.INVALID_DATE_MSG) LocalDate getDate() {
+    public @NotNull(message = NotNullMsg.EMPTY_DATE) @PastOrPresent(message = InvalidWorkoutData.INVALID_DATE_MSG) LocalDate getDate() {
         return date;
     }
 
-    public void setDate(@NotNull(message = InvalidInputData.INVALID_EMPTY_DATE_MSG) @PastOrPresent(message = InvalidWorkoutData.INVALID_DATE_MSG) LocalDate date) {
+    public void setDate(@NotNull(message = NotNullMsg.EMPTY_DATE) @PastOrPresent(message = InvalidWorkoutData.INVALID_DATE_MSG) LocalDate date) {
         this.date = date;
     }
 
-    public User getUser() {
+    public @NotNull User getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(@NotNull User user) {
         this.user = user;
     }
 
@@ -87,5 +89,16 @@ public class Workout {
 
     public void setExercises(List<Exercise> exercises) {
         this.exercises = exercises;
+    }
+
+    @Override
+    public String toString() {
+        return "Workout{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", date=" + date +
+                ", user=" + user +
+                ", exercises=" + exercises +
+                '}';
     }
 }

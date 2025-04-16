@@ -111,4 +111,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         errorResponse.setTimeStamp(new Date());
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handlePasswordAndConfirmPasswordNotEqualException(
+            PasswordAndConfirmPasswordNotEqualException e, WebRequest webRequest
+    ) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(e.getMessage());
+        errorResponse.setTimeStamp(new Date());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
 }
