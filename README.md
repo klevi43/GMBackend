@@ -119,7 +119,7 @@ The name and date fields are optional.
 ```
 URL: http://localhost:8080/workouts/update?workoutId=[workout-id]
 REQUEST TYPE: PUT
-FIELDS:
+BODY:
 {
   "name": "your-workout-name",
   "date": "YYYY-MM-DD"
@@ -184,7 +184,7 @@ Update an existing set for an existing exercise with an existing workout. NOTE: 
 ```
 URL: http://localhost:8080/workouts/exercises/sets/update?workoutId=[workout-id]&exerciseId=[exercise-id]*setId=[set-id]
 REQUEST TYPE: PUT
-FIELDS:
+BODY:
 {
   "weight": [Weight},
   "Reps": [Reps]
