@@ -134,7 +134,7 @@ REQUEST TYPE: DELETE
 
 <a name="Exercise"></a>
 ## Exercise Related Functionality
-Looking for a GET method to see your exercises? Go to the [Get a Workout By Id](#Get-Workout-By-Id) section.
+Looking for a GET method to see your exercises? Go to the [Get a Workout By Id](#Get-Workout-By-Id).
 ### 1. Create an Exercise
 ***Create an exercise within an existing workout.***
 
@@ -166,7 +166,7 @@ REQUEST TYPE: DELETE
 
 <a name="Set"></a>
 ## Set Related Functionality
-Looking for a GET method to see your sets?  Go to the [Get a Workout By Id](#Get-Workout-By-Id) section.
+Looking for a GET method to see your sets?  Go to the [Get a Workout By Id](#Get-Workout-By-Id).
 ### 1. Create a Set
 Create a set for an existing exercise within an existing workout.
 ```
