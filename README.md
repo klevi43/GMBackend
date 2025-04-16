@@ -44,7 +44,7 @@ git clone https://github.com/klevi43/GMBackend
        spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
        spring.jpa.show-sql=true
      ```
-  5. You're all set! Click the run button in your IDE (the green play button in Eclipse) the application, and let's start logging your workouts!
+  5. You're all set! Click the run button in your IDE (the green play button in Eclipse), and let's start logging your workouts!
 
 
 <a name="How-to-Use-Guide"></a>
