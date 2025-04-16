@@ -48,7 +48,7 @@ If you already have the prerequisites installed, then please move on to next [se
 
 
 <a name="How-to-Use-Guide"></a>
-## How to use
+## 3. How to Use Guide
 To do any of the actions below, please enter the following information into the correct fields in your API tester. </br> 
 ### 1. Create a New Account
 ```
