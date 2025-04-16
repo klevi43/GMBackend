@@ -101,7 +101,7 @@ OPTIONAL REQUEST PARAMS: pageNo=[page-no]&pageSize=[page-size]
 REQUEST TYPE: GET
 ```
 <a name="Get-Workout-By-Id"></a>
-### 4. Get a Single Workout 
+### 4. Get a Workout By Id
 Shows a single workout. You can see all your created exercises and sets here as well.
 ```
 URL: http://localhost:8080/workouts/workout?workoutId=[workout-id]
@@ -127,7 +127,7 @@ REQUEST TYPE: DELETE
 ```
 
 ## Exercise Related Functionality
-Looking for a GET method to see your exercises? Go [here](#Get-Workout-By-Id)
+Looking for a GET method to see your exercises? Go to the [Get a Workout By Id](#Get-Workout-By-Id) section.
 ### 1. Create an Exercise
 ***Create an exercise within an existing workout.***
 
@@ -158,7 +158,7 @@ REQUEST TYPE: DELETE
 ```
 
 ## Set Related Functionality
-***Looking for a GET method to see your sets? Go [here](#Get-Workout-By-Id)***
+Looking for a GET method to see your sets?  Go to the [Get a Workout By Id](#Get-Workout-By-Id) section.
 ### 1. Create a Set
 Create a set for an existing exercise within an existing workout.
 ```
