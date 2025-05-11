@@ -2,6 +2,7 @@ package org.kylecodes.gm.filters;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.kylecodes.gm.services.JwtService;
@@ -27,10 +28,17 @@ public class JwtFilter extends OncePerRequestFilter {
     // for every request, we want this filter to execute once
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String token = request.getHeader("jwtToken");
-
-
+        String token = null;
         String email = null;
+
+        if (request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if (cookie.getName().equals("jwtToken")) {
+                    token = cookie.getValue();
+                    break;
+                }
+            }
+        }
 
         if(token != null) {
             email = jwtService.extractEmail(token);
