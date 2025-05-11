@@ -4,7 +4,6 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.kylecodes.gm.constants.JwtTokenData;
 import org.kylecodes.gm.services.JwtService;
 import org.kylecodes.gm.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +27,12 @@ public class JwtFilter extends OncePerRequestFilter {
     // for every request, we want this filter to execute once
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String authHeader = request.getHeader("Authorization");
-        String token = null;
+        String token = request.getHeader("jwtToken");
+
+
         String email = null;
 
-        if(authHeader != null && authHeader.startsWith(JwtTokenData.JWT_PREFIX)) {
-            token = authHeader.substring(JwtTokenData.JWT_STARTING_INDEX);
+        if(token != null) {
             email = jwtService.extractEmail(token);
         }
 
