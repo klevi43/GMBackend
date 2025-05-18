@@ -1,5 +1,6 @@
 package org.kylecodes.gm.exceptions;
 
+import org.kylecodes.gm.responses.ErrorResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -28,7 +29,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         errorResponse.setStatus(HttpStatus.NOT_FOUND.value());
         errorResponse.setMessage(e.getMessage());
-        errorResponse.setTimeStamp(new Date());
+        errorResponse.setTimestamp(new Date());
 
         return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.NOT_FOUND);
     }
@@ -44,7 +45,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
         errorResponse.setMessage(errorMsgs.toString());
-        errorResponse.setTimeStamp(new Date());
+        errorResponse.setTimestamp(new Date());
 
         return new ResponseEntity<>(errorResponse, HttpStatusCode.valueOf(errorResponse.getStatus()));
     }
@@ -56,7 +57,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         errorResponse.setStatus(HttpStatus.NOT_FOUND.value());
         errorResponse.setMessage(e.getMessage());
-        errorResponse.setTimeStamp(new Date());
+        errorResponse.setTimestamp(new Date());
 
         return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.NOT_FOUND);
     }
@@ -67,7 +68,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         errorResponse.setStatus(HttpStatus.NOT_FOUND.value());
         errorResponse.setMessage(e.getMessage());
-        errorResponse.setTimeStamp(new Date());
+        errorResponse.setTimestamp(new Date());
 
         return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.NOT_FOUND);
     }
@@ -78,7 +79,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         errorResponse.setStatus(HttpStatus.FORBIDDEN.value());
         errorResponse.setMessage(e.getMessage());
-        errorResponse.setTimeStamp(new Date());
+        errorResponse.setTimestamp(new Date());
         return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
     }
 
@@ -88,7 +89,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         errorResponse.setStatus(HttpStatus.FORBIDDEN.value());
         errorResponse.setMessage(e.getMessage());
-        errorResponse.setTimeStamp(new Date());
+        errorResponse.setTimestamp(new Date());
         return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
     }
 
@@ -98,7 +99,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         errorResponse.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
         errorResponse.setMessage(e.getMessage());
-        errorResponse.setTimeStamp(new Date());
+        errorResponse.setTimestamp(new Date());
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
@@ -108,7 +109,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         errorResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
         errorResponse.setMessage("Invalid Email or Password");
-        errorResponse.setTimeStamp(new Date());
+        errorResponse.setTimestamp(new Date());
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
 
@@ -118,7 +119,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     ) {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setMessage(e.getMessage());
-        errorResponse.setTimeStamp(new Date());
+        errorResponse.setTimestamp(new Date());
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 }
