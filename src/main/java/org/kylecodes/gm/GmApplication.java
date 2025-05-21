@@ -21,7 +21,9 @@ public class GmApplication {
                 WebMvcConfigurer.super.addCorsMappings(registry);
                 registry.addMapping("/**") // allow all
                         .allowedMethods("*")
-                        .allowedOrigins("http://localhost:5173/");
+                        .allowedOrigins("http://localhost:5173")
+                        .allowCredentials(true)
+                        .allowedHeaders("*");
 
             }
         };

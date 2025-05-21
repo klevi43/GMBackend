@@ -31,6 +31,7 @@ public class AuthServiceImpl implements AuthService {
         Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(authUserDto.getEmail(), authUserDto.getPassword()));
 
         if (authentication.isAuthenticated()) {
+            SecurityContextHolder.getContext().setAuthentication(authentication);
             return new JwtDto(jwtServiceImpl.generateToken(authUserDto.getEmail()));
         } else {
             throw new TokenGenerationFailureException();

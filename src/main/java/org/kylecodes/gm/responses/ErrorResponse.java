@@ -1,4 +1,4 @@
-package org.kylecodes.gm.exceptions;
+package org.kylecodes.gm.responses;
 
 import java.util.Date;
 
@@ -6,15 +6,15 @@ public class ErrorResponse {
 
     private int status;
     private String message;
-    private Date timeStamp;
+    private Date timestamp;
 
     public ErrorResponse() {
     }
 
-    public ErrorResponse(int status, String message, Date timeStamp) {
+    public ErrorResponse(int status, String message, Date timestamp) {
         this.status = status;
         this.message = message;
-        this.timeStamp = timeStamp;
+        this.timestamp = timestamp;
     }
 
     public int getStatus() {
@@ -33,11 +33,11 @@ public class ErrorResponse {
         this.message = message;
     }
 
-    public Date getTimeStamp() {
-        return timeStamp;
+    public Date getTimestamp() {
+        return timestamp;
     }
 
-    public void setTimeStamp(Date timeStamp) {
-        this.timeStamp = timeStamp;
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
     }
 }

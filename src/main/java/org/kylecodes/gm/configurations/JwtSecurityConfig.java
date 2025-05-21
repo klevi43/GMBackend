@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -33,11 +32,11 @@ public class JwtSecurityConfig {
 
         http.authorizeHttpRequests(
                 auth -> {
-                    auth.requestMatchers("/register", "/login").permitAll()
+                    auth.requestMatchers("/register", "/auth/login", "/auth/logout").permitAll()
                             .requestMatchers("/admin/**").hasRole("ADMIN");
                     auth.anyRequest().authenticated();
                 });
-        http.httpBasic(Customizer.withDefaults()); // this is an empty lambda
+        http.logout(AbstractHttpConfigurer::disable);
         http.sessionManagement(
                 session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         ).addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
