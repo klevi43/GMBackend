@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Size;
 import org.kylecodes.gm.constants.InvalidExerciseData;
 import org.kylecodes.gm.constants.NotNullMsg;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ExerciseDto {
@@ -62,6 +63,6 @@ public class ExerciseDto {
     }
 
     public void setSetDtoList(List<SetDto> setDtoList) {
-        this.setDtoList = setDtoList;
+        this.setDtoList = setDtoList != null ? setDtoList : new ArrayList<>();
     }
 }

@@ -8,6 +8,7 @@ import org.kylecodes.gm.constants.InvalidWorkoutData;
 import org.kylecodes.gm.constants.NotNullMsg;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class FullWorkoutDto {
@@ -64,6 +65,6 @@ public class FullWorkoutDto {
     }
 
     public void setExerciseDtos(List<ExerciseDto> exerciseDtos) {
-        this.exerciseDtos = exerciseDtos;
+        this.exerciseDtos = exerciseDtos != null ? exerciseDtos : new ArrayList<>();
     }
 }
