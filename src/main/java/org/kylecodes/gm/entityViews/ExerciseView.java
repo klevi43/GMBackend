@@ -14,6 +14,8 @@ public interface ExerciseView {
     @IdMapping
     Long getId();
     String getName();
+    @Mapping("workout.id")
+    Long getWorkoutId();
     @Mapping(fetch = FetchStrategy.MULTISET)
     List<SetView> getSets();
 }
