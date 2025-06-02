@@ -11,7 +11,7 @@ public class SetViewToSetDtoMapper implements EntityToDtoMapper<SetView, SetDto>
         setDto.setId(setView.getId());
         setDto.setWeight(setView.getWeight());
         setDto.setReps(setView.getReps());
-        setDto.setExerciseId(setDto.getExerciseId());
+        setDto.setExerciseId(setView.getExerciseId());
         return setDto;
     }
 }

@@ -124,7 +124,7 @@ public class ExerciseServiceIntegrationTest {
     @Test
     public void ExerciseService_CreateExerciseInWorkout_ReturnCreatedExerciseInWorkoutDto() {
         assertThat(workoutRepository.existsByIdAndUserId(VALID_WORKOUT_ID, VALID_USER_ID)).isTrue();
-        exerciseDto.setSetDtoList(null);
+        exerciseDto.setSetDtos(null);
         ExerciseDto savedExerciseDto = exerciseService.createExerciseInWorkout(exerciseDto, VALID_WORKOUT_ID);
         assertThat(savedExerciseDto.getName()).isEqualTo(exerciseDto.getName());
         assertThat(savedExerciseDto.getWorkoutId()).isEqualTo(exerciseDto.getWorkoutId());
@@ -144,7 +144,7 @@ public class ExerciseServiceIntegrationTest {
         assertThat(workoutRepository.existsByIdAndUserId(VALID_WORKOUT_ID, VALID_USER_ID)).isTrue();
         assertThat(exerciseRepository.findByIdAndWorkoutId(VALID_EXERCISE_ID, VALID_WORKOUT_ID)).isPresent();
         exerciseDto.setName(VALID_EXERCISE_NAME_UPDATE);
-        exerciseDto.setSetDtoList(null);
+        exerciseDto.setSetDtos(null);
         ExerciseDto savedExerciseDto = exerciseService.updateExerciseInWorkoutById(exerciseDto, VALID_EXERCISE_ID, VALID_WORKOUT_ID);
         assertThat(savedExerciseDto.getName()).isEqualTo(exerciseDto.getName());
         assertThat(savedExerciseDto.getWorkoutId()).isEqualTo(exerciseDto.getWorkoutId());
@@ -155,7 +155,7 @@ public class ExerciseServiceIntegrationTest {
         assertThat(workoutRepository.existsByIdAndUserId(VALID_WORKOUT_ID, VALID_USER_ID)).isTrue();
         assertThat(exerciseRepository.findByIdAndWorkoutId(VALID_EXERCISE_ID, VALID_WORKOUT_ID)).isPresent();
 
-        exerciseDto.setSetDtoList(null);
+        exerciseDto.setSetDtos(null);
         ExerciseDto savedExerciseDto = exerciseService.updateExerciseInWorkoutById(exerciseDto, VALID_EXERCISE_ID, VALID_WORKOUT_ID);
         assertThat(savedExerciseDto.getName()).isEqualTo(exerciseDto.getName());
         assertThat(savedExerciseDto.getWorkoutId()).isEqualTo(exerciseDto.getWorkoutId());
@@ -166,7 +166,7 @@ public class ExerciseServiceIntegrationTest {
     @Test
     public void ExerciseService_UpdateExerciseInWorkoutById_ThrowWorkoutNotFoundException() {
         assertThat(workoutRepository.existsByIdAndUserId(INVALID_ID, VALID_USER_ID)).isFalse();
-        exerciseDto.setSetDtoList(null);
+        exerciseDto.setSetDtos(null);
         assertThrows(WorkoutNotFoundException.class,
                 () -> exerciseService.updateExerciseInWorkoutById(exerciseDto, VALID_EXERCISE_ID, INVALID_ID));
 
@@ -177,7 +177,7 @@ public class ExerciseServiceIntegrationTest {
     public void ExerciseService_UpdateExerciseInWorkoutById_ThrowExerciseNotFoundException() {
         assertThat(workoutRepository.existsByIdAndUserId(VALID_WORKOUT_ID, VALID_USER_ID)).isTrue();
         assertThat(exerciseRepository.findByIdAndWorkoutId(INVALID_ID, VALID_WORKOUT_ID)).isEmpty();
-        exerciseDto.setSetDtoList(null);
+        exerciseDto.setSetDtos(null);
         assertThrows(ExerciseNotFoundException.class,
                 () -> exerciseService.updateExerciseInWorkoutById(exerciseDto, INVALID_ID, VALID_WORKOUT_ID));
 

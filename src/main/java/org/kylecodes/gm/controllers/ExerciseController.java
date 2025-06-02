@@ -1,5 +1,6 @@
 package org.kylecodes.gm.controllers;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.kylecodes.gm.dtos.ExerciseDto;
 import org.kylecodes.gm.services.ExerciseServiceImpl;
@@ -43,10 +44,12 @@ public class ExerciseController {
 
     @PutMapping("/workouts/exercises/update")
     public ExerciseDto updateExerciseInWorkout(@Valid @RequestBody ExerciseDto exerciseDto, @RequestParam Long workoutId, @RequestParam Long exerciseId) {
+        System.out.println("recv update");
+
         ExerciseDto updatedExercise = exerciseService.updateExerciseInWorkoutById(exerciseDto, exerciseId, workoutId);
         return updatedExercise;
     }
-
+    @Transactional
     @DeleteMapping("/workouts/exercises/delete")
     public void deleteExerciseInWorkout(@RequestParam Long workoutId, @RequestParam Long exerciseId) {
         exerciseService.deleteExerciseInWorkoutById(exerciseId, workoutId);

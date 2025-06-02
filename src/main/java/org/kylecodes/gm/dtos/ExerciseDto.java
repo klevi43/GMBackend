@@ -19,12 +19,12 @@ public class ExerciseDto {
 //    @NotNull(message = InvalidInputData.INVALID_WORKOUT_ID_MSG)
     private Long workoutId;
 
-    private List<SetDto> setDtoList;
-    public ExerciseDto(Long id, String name, Long workoutId, List<SetDto> setDtoList) {
+    private List<SetDto> setDtos;
+    public ExerciseDto(Long id, String name, Long workoutId, List<SetDto> setDtos) {
         this.id = id;
         this.name = name;
         this.workoutId = workoutId;
-        this.setDtoList = setDtoList;
+        this.setDtos = setDtos;
     }
 
 
@@ -58,11 +58,11 @@ public class ExerciseDto {
         this.workoutId = workoutId;
     }
 
-    public List<SetDto> getSetDtoList() {
-        return setDtoList;
+    public List<SetDto> getSetDtos() {
+        return setDtos;
     }
 
-    public void setSetDtoList(List<SetDto> setDtoList) {
-        this.setDtoList = setDtoList != null ? setDtoList : new ArrayList<>();
+    public void setSetDtos(List<SetDto> setDtos) {
+        this.setDtos = setDtos != null ? setDtos : new ArrayList<>();
     }
 }

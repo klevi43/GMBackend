@@ -1,5 +1,6 @@
 package org.kylecodes.gm.controllers;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.kylecodes.gm.dtos.SetDto;
 import org.kylecodes.gm.services.SetService;
@@ -45,7 +46,7 @@ public class SetController {
                                                     @Valid @RequestBody SetDto setDto) {
         return setService.updateSetForExerciseInWorkout(setDto, setId, exerciseId, workoutId);
     }
-
+    @Transactional
     @DeleteMapping("/workouts/exercises/sets/delete")
     public void deleteSetForExerciseInWorkoutById(@RequestParam Long workoutId, @RequestParam Long exerciseId,
                                               @RequestParam Long setId) {

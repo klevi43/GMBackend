@@ -101,7 +101,7 @@ public class ExerciseControllerUnitTest {
         exerciseDto2.setName("Test Dto 2");
 
         exerciseDto.setWorkoutId(workout.getId());
-        exerciseDto.setSetDtoList(Arrays.asList(setDto, setDto2));
+        exerciseDto.setSetDtos(Arrays.asList(setDto, setDto2));
 
         WorkoutDto workoutDto = new WorkoutDto();
         workoutDto.setId(VALID_WORKOUT_ID_2);
@@ -123,7 +123,7 @@ public class ExerciseControllerUnitTest {
         response.andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name", CoreMatchers.is("Test Dto")))
                 .andExpect(jsonPath("$.workoutId", CoreMatchers.is(VALID_WORKOUT_ID_1.intValue())))
-                .andExpect(jsonPath("$.setDtoList", hasSize(2)))
+                .andExpect(jsonPath("$.setDtos", hasSize(2)))
                 .andDo(MockMvcResultHandlers.print());
         response.andDo(print());
     }
@@ -152,7 +152,7 @@ public class ExerciseControllerUnitTest {
         updatedExerciseDto.setId(exerciseDto.getId());
 
         updatedExerciseDto.setName("Updated Test Dto");
-        updatedExerciseDto.setSetDtoList(Arrays.asList(setDto, setDto2));
+        updatedExerciseDto.setSetDtos(Arrays.asList(setDto, setDto2));
 
         given(exerciseService.updateExerciseInWorkoutById(ArgumentMatchers.any(), ArgumentMatchers.anyLong(), ArgumentMatchers.anyLong())).willAnswer((invocationOnMock -> invocationOnMock.getArgument(0)));
 
@@ -165,7 +165,7 @@ public class ExerciseControllerUnitTest {
         response.andDo(print());
         response.andExpect(status().isOk())
                         .andExpect(jsonPath("$.name", CoreMatchers.is(updatedExerciseDto.getName())))
-                .andExpect(jsonPath("$.setDtoList", hasSize(2)));
+                .andExpect(jsonPath("$.setDtos", hasSize(2)));
 
     }
 

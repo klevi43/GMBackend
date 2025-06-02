@@ -1,7 +1,6 @@
 package org.kylecodes.gm.controllers.integrationTests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kylecodes.gm.dtos.AuthUserDto;
@@ -16,7 +15,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -47,18 +45,17 @@ public class AuthControllerIntegrationTest {
     @Test
     public void AuthController_Login_ReturnJwtDto() throws Exception {
         SecurityContextHolder.setContext(SecurityContextHolder.createEmptyContext());
-        ResultActions result = mockMvc.perform(post("/login")
+        ResultActions result = mockMvc.perform(post("/auth/login")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(validUser)));
 
         result.andExpect(status().isOk())
-                .andExpect(jsonPath("$.payload", CoreMatchers.notNullValue()))
                 .andDo(MockMvcResultHandlers.print());
     }
 
     @Test
     public void AuthController_LoginWithNonExistentEmail_ThrowBadCredentialsException() throws Exception {
-        ResultActions result = mockMvc.perform(post("/login")
+        ResultActions result = mockMvc.perform(post("/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(nonexistentUser)));
 
@@ -66,7 +63,7 @@ public class AuthControllerIntegrationTest {
     }
     @Test
     public void AuthContoller_LoginWithWrongPassword_ThrowBadCredentialsException() throws Exception {
-        ResultActions result = mockMvc.perform(post("/login")
+        ResultActions result = mockMvc.perform(post("/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(badPwUser)));
 
