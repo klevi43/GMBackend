@@ -57,8 +57,11 @@ public class AuthController {
     @GetMapping("/auth/me")
     public ResponseEntity<?> getAuthenticatedUser(HttpServletResponse response) {
         User authenticatedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return ResponseEntity.ok(new LoginResponse(authenticatedUser.getUsername(), authenticatedUser.getRole(),
-                SecurityContextHolder.getContext().getAuthentication().isAuthenticated()));
+        LoginResponse res = new LoginResponse();
+        res.setUserEmail(authenticatedUser.getUsername());
+        res.setUserRole(authenticatedUser.getRole());
+        res.setIsAuthenticated(SecurityContextHolder.getContext().getAuthentication().isAuthenticated());
+        return ResponseEntity.ok(res);
     }
 
 
