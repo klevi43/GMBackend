@@ -54,7 +54,7 @@ public class WorkoutServiceImpl implements WorkoutService {
     @Override
     public WorkoutPageDto getAllWorkouts(Integer pageNo, Integer pageSize) {
         User user = SecurityUtil.getPrincipalFromSecurityContext();
-        Page<Workout> workouts = workoutRepository.findAllByUserId(user.getId(), PageRequest.of(pageNo, pageSize));
+        Page<Workout> workouts = workoutRepository.findAllByUserIdOrderByDateDesc(user.getId(), PageRequest.of(pageNo, pageSize));
         List<Workout> workoutList = workouts.getContent();
 
         List<WorkoutDto> workoutDtoList = new ArrayList<>();

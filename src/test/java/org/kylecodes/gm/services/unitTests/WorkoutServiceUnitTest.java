@@ -159,7 +159,7 @@ public class WorkoutServiceUnitTest {
     public void WorkoutService_GetAllWorkouts_ReturnResponseDto() {
         Page workouts = Mockito.mock(Page.class);
 
-        when(workoutRepository.findAllByUserId(Mockito.anyLong(), Mockito.any())).thenReturn(workouts);
+        when(workoutRepository.findAllByUserIdOrderByDateDesc(Mockito.anyLong(), Mockito.any())).thenReturn(workouts);
 
         WorkoutPageDto foundWorkout = workoutService.getAllWorkouts(1, 10);
 
