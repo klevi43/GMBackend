@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto updateUserInfo(AuthUserDto updateUser) {
         User currentUser = SecurityUtil.getPrincipalFromSecurityContext();
-        if (updateUser.getEmail() != null) {
+        if (updateUser.getEmail() != null && !updateUser.getEmail().equals(currentUser.getUsername())) {
             if (userRepository.existsByEmail(updateUser.getEmail())) {
                 throw new EmailAlreadyExistsException();
             }
