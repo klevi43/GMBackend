@@ -2,15 +2,15 @@ package org.kylecodes.gm.dtos;
 
 import java.util.List;
 
-public class WorkoutPageDto {
-    private List<WorkoutDto> content;
+public class PageDto<T> {
+    private List<T> content;
     private Integer pageNo;
     private Integer pageSize;
     private Long totalElements;
     private Integer totalPages;
     private Boolean isLastPage;
 
-    public WorkoutPageDto(List<WorkoutDto> workoutDtos, Integer pageNo, Integer pageSize, Long totalElements, Integer totalPages, Boolean isLastPage) {
+    public PageDto(List<T> workoutDtos, Integer pageNo, Integer pageSize, Long totalElements, Integer totalPages, Boolean isLastPage) {
         this.content = workoutDtos;
         this.pageNo = pageNo;
         this.pageSize = pageSize;
@@ -19,14 +19,14 @@ public class WorkoutPageDto {
         this.isLastPage = isLastPage;
     }
 
-    public WorkoutPageDto() {
+    public PageDto() {
     }
 
-    public List<WorkoutDto> getContent() {
+    public List<T> getContent() {
         return content;
     }
 
-    public void setContent(List<WorkoutDto> content) {
+    public void setContent(List<T> content) {
         this.content = content;
     }
 
