@@ -1,8 +1,11 @@
 package org.kylecodes.gm.services;
 
+import org.kylecodes.gm.constants.Roles;
 import org.kylecodes.gm.dtos.PageDto;
 import org.kylecodes.gm.dtos.UserDto;
 import org.kylecodes.gm.entities.User;
+import org.kylecodes.gm.exceptions.UserAlreadyAdminException;
+import org.kylecodes.gm.exceptions.UserNotFoundException;
 import org.kylecodes.gm.mappers.EntityToDtoMapper;
 import org.kylecodes.gm.mappers.UserToUserDtoMapper;
 import org.kylecodes.gm.repositories.UserRepository;
@@ -13,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -34,4 +38,29 @@ public class AdminServiceImpl implements AdminService {
         pageDto.setLastPage(users.isLast());
         return pageDto;
     }
+
+    @Override
+    public UserDto promoteToAdmin(Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isEmpty()) {
+            throw new UserNotFoundException();
+        }
+        if (user.get().getRole().equals("ROLE_" + Roles.ADMIN)) {
+            throw new UserAlreadyAdminException();
+        }
+
+        user.get().setRole("ROLE_" + Roles.ADMIN);
+        User savedUser = userRepository.save(user.get());
+        return userMapper.mapToDto(savedUser);
+    }
+
+    @Override
+    public void deleteUser(Long userId) {
+        if (!userRepository.existsById(userId)) {
+            throw new UserNotFoundException();
+        }
+        userRepository.deleteById(userId);
+    }
+
+
 }
