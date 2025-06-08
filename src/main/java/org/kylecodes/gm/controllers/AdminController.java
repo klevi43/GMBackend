@@ -17,11 +17,14 @@ public class AdminController {
         return adminService.getAllUsers(pageNo, pageSize);
     }
 
-    @PutMapping("/admin/users/update")
+    @PutMapping("/admin/users/promote")
     public UserDto promoteToAdmin(@RequestParam Long userId) {
         return adminService.promoteToAdmin(userId);
     }
-
+    @PutMapping("/admin/users/demote")
+    public UserDto demoteToUser(@RequestParam Long userId) {
+        return adminService.demoteToUser(userId);
+    }
     @DeleteMapping("/admin/users/delete")
     public void deleteUser(@RequestParam Long userId) {
         adminService.deleteUser(userId);

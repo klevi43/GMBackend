@@ -7,5 +7,6 @@ public interface AdminService {
 
     PageDto<UserDto> getAllUsers(Integer pageNo, Integer pageSize);
     UserDto promoteToAdmin(Long userId);
+    UserDto demoteToUser(Long userId);
     void deleteUser(Long userId);
 }

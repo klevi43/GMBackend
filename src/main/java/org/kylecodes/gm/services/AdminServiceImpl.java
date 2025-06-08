@@ -4,7 +4,8 @@ import org.kylecodes.gm.constants.Roles;
 import org.kylecodes.gm.dtos.PageDto;
 import org.kylecodes.gm.dtos.UserDto;
 import org.kylecodes.gm.entities.User;
-import org.kylecodes.gm.exceptions.UserAlreadyAdminException;
+import org.kylecodes.gm.exceptions.AlreadyAdminException;
+import org.kylecodes.gm.exceptions.AlreadyUserException;
 import org.kylecodes.gm.exceptions.UserNotFoundException;
 import org.kylecodes.gm.mappers.EntityToDtoMapper;
 import org.kylecodes.gm.mappers.UserToUserDtoMapper;
@@ -45,11 +46,26 @@ public class AdminServiceImpl implements AdminService {
         if (user.isEmpty()) {
             throw new UserNotFoundException();
         }
-        if (user.get().getRole().equals("ROLE_" + Roles.ADMIN)) {
-            throw new UserAlreadyAdminException();
+
+        if (user.get().getRole().equals(Roles.ADMIN)) {
+            throw new AlreadyAdminException();
         }
 
         user.get().setRole("ROLE_" + Roles.ADMIN);
+        User savedUser = userRepository.save(user.get());
+        return userMapper.mapToDto(savedUser);
+    }
+
+    @Override
+    public UserDto demoteToUser(Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isEmpty()) {
+            throw new UserNotFoundException();
+        }
+        if (user.get().getRole().equals(Roles.USER)) {
+            throw new AlreadyUserException();
+        }
+        user.get().setRole("ROLE_" + Roles.USER);
         User savedUser = userRepository.save(user.get());
         return userMapper.mapToDto(savedUser);
     }

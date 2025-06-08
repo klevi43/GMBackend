@@ -135,13 +135,23 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler
-    public ResponseEntity<ErrorResponse> handleUserAlreadyAdmindException(UserAlreadyAdminException e, WebRequest request) {
+    public ResponseEntity<ErrorResponse> handleAlreadyAdminException(AlreadyAdminException e, WebRequest request) {
         ErrorResponse errorResponse = new ErrorResponse();
 
-        errorResponse.setStatus(HttpStatus.NOT_FOUND.value());
+        errorResponse.setStatus(HttpStatus.FORBIDDEN.value());
         errorResponse.setMessage(e.getMessage());
         errorResponse.setTimestamp(new Date());
 
-        return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.FORBIDDEN);
+    }
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleAlreadyUserException(AlreadyUserException e, WebRequest request) {
+        ErrorResponse errorResponse = new ErrorResponse();
+
+        errorResponse.setStatus(HttpStatus.FORBIDDEN.value());
+        errorResponse.setMessage(e.getMessage());
+        errorResponse.setTimestamp(new Date());
+
+        return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.FORBIDDEN);
     }
 }
