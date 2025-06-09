@@ -29,7 +29,7 @@ public class AdminServiceImpl implements AdminService {
     public PageDto<UserDto> getAllUsers(Integer pageNo, Integer pageSize) {
         Page<User> users = userRepository.findAll(PageRequest.of(pageNo, pageSize, Sort.by("role")));
         List<UserDto> userDtos = users.getContent().stream().map((user) -> userMapper.mapToDto(user)).toList();
-
+        System.out.println(userDtos);
         PageDto<UserDto> pageDto = new PageDto<>();
         pageDto.setContent(userDtos);
         pageDto.setPageNo(users.getNumber());
@@ -47,7 +47,7 @@ public class AdminServiceImpl implements AdminService {
             throw new UserNotFoundException();
         }
 
-        if (user.get().getRole().equals(Roles.ADMIN)) {
+        if (user.get().getRole().equals("ROLE_" + Roles.ADMIN)) {
             throw new AlreadyAdminException();
         }
 
@@ -62,7 +62,7 @@ public class AdminServiceImpl implements AdminService {
         if (user.isEmpty()) {
             throw new UserNotFoundException();
         }
-        if (user.get().getRole().equals(Roles.USER)) {
+        if (user.get().getRole().equals("ROLE_" + Roles.USER)) {
             throw new AlreadyUserException();
         }
         user.get().setRole("ROLE_" + Roles.USER);

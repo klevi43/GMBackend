@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
 
         user.setEmail(registerDto.getEmail());
         user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
-        user.setRole(Roles.USER);
+        user.setRole("ROLE_" + Roles.USER);
         User savedUser = userRepository.save(user);
         return userMapper.mapToDto(savedUser);
     }
