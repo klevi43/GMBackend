@@ -1,6 +1,6 @@
 # GMBackend
 
-This is the Spring Boot backend for **Growth Mindset**, a full-stack fitness tracking app. It provides RESTful endpoints for managing users, workouts, exercises, and sets — supporting role-based authentication and secure session management via JWT.
+This is the Spring Boot backend for **Growth Mindset**, a full-stack fitness tracking app. It provides RESTful endpoints for managing users, workouts, exercises, and sets. It also supports role-based authentication and secure session management via JWT.
 
 ## Features
 
@@ -44,32 +44,35 @@ Use your IDE(e.g. Eclipse or IntelliJ) to run the application in GmApplication.j
 
 ## API Overview
 All routes except for /auth/login and /auth/register require a valid JWT stored in an HTTP-only cookie header.
+<pre>
 1. Auth
-   POST /register
-   POST /login
-3. Workouts
-   GET    /workouts                 // Get recent workouts
-   GET    /workouts/history         // Get full workout history
-   POST   /workouts/create
-   PUT    /workouts/update?workoutId={id}
-   DELETE /workouts/delete?workoutId={id}
-4. Exercises
-   POST   /workouts/exercises/create?workoutId={workoutId}
-   PUT    /workouts/exercises/update?workoutId={workoutId}&exerciseId={exerciseId}
-   DELETE /workouts/exercises/delete?workoutId={workoutId}&exerciseId={exerciseId}
-5. Sets
-   POST   /workouts/exercises/sets/create?workoutId={workoutId}&exerciseId={exerciseId}
-   PUT    /workouts/exercises/sets/update?workoutId={workoutId}&exerciseId={id}&setId={exerciseId}&setId={setId}
-   DELETE /workouts/exercises/sets/delete?workoutId={workoutId}&exerciseId={id}&setId={exerciseId}&setId={setId}
-6. Users
-   GET /users
-   POST /users/create 
-   UPDATE /users/update
-   DELETE /users/delete
-7. Admin
-   GET /admin/users    // Get all users
-   PUT /admin/users/promote // Promote user to admin
-   Put /admin/users/demote // Demote admin to user
-   DELETE /admin/users/delete // delete a user's account
+   POST   /auth/login  
+   POST   /auth/logout
+   GET    /auth/me                  // Get authenticated user (used to check if user is logged in)
+2. Workouts
+   GET    /workouts                 // Get recent workouts  
+   GET    /workouts/history         // Get full workout history  
+   POST   /workouts/create  
+   PUT    /workouts/update?workoutId={id}  
+   DELETE /workouts/delete?workoutId={id}  
+3. Exercises
+   POST   /workouts/exercises/create?workoutId={workoutId}  
+   PUT    /workouts/exercises/update?workoutId={workoutId}&exerciseId={exerciseId}  
+   DELETE /workouts/exercises/delete?workoutId={workoutId}&exerciseId={exerciseId}  
+4. Sets
+   POST   /workouts/exercises/sets/create?workoutId={workoutId}&exerciseId={exerciseId}  
+   PUT    /workouts/exercises/sets/update?workoutId={workoutId}&exerciseId={id}&setId={exerciseId}&setId={setId}  
+   DELETE /workouts/exercises/sets/delete?workoutId={workoutId}&exerciseId={id}&setId={exerciseId}&setId={setId}  
+5. Users
+   GET    /users          
+   POST   /register 
+   UPDATE /users/update  
+   DELETE /users/delete  
+6. Admin
+   GET    /admin/users                              // Get all users  
+   PUT    /admin/users/promote?userId={userId}      // Promote user to admin  
+   Put    /admin/users/demote?userId={userId}       // Demote admin to user  
+   DELETE /admin/users/delete?userID={userId}       // delete a user's account  
+</pre>
    
     
