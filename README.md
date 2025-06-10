@@ -27,8 +27,8 @@ This is the Spring Boot backend for **Growth Mindset**, a full-stack fitness tra
 
 - **Authentication:** Uses stateless JWTs stored in HTTP-only cookies for security against XSS.
 - **CSRF Protection:**
-  - CSRF attacks are mitigated by setting SameSite=Strict on the authentication cookie, preventing the browser from             sending it in cross-origin requests.
-  - This setup is safe without additional CSRF tokens, assuming the frontend and backend share the same origin.
+   - CSRF attacks are mitigated by setting SameSite=Strict on the authentication cookie, preventing the browser from             sending it in cross-origin requests.
+   - This setup is safe without additional CSRF tokens, assuming the frontend and backend share the same origin.
 - **CORS Support**: Configured to allow secure cross-origin communication between the frontend and backend.
 
 
@@ -40,9 +40,9 @@ This is the Spring Boot backend for **Growth Mindset**, a full-stack fitness tra
 git clone https://github.com/klevi43/GMBackend.git
 ```
 2. **Set up your database**
-Create a MySQL database/schema (E.G. growth_mindest_db)
+   Create a MySQL database/schema (E.G. growth_mindest_db)
 3. **Configure environment**
-In src/main/resources/application.properties:
+   In src/main/resources/application.properties:
 ```
     spring.datasource.url=jdbc:mysql://localhost:3306/your_db_name
     spring.datasource.username=your_username
@@ -51,7 +51,7 @@ In src/main/resources/application.properties:
 ```
 **Database tables will be created automatically upon application startup if they don't already exist.**
 4. **Run the app**
-Use your IDE(e.g. Eclipse or IntelliJ) to run the application in GmApplication.java.
+   Use your IDE(e.g. Eclipse or IntelliJ) to run the application in GmApplication.java.
 
 ## API Overview
 All routes except for /auth/login and /auth/register require a valid JWT stored in an HTTP-only cookie header.
@@ -94,4 +94,3 @@ All routes except for /auth/login and /auth/register require a valid JWT stored 
 ## Frontend
 This backend connects to a React frontend. You can find the frontend repo here:
 [GMFrontend](https://github.com/klevi43/GMFrontend)
-    
