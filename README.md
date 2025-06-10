@@ -8,6 +8,7 @@ This is the Spring Boot backend for **Growth Mindset**, a full-stack fitness tra
 - Full CRUD support for user profile management
 - Full CRUD support for workout management
 - JWT-based stateless auth
+- **CSRF protection enable for all authenticated routes**
 - MySQL database integration
 - Efficient entity fetching with Blaze-Persistence
 - CORS support for frontend communication
@@ -21,6 +22,15 @@ This is the Spring Boot backend for **Growth Mindset**, a full-stack fitness tra
 - Blaze-Persistence
 - MySQL
 - Maven
+
+## Security
+
+- **Authentication:** Uses stateless JWTs stored in HTTP-only cookies for security against XSS.
+- **CSRF Protection:**
+  - CSRF attacks are mitigated by setting SameSite=Strict on the authentication cookie, preventing the browser from             sending it in cross-origin requests.
+  - This setup is safe without additional CSRF tokens, assuming the frontend and backend share the same origin.
+- **CORS Support**: Configured to allow secure cross-origin communication between the frontend and backend.
+
 
 ## Getting Started
 
@@ -39,6 +49,7 @@ In src/main/resources/application.properties:
     spring.datasource.password=your_password
     spring.jpa.hibernate.ddl-auto=update
 ```
+**Database tables will be created automatically upon application startup if they don't already exist.
 4. **Run the app**
 Use your IDE(e.g. Eclipse or IntelliJ) to run the application in GmApplication.java.
 
@@ -76,7 +87,7 @@ All routes except for /auth/login and /auth/register require a valid JWT stored 
 6. Admin
    GET    /admin/users                              // Get all users  
    PUT    /admin/users/promote?userId={userId}      // Promote user to admin  
-   Put    /admin/users/demote?userId={userId}       // Demote admin to user  
+   PUT    /admin/users/demote?userId={userId}       // Demote admin to user  
    DELETE /admin/users/delete?userID={userId}       // delete a user's account  
 </pre>
 
