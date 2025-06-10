@@ -49,7 +49,7 @@ In src/main/resources/application.properties:
     spring.datasource.password=your_password
     spring.jpa.hibernate.ddl-auto=update
 ```
-**Database tables will be created automatically upon application startup if they don't already exist.
+**Database tables will be created automatically upon application startup if they don't already exist.**
 4. **Run the app**
 Use your IDE(e.g. Eclipse or IntelliJ) to run the application in GmApplication.java.
 
