@@ -49,30 +49,38 @@ All routes except for /auth/login and /auth/register require a valid JWT stored 
    POST   /auth/login  
    POST   /auth/logout
    GET    /auth/me                  // Get authenticated user (used to check if user is logged in)
+    
 2. Workouts
    GET    /workouts                 // Get recent workouts  
    GET    /workouts/history         // Get full workout history  
    POST   /workouts/create  
    PUT    /workouts/update?workoutId={id}  
    DELETE /workouts/delete?workoutId={id}  
+    
 3. Exercises
    POST   /workouts/exercises/create?workoutId={workoutId}  
    PUT    /workouts/exercises/update?workoutId={workoutId}&exerciseId={exerciseId}  
    DELETE /workouts/exercises/delete?workoutId={workoutId}&exerciseId={exerciseId}  
+
 4. Sets
    POST   /workouts/exercises/sets/create?workoutId={workoutId}&exerciseId={exerciseId}  
-   PUT    /workouts/exercises/sets/update?workoutId={workoutId}&exerciseId={id}&setId={exerciseId}&setId={setId}  
-   DELETE /workouts/exercises/sets/delete?workoutId={workoutId}&exerciseId={id}&setId={exerciseId}&setId={setId}  
+   PUT    /workouts/exercises/sets/update?workoutId={workoutId}&exerciseId={exerciseId}&setId={setId}  
+   DELETE /workouts/exercises/sets/delete?workoutId={workoutId}&exerciseId={exerciseId}&setId={setId} 
+    
 5. Users
    GET    /users          
    POST   /register 
    UPDATE /users/update  
    DELETE /users/delete  
+    
 6. Admin
    GET    /admin/users                              // Get all users  
    PUT    /admin/users/promote?userId={userId}      // Promote user to admin  
    Put    /admin/users/demote?userId={userId}       // Demote admin to user  
    DELETE /admin/users/delete?userID={userId}       // delete a user's account  
 </pre>
-   
+
+## Backend
+This backend connects to a React frontend. You can find the frontend repo here:
+[GMFrontend](https://github.com/klevi43/GMFrontend)
     
