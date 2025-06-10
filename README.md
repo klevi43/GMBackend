@@ -1,14 +1,16 @@
 # GMBackend
 
-This is the Spring Boot backend for **Growth Mindset**, a full-stack fitness tracking app. It provides RESTful endpoints for managing users, workouts, exercises, and sets — supporting role-based authentication and secure session management via JWT.
+This is the Spring Boot backend for **Growth Mindset**, a full-stack fitness tracking app. It provides RESTful endpoints for managing users, workouts, exercises, and sets. It also supports role-based authentication and secure session management via JWT.
 
 ## Features
 
-- User authentication & role-based authorization (User/Admin)
-- Full CRUD support for workouts, exercises, and sets
+- User authentication, role-based authorization, & protected routes (User/Admin)
+- Full CRUD support for user profile management
+- Full CRUD support for workout management
 - JWT-based stateless auth
+- **CSRF protection enable for all authenticated routes**
 - MySQL database integration
-- Efficient entity fetching with Blaze-Persistence
+- Efficient entity fetching for deeply nested entities (exercises, sets) with Blaze-Persistence, minimizing N+1 query problems
 - CORS support for frontend communication
 
 ## Tech Stack
@@ -21,45 +23,74 @@ This is the Spring Boot backend for **Growth Mindset**, a full-stack fitness tra
 - MySQL
 - Maven
 
+## Security
+
+- **Authentication:** Uses stateless JWTs stored in HTTP-only cookies for security against XSS.
+- **CSRF Protection:**
+   - CSRF attacks are mitigated by setting SameSite=Strict on the authentication cookie, preventing the browser from             sending it in cross-origin requests.
+   - This setup is safe without additional CSRF tokens, assuming the frontend and backend share the same origin.
+- **CORS Support**: Configured to allow secure cross-origin communication between the frontend and backend.
+
+
 ## Getting Started
 
 1. **Clone the repo**
 
 ```bash
 git clone https://github.com/klevi43/GMBackend.git
-cd GMBackend
 ```
 2. **Set up your database**
-Create a MySQL database/schema (E.G. growth_mindest_db)
+   Create a MySQL database/schema (E.G. growth_mindest_db)
 3. **Configure environment**
-In src/main/resources/application.properties:
+   In src/main/resources/application.properties:
 ```
     spring.datasource.url=jdbc:mysql://localhost:3306/your_db_name
-      spring.datasource.username=your_username
+    spring.datasource.username=your_username
     spring.datasource.password=your_password
     spring.jpa.hibernate.ddl-auto=update
 ```
+**Database tables will be created automatically upon application startup if they don't already exist.**
 4. **Run the app**
-Use your IDE(e.g. Eclipse or IntelliJ) to run the application in GmApplication.java.
+   Use your IDE(e.g. Eclipse or IntelliJ) to run the application in GmApplication.java.
 
 ## API Overview
 All routes except for /auth/login and /auth/register require a valid JWT stored in an HTTP-only cookie header.
+<pre>
 1. Auth
-   POST /register
-   POST /login
-2. Workouts
-   GET    /workouts                 // Get recent workouts
-   GET    /workouts/history         // Get full workout history
-   POST   /workouts/create
-   PUT    /workouts/update?workoutId={id}
-   DELETE /workouts/delete?workoutId={id}
-3. Exercises
-   POST   /workouts/exercises/create?workoutId={workoutId}
-   PUT    /workouts/exercises/update?workoutId={workoutId}&exerciseId={exerciseId}
-   DELETE /workouts/exercises/delete?workoutId={workoutId}&exerciseId={exerciseId}
-4. Sets
-   POST   /workouts/exercises/sets/create?workoutId={workoutId}&exerciseId={exerciseId}
-   PUT    /workouts/exercises/sets/update?workoutId={workoutId}&exerciseId={id}&setId={exerciseId}&setId={setId}
-   DELETE /workouts/exercises/sets/delete?workoutId={workoutId}&exerciseId={id}&setId={exerciseId}&setId={setId}
-5. Users
+   POST   /auth/login  
+   POST   /auth/logout
+   GET    /auth/me                  // Get authenticated user (used to check if user is logged in)
     
+2. Workouts
+   GET    /workouts                 // Get recent workouts  
+   GET    /workouts/history         // Get full workout history  
+   POST   /workouts/create  
+   PUT    /workouts/update?workoutId={id}  
+   DELETE /workouts/delete?workoutId={id}  
+    
+3. Exercises
+   POST   /workouts/exercises/create?workoutId={workoutId}  
+   PUT    /workouts/exercises/update?workoutId={workoutId}&exerciseId={exerciseId}  
+   DELETE /workouts/exercises/delete?workoutId={workoutId}&exerciseId={exerciseId}  
+
+4. Sets
+   POST   /workouts/exercises/sets/create?workoutId={workoutId}&exerciseId={exerciseId}  
+   PUT    /workouts/exercises/sets/update?workoutId={workoutId}&exerciseId={exerciseId}&setId={setId}  
+   DELETE /workouts/exercises/sets/delete?workoutId={workoutId}&exerciseId={exerciseId}&setId={setId} 
+    
+5. Users
+   GET    /users          
+   POST   /register 
+   UPDATE /users/update  
+   DELETE /users/delete  
+    
+6. Admin
+   GET    /admin/users                              // Get all users  
+   PUT    /admin/users/promote?userId={userId}      // Promote user to admin  
+   PUT    /admin/users/demote?userId={userId}       // Demote admin to user  
+   DELETE /admin/users/delete?userID={userId}       // delete a user's account  
+</pre>
+
+## Frontend
+This backend connects to a React frontend. You can find the frontend repo here:
+[GMFrontend](https://github.com/klevi43/GMFrontend)
