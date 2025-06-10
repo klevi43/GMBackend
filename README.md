@@ -4,13 +4,13 @@ This is the Spring Boot backend for **Growth Mindset**, a full-stack fitness tra
 
 ## Features
 
-- User authentication & role-based authorization (User/Admin)
+- User authentication, role-based authorization, & protected routes (User/Admin)
 - Full CRUD support for user profile management
 - Full CRUD support for workout management
 - JWT-based stateless auth
 - **CSRF protection enable for all authenticated routes**
 - MySQL database integration
-- Efficient entity fetching with Blaze-Persistence
+- Efficient entity fetching for deeply nested entities (exercises, sets) with Blaze-Persistence, minimizing N+1 query problems
 - CORS support for frontend communication
 
 ## Tech Stack
@@ -91,7 +91,7 @@ All routes except for /auth/login and /auth/register require a valid JWT stored 
    DELETE /admin/users/delete?userID={userId}       // delete a user's account  
 </pre>
 
-## Backend
+## Frontend
 This backend connects to a React frontend. You can find the frontend repo here:
 [GMFrontend](https://github.com/klevi43/GMFrontend)
     
