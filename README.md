@@ -5,7 +5,8 @@ This is the Spring Boot backend for **Growth Mindset**, a full-stack fitness tra
 ## Features
 
 - User authentication & role-based authorization (User/Admin)
-- Full CRUD support for workouts, exercises, and sets
+- Full CRUD support for user profile management
+- Full CRUD support for workout management
 - JWT-based stateless auth
 - MySQL database integration
 - Efficient entity fetching with Blaze-Persistence
@@ -27,7 +28,6 @@ This is the Spring Boot backend for **Growth Mindset**, a full-stack fitness tra
 
 ```bash
 git clone https://github.com/klevi43/GMBackend.git
-cd GMBackend
 ```
 2. **Set up your database**
 Create a MySQL database/schema (E.G. growth_mindest_db)
@@ -35,7 +35,7 @@ Create a MySQL database/schema (E.G. growth_mindest_db)
 In src/main/resources/application.properties:
 ```
     spring.datasource.url=jdbc:mysql://localhost:3306/your_db_name
-      spring.datasource.username=your_username
+    spring.datasource.username=your_username
     spring.datasource.password=your_password
     spring.jpa.hibernate.ddl-auto=update
 ```
@@ -47,19 +47,29 @@ All routes except for /auth/login and /auth/register require a valid JWT stored 
 1. Auth
    POST /register
    POST /login
-2. Workouts
+3. Workouts
    GET    /workouts                 // Get recent workouts
    GET    /workouts/history         // Get full workout history
    POST   /workouts/create
    PUT    /workouts/update?workoutId={id}
    DELETE /workouts/delete?workoutId={id}
-3. Exercises
+4. Exercises
    POST   /workouts/exercises/create?workoutId={workoutId}
    PUT    /workouts/exercises/update?workoutId={workoutId}&exerciseId={exerciseId}
    DELETE /workouts/exercises/delete?workoutId={workoutId}&exerciseId={exerciseId}
-4. Sets
+5. Sets
    POST   /workouts/exercises/sets/create?workoutId={workoutId}&exerciseId={exerciseId}
    PUT    /workouts/exercises/sets/update?workoutId={workoutId}&exerciseId={id}&setId={exerciseId}&setId={setId}
    DELETE /workouts/exercises/sets/delete?workoutId={workoutId}&exerciseId={id}&setId={exerciseId}&setId={setId}
-5. Users
+6. Users
+   GET /users
+   POST /users/create 
+   UPDATE /users/update
+   DELETE /users/delete
+7. Admin
+   GET /admin/users    // Get all users
+   PUT /admin/users/promote // Promote user to admin
+   Put /admin/users/demote // Demote admin to user
+   DELETE /admin/users/delete // delete a user's account
+   
     
