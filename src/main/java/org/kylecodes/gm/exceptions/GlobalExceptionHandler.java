@@ -122,4 +122,36 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         errorResponse.setTimestamp(new Date());
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleUserNotFoundException(UserNotFoundException e, WebRequest request) {
+        ErrorResponse errorResponse = new ErrorResponse();
+
+        errorResponse.setStatus(HttpStatus.NOT_FOUND.value());
+        errorResponse.setMessage(e.getMessage());
+        errorResponse.setTimestamp(new Date());
+
+        return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleAlreadyAdminException(AlreadyAdminException e, WebRequest request) {
+        ErrorResponse errorResponse = new ErrorResponse();
+
+        errorResponse.setStatus(HttpStatus.FORBIDDEN.value());
+        errorResponse.setMessage(e.getMessage());
+        errorResponse.setTimestamp(new Date());
+
+        return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.FORBIDDEN);
+    }
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleAlreadyUserException(AlreadyUserException e, WebRequest request) {
+        ErrorResponse errorResponse = new ErrorResponse();
+
+        errorResponse.setStatus(HttpStatus.FORBIDDEN.value());
+        errorResponse.setMessage(e.getMessage());
+        errorResponse.setTimestamp(new Date());
+
+        return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.FORBIDDEN);
+    }
 }

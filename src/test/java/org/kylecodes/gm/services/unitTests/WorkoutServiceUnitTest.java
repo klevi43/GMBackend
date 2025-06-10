@@ -6,7 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.kylecodes.gm.contexts.SecurityContextForTests;
 import org.kylecodes.gm.dtos.FullWorkoutDto;
 import org.kylecodes.gm.dtos.WorkoutDto;
-import org.kylecodes.gm.dtos.WorkoutPageDto;
+import org.kylecodes.gm.dtos.PageDto;
 import org.kylecodes.gm.entities.User;
 import org.kylecodes.gm.entities.Workout;
 import org.kylecodes.gm.entityViews.ExerciseView;
@@ -159,9 +159,9 @@ public class WorkoutServiceUnitTest {
     public void WorkoutService_GetAllWorkouts_ReturnResponseDto() {
         Page workouts = Mockito.mock(Page.class);
 
-        when(workoutRepository.findAllByUserId(Mockito.anyLong(), Mockito.any())).thenReturn(workouts);
+        when(workoutRepository.findAllByUserIdOrderByDateDesc(Mockito.anyLong(), Mockito.any())).thenReturn(workouts);
 
-        WorkoutPageDto foundWorkout = workoutService.getAllWorkouts(1, 10);
+        PageDto foundWorkout = workoutService.getAllWorkouts(1, 10);
 
         assertThat(foundWorkout).isNotNull();
 

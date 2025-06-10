@@ -35,7 +35,7 @@ public class User implements UserDetails {
     @JsonIgnore
     private List<Workout> workouts;
 
-    public User( Long id,  String email,  String password, String role, List<Workout> workouts) {
+    public User(Long id, String email, String password, String role, List<Workout> workouts) {
         this.id = id;
         this.email = email;
         this.password = password;

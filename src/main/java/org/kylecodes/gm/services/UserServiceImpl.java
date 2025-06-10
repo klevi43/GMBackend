@@ -45,25 +45,25 @@ public class UserServiceImpl implements UserService {
         if (!registerDto.getPassword().equals(registerDto.getConfirmPassword())) {
             throw new PasswordAndConfirmPasswordNotEqualException();
         }
-        User newUser = new User();
+        User user = new User();
 
-        newUser.setEmail(registerDto.getEmail());
-        newUser.setPassword(passwordEncoder.encode(registerDto.getPassword()));
-        newUser.setRole(Roles.USER);
-        User savedUser = userRepository.save(newUser);
+        user.setEmail(registerDto.getEmail());
+        user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
+        user.setRole("ROLE_" + Roles.USER);
+        User savedUser = userRepository.save(user);
         return userMapper.mapToDto(savedUser);
     }
 
     @Override
     public UserDto getUserInfo() {
-        User user = SecurityUtil.getPrincipalFromSecurityContext();
-        return userMapper.mapToDto(user);
+        User userDetailsModel = SecurityUtil.getPrincipalFromSecurityContext();
+        return userMapper.mapToDto(userDetailsModel);
     }
 
     @Override
     public UserDto updateUserInfo(AuthUserDto updateUser) {
         User currentUser = SecurityUtil.getPrincipalFromSecurityContext();
-        if (updateUser.getEmail() != null) {
+        if (updateUser.getEmail() != null && !updateUser.getEmail().equals(currentUser.getUsername())) {
             if (userRepository.existsByEmail(updateUser.getEmail())) {
                 throw new EmailAlreadyExistsException();
             }

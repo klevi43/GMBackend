@@ -13,9 +13,10 @@ public class ExerciseViewToExerciseDtoMapper implements EntityToDtoMapper<Exerci
     @Override
     public ExerciseDto mapToDto(ExerciseView exerciseView) {
         ExerciseDto exerciseDto = new ExerciseDto();
+        exerciseDto.setWorkoutId(exerciseView.getWorkoutId());
         exerciseDto.setId(exerciseView.getId());
         exerciseDto.setName(exerciseView.getName());
-        exerciseDto.setSetDtoList(convertToSetDtos(exerciseView.getSets()));
+        exerciseDto.setSetDtos(convertToSetDtos(exerciseView.getSets()));
         return exerciseDto;
     }
 

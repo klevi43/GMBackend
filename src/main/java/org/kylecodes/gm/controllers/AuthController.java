@@ -12,6 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,7 +41,6 @@ public class AuthController {
 
         JwtDto jwtDto = authService.verify(authUserDto);
         User authenticatedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        System.out.println(authenticatedUser.toString());
 
         ResponseCookie cookie = ResponseCookie.from("jwtToken", jwtDto.getPayload())
                 .httpOnly(true)
@@ -53,6 +53,15 @@ public class AuthController {
 
         return ResponseEntity.ok(new LoginResponse(authenticatedUser.getUsername(), authenticatedUser.getRole(),
                 true));
+    }
+    @GetMapping("/auth/me")
+    public ResponseEntity<?> getAuthenticatedUser(HttpServletResponse response) {
+        User authenticatedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        LoginResponse res = new LoginResponse();
+        res.setUserEmail(authenticatedUser.getUsername());
+        res.setUserRole(authenticatedUser.getRole());
+        res.setIsAuthenticated(SecurityContextHolder.getContext().getAuthentication().isAuthenticated());
+        return ResponseEntity.ok(res);
     }
 
 

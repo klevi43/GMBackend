@@ -4,7 +4,7 @@ import jakarta.transaction.Transactional;
 import org.kylecodes.gm.constants.RequestFailure;
 import org.kylecodes.gm.dtos.FullWorkoutDto;
 import org.kylecodes.gm.dtos.WorkoutDto;
-import org.kylecodes.gm.dtos.WorkoutPageDto;
+import org.kylecodes.gm.dtos.PageDto;
 import org.kylecodes.gm.entities.User;
 import org.kylecodes.gm.entities.Workout;
 import org.kylecodes.gm.entityViews.WorkoutView;
@@ -52,9 +52,9 @@ public class WorkoutServiceImpl implements WorkoutService {
     }
 
     @Override
-    public WorkoutPageDto getAllWorkouts(Integer pageNo, Integer pageSize) {
+    public PageDto<WorkoutDto> getAllWorkouts(Integer pageNo, Integer pageSize) {
         User user = SecurityUtil.getPrincipalFromSecurityContext();
-        Page<Workout> workouts = workoutRepository.findAllByUserId(user.getId(), PageRequest.of(pageNo, pageSize));
+        Page<Workout> workouts = workoutRepository.findAllByUserIdOrderByDateDesc(user.getId(), PageRequest.of(pageNo, pageSize));
         List<Workout> workoutList = workouts.getContent();
 
         List<WorkoutDto> workoutDtoList = new ArrayList<>();
@@ -64,14 +64,14 @@ public class WorkoutServiceImpl implements WorkoutService {
                 workoutDtoList.add(workoutDto);
             }
         }
-        WorkoutPageDto workoutPageDto = new WorkoutPageDto();
-        workoutPageDto.setContent(workoutDtoList);
-        workoutPageDto.setPageNo(workouts.getNumber());
-        workoutPageDto.setPageSize(workouts.getSize());
-        workoutPageDto.setTotalPages(workouts.getTotalPages());
-        workoutPageDto.setTotalElements(workouts.getTotalElements());
-        workoutPageDto.setLastPage(workouts.isLast());
-        return workoutPageDto;
+        PageDto<WorkoutDto> pageDto = new PageDto<>();
+        pageDto.setContent(workoutDtoList);
+        pageDto.setPageNo(workouts.getNumber());
+        pageDto.setPageSize(workouts.getSize());
+        pageDto.setTotalPages(workouts.getTotalPages());
+        pageDto.setTotalElements(workouts.getTotalElements());
+        pageDto.setLastPage(workouts.isLast());
+        return pageDto;
     }
 
     @Override
@@ -81,7 +81,6 @@ public class WorkoutServiceImpl implements WorkoutService {
 
         Optional<WorkoutView> workout = Optional.of(workoutRepository.findByIdAndUserIdBlaze(id, user.getId())
                 .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.GET_REQUEST_FAILURE)));
-
       return workoutViewMapper.mapToDto(workout.get());
 
     }
@@ -99,6 +98,7 @@ public class WorkoutServiceImpl implements WorkoutService {
         if (workoutDto.getDate() != null) {
             updateWorkout.setDate(workoutDto.getDate());
         }
+
         Workout savedWorkout = workoutRepository.save(updateWorkout);
 
         return workoutMapper.mapToDto(savedWorkout);
