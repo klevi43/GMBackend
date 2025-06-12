@@ -17,17 +17,7 @@ public class SetController {
     @Autowired
     SetService setService;
 
-//    @GetMapping("/workouts/exercises/sets")
-//    public List<SetDto> getAllSetsForExerciseInWorkout(@RequestParam Long workoutId,  @RequestParam Long exerciseId) {
-//        return setService.getAllSetsForExerciseInWorkout(exerciseId, workoutId);
-//    }
-//
-//    @GetMapping("/workouts/exercises/sets/set")
-//    public SetDto getSetForExerciseInWorkoutById(@RequestParam Long workoutId,  @RequestParam Long exerciseId,
-//                                             @RequestParam Long setId) {
-//
-//        return setService.getSetForExerciseInWorkout(setId, exerciseId, workoutId);
-//    }
+
     @PostMapping("/workouts/exercises/sets/create")
     public ResponseEntity<SetDto> createSetForExerciseInWorkoutById(@RequestParam Long workoutId, @RequestParam Long exerciseId,
                                                 @Valid @RequestBody SetDto setDto) {
