@@ -12,10 +12,7 @@ import org.kylecodes.gm.entityViews.ExerciseView;
 import org.kylecodes.gm.entityViews.SetView;
 import org.kylecodes.gm.entityViews.WorkoutView;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.*;
 
 @Configuration
 public class BlazePersistenceConfig {
@@ -31,6 +28,7 @@ public class BlazePersistenceConfig {
         return config.createCriteriaBuilderFactory(entityManagerFactory);
     }
     @Bean
+    @Profile("!test")
     public EntityViewConfiguration entityViewConfiguration(
             CriteriaBuilderFactory criteriaBuilderFactory
     ) {

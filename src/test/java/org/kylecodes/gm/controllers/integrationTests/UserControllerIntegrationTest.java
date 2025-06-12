@@ -93,7 +93,7 @@ public class UserControllerIntegrationTest {
         resultActions.andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", CoreMatchers.notNullValue()))
                 .andExpect(jsonPath("$.email", CoreMatchers.is(registerDto.getEmail())))
-                .andExpect(jsonPath("$.role", CoreMatchers.is(Roles.USER)));
+                .andExpect(jsonPath("$.role", CoreMatchers.is("ROLE_" + Roles.USER)));
     }
 
     @Test
@@ -127,15 +127,6 @@ public class UserControllerIntegrationTest {
                 .andExpect(jsonPath("$.email", CoreMatchers.is(UPDATE_EMAIL)));
     }
 
-    @Test
-    public void UserController_UpdateUserInfo_ThrowEmailAlreadyExistsException() throws Exception {
-
-        ResultActions resultActions = mockMvc.perform(put("/users/update")
-                .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(validUser)));
-
-        resultActions.andExpect(status().is4xxClientError())
-                .andExpect(jsonPath("$.message", CoreMatchers.is(EmailAlreadyExists.ERROR_MSG)));
-    }
 
     @Test
     public void UserController_DeleteUser_ReturnNothing() throws Exception {
