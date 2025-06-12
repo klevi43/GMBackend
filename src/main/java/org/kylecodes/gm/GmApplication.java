@@ -13,19 +13,5 @@ public class GmApplication {
         SpringApplication.run(GmApplication.class, args);
     }
 
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                //WebMvcConfigurer.super.addCorsMappings(registry);
-                registry.addMapping("/**") // allow all
-                        .allowedMethods("*")
-                        .allowedOrigins("http://localhost:5173")
-                        .allowCredentials(true)
-                        .allowedHeaders("*");
 
-            }
-        };
-    }
 }
