@@ -1,10 +1,13 @@
 package org.kylecodes.gm.controllers;
 
-import org.kylecodes.gm.dtos.AuthUserDto;
+import jakarta.servlet.http.HttpServletResponse;
+import org.kylecodes.gm.dtos.PasswordDto;
 import org.kylecodes.gm.dtos.RegisterDto;
 import org.kylecodes.gm.dtos.UserDto;
 import org.kylecodes.gm.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,9 +27,17 @@ public class UserController {
         return userService.getUserInfo();
     }
 
-    @PutMapping("/users/update")
-    public UserDto updateUserInfo(@RequestBody AuthUserDto authUserDto) {
-        return userService.updateUserInfo(authUserDto);
+    @PutMapping("/users/password/update")
+    public void updateUserPassword(@RequestBody PasswordDto passwordDto, HttpServletResponse response) {
+        userService.updateUserPassword(passwordDto);
+        ResponseCookie cookie = ResponseCookie.from("jwtToken", "")
+                .httpOnly(true)
+                .secure(false)
+                .path("/")
+                .maxAge(0)
+                .sameSite("Strict")
+                .build();
+        response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
     }
 
     @DeleteMapping("/users/delete")

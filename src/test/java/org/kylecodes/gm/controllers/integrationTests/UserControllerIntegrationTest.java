@@ -6,7 +6,7 @@ import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kylecodes.gm.constants.EmailAlreadyExists;
-import org.kylecodes.gm.constants.PasswordAndConfirmPasswordNotEqual;
+import org.kylecodes.gm.constants.PasswordErrorMsg;
 import org.kylecodes.gm.constants.Roles;
 import org.kylecodes.gm.contexts.SecurityContextForTests;
 import org.kylecodes.gm.dtos.AuthUserDto;
@@ -113,7 +113,7 @@ public class UserControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(registerDto)));
 
         resultActions.andExpect(status().is4xxClientError())
-                .andExpect(jsonPath("$.message", CoreMatchers.is(PasswordAndConfirmPasswordNotEqual.ERROR_MSG)));
+                .andExpect(jsonPath("$.message", CoreMatchers.is(PasswordErrorMsg.PASSWORD_AND_CONFIRM_PASSWORD_MUST_BE_EQUAL_VALUES)));
     }
 
     @Test

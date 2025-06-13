@@ -2,13 +2,11 @@ package org.kylecodes.gm.services;
 
 import org.kylecodes.gm.constants.NotFoundMsg;
 import org.kylecodes.gm.constants.Roles;
-import org.kylecodes.gm.dtos.AuthUserDto;
+import org.kylecodes.gm.dtos.PasswordDto;
 import org.kylecodes.gm.dtos.RegisterDto;
 import org.kylecodes.gm.dtos.UserDto;
 import org.kylecodes.gm.entities.User;
-import org.kylecodes.gm.exceptions.AlreadyLoggedInException;
-import org.kylecodes.gm.exceptions.EmailAlreadyExistsException;
-import org.kylecodes.gm.exceptions.PasswordAndConfirmPasswordNotEqualException;
+import org.kylecodes.gm.exceptions.*;
 import org.kylecodes.gm.mappers.EntityToDtoMapper;
 import org.kylecodes.gm.mappers.UserToUserDtoMapper;
 import org.kylecodes.gm.repositories.UserRepository;
@@ -60,21 +58,37 @@ public class UserServiceImpl implements UserService {
         return userMapper.mapToDto(userDetailsModel);
     }
 
+
+//    public UserDto updateUser(PasswordDto updateUser) {
+//        User currentUser = SecurityUtil.getPrincipalFromSecurityContext();
+//        if (updateUser.getEmail() != null && !updateUser.getEmail().equals(currentUser.getUsername())) {
+//            if (userRepository.existsByEmail(updateUser.getEmail())) {
+//                throw new EmailAlreadyExistsException();
+//            }
+//            currentUser.setEmail(updateUser.getEmail());
+//        }
+//
+//        if(updateUser.getPassword() != null) {
+//            currentUser.setPassword(passwordEncoder.encode(updateUser.getPassword()));
+//        }
+//        User savedUser = userRepository.save(currentUser);
+//        return userMapper.mapToDto(savedUser);
+//    }
     @Override
-    public UserDto updateUserInfo(AuthUserDto updateUser) {
+    public void updateUserPassword(PasswordDto passwordDto) {
         User currentUser = SecurityUtil.getPrincipalFromSecurityContext();
-        if (updateUser.getEmail() != null && !updateUser.getEmail().equals(currentUser.getUsername())) {
-            if (userRepository.existsByEmail(updateUser.getEmail())) {
-                throw new EmailAlreadyExistsException();
-            }
-            currentUser.setEmail(updateUser.getEmail());
+        if (!passwordEncoder.matches(passwordDto.getCurrentPassword(), currentUser.getPassword())) {
+            throw new InvalidPasswordException();
+        }
+        if (passwordEncoder.matches(passwordDto.getCurrentPassword(), currentUser.getPassword())) {
+            throw new CurrentPasswordMatchesNewPasswordException();
         }
 
-        if(updateUser.getPassword() != null) {
-            currentUser.setPassword(passwordEncoder.encode(updateUser.getPassword()));
+        if (!passwordDto.getNewPassword().equals(passwordDto.getConfirmNewPassword())) {
+            throw new PasswordAndConfirmPasswordNotEqualException();
         }
-        User savedUser = userRepository.save(currentUser);
-        return userMapper.mapToDto(savedUser);
+        currentUser.setPassword(passwordEncoder.encode(passwordDto.getNewPassword()));
+        userRepository.save(currentUser);
     }
 
     @Override
