@@ -2,6 +2,7 @@ package org.kylecodes.gm.services;
 
 import org.kylecodes.gm.constants.NotFoundMsg;
 import org.kylecodes.gm.constants.Roles;
+import org.kylecodes.gm.dtos.EmailDto;
 import org.kylecodes.gm.dtos.PasswordDto;
 import org.kylecodes.gm.dtos.RegisterDto;
 import org.kylecodes.gm.dtos.UserDto;
@@ -58,30 +59,38 @@ public class UserServiceImpl implements UserService {
         return userMapper.mapToDto(userDetailsModel);
     }
 
+    @Override
+    public void updateUserEmail(EmailDto emailDto) {
+        User currentUser = SecurityUtil.getPrincipalFromSecurityContext();
+        if (!passwordEncoder.matches(emailDto.getPassword(), currentUser.getPassword())) {
+            throw new InvalidPasswordException();
+        }
 
-//    public UserDto updateUser(PasswordDto updateUser) {
-//        User currentUser = SecurityUtil.getPrincipalFromSecurityContext();
-//        if (updateUser.getEmail() != null && !updateUser.getEmail().equals(currentUser.getUsername())) {
-//            if (userRepository.existsByEmail(updateUser.getEmail())) {
-//                throw new EmailAlreadyExistsException();
-//            }
-//            currentUser.setEmail(updateUser.getEmail());
-//        }
-//
-//        if(updateUser.getPassword() != null) {
-//            currentUser.setPassword(passwordEncoder.encode(updateUser.getPassword()));
-//        }
-//        User savedUser = userRepository.save(currentUser);
-//        return userMapper.mapToDto(savedUser);
-//    }
+        if (!emailDto.getCurrentEmail().equals(currentUser.getUsername())) {
+            throw new InvalidEmailException();
+        }
+
+        if (emailDto.getCurrentEmail().equals(emailDto.getNewEmail())) {
+            throw new NewEmailMatchesCurrentEmailException();
+        }
+
+        if (userRepository.existsByEmail(emailDto.getNewEmail())) {
+            throw new EmailAlreadyExistsException();
+        }
+
+        currentUser.setEmail(emailDto.getNewEmail());
+        userRepository.save(currentUser);
+    }
+
     @Override
     public void updateUserPassword(PasswordDto passwordDto) {
         User currentUser = SecurityUtil.getPrincipalFromSecurityContext();
         if (!passwordEncoder.matches(passwordDto.getCurrentPassword(), currentUser.getPassword())) {
             throw new InvalidPasswordException();
         }
+
         if (passwordEncoder.matches(passwordDto.getCurrentPassword(), currentUser.getPassword())) {
-            throw new CurrentPasswordMatchesNewPasswordException();
+            throw new NewPasswordMatchesCurrentPasswordException();
         }
 
         if (!passwordDto.getNewPassword().equals(passwordDto.getConfirmNewPassword())) {

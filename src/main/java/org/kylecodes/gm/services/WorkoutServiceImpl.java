@@ -43,6 +43,7 @@ public class WorkoutServiceImpl implements WorkoutService {
         if (workoutList.isEmpty()) {
             return new ArrayList<>();
         }
+
         List<WorkoutDto> workoutDtoList = new ArrayList<>();
         for (Workout workout : workoutList) {
             WorkoutDto workoutDto = workoutMapper.mapToDto(workout);

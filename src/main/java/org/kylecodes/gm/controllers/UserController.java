@@ -1,6 +1,7 @@
 package org.kylecodes.gm.controllers;
 
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import org.kylecodes.gm.dtos.EmailDto;
 import org.kylecodes.gm.dtos.PasswordDto;
 import org.kylecodes.gm.dtos.RegisterDto;
@@ -17,7 +18,7 @@ public class UserController {
     UserService userService;
 
     @PostMapping("/register")
-    public UserDto register(@RequestBody RegisterDto registerDto) {
+    public UserDto register(@RequestBody @Valid RegisterDto registerDto) {
         System.out.println(registerDto.getEmail());
 
         return userService.registerNewUser(registerDto);
@@ -29,7 +30,7 @@ public class UserController {
     }
 
     @PutMapping("/users/password/update")
-    public void updateUserPassword(@RequestBody PasswordDto passwordDto, HttpServletResponse response) {
+    public void updateUserPassword(@RequestBody @Valid PasswordDto passwordDto, HttpServletResponse response) {
         userService.updateUserPassword(passwordDto);
         ResponseCookie cookie = ResponseCookie.from("jwtToken", "")
                 .httpOnly(true)
@@ -42,7 +43,16 @@ public class UserController {
     }
 
     @PutMapping("/users/email/update")
-    public void updateUserEmail(@RequestBody EmailDto emailDto, HttpServletResponse response) {
+    public void updateUserEmail(@RequestBody @Valid EmailDto emailDto, HttpServletResponse response) {
+        userService.updateUserEmail(emailDto);
+        ResponseCookie cookie = ResponseCookie.from("jwtToken", "")
+                .httpOnly(true)
+                .secure(false)
+                .path("/")
+                .maxAge(0)
+                .sameSite("Strict")
+                .build();
+        response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
 
     }
     @DeleteMapping("/users/delete")

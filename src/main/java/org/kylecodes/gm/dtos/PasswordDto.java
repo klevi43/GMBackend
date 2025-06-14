@@ -1,22 +1,18 @@
 package org.kylecodes.gm.dtos;
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import org.kylecodes.gm.constants.PasswordLen;
 
 public class PasswordDto {
     @NotNull
-    @Min(PasswordLen.MIN_LENGTH)
-    @Max(PasswordLen.MAX_LENGTH)
+    @Size(min = PasswordLen.MIN_LENGTH, max = PasswordLen.MAX_LENGTH)
     private String currentPassword;
     @NotNull
-    @Min(PasswordLen.MIN_LENGTH)
-    @Max(PasswordLen.MAX_LENGTH)
+    @Size(min = PasswordLen.MIN_LENGTH, max = PasswordLen.MAX_LENGTH)
     private String newPassword;
     @NotNull
-    @Min(PasswordLen.MIN_LENGTH)
-    @Max(PasswordLen.MAX_LENGTH)
+    @Size(min = PasswordLen.MIN_LENGTH, max = PasswordLen.MAX_LENGTH)
     private String confirmNewPassword;
 
     public PasswordDto(String currentPassword, String newPassword, String confirmNewPassword) {
@@ -28,27 +24,27 @@ public class PasswordDto {
     public PasswordDto() {
     }
 
-    public @NotNull @Min(PasswordLen.MIN_LENGTH) @Max(PasswordLen.MAX_LENGTH) String getCurrentPassword() {
+    public @NotNull @Size(min = PasswordLen.MIN_LENGTH, max = PasswordLen.MAX_LENGTH) String getCurrentPassword() {
         return currentPassword;
     }
 
-    public void setCurrentPassword(@NotNull @Min(PasswordLen.MIN_LENGTH) @Max(PasswordLen.MAX_LENGTH) String currentPassword) {
+    public void setCurrentPassword(@NotNull @Size(min = PasswordLen.MIN_LENGTH, max = PasswordLen.MAX_LENGTH) String currentPassword) {
         this.currentPassword = currentPassword;
     }
 
-    public @NotNull @Min(PasswordLen.MIN_LENGTH) @Max(PasswordLen.MAX_LENGTH) String getNewPassword() {
+    public @NotNull @Size(min = PasswordLen.MIN_LENGTH, max = PasswordLen.MAX_LENGTH) String getNewPassword() {
         return newPassword;
     }
 
-    public void setNewPassword(@NotNull @Min(PasswordLen.MIN_LENGTH) @Max(PasswordLen.MAX_LENGTH) String newPassword) {
+    public void setNewPassword(@NotNull @Size(min = PasswordLen.MIN_LENGTH, max = PasswordLen.MAX_LENGTH) String newPassword) {
         this.newPassword = newPassword;
     }
 
-    public @NotNull @Min(PasswordLen.MIN_LENGTH) @Max(PasswordLen.MAX_LENGTH) String getConfirmNewPassword() {
+    public @NotNull @Size(min = PasswordLen.MIN_LENGTH, max = PasswordLen.MAX_LENGTH) String getConfirmNewPassword() {
         return confirmNewPassword;
     }
 
-    public void setConfirmNewPassword(@NotNull @Min(PasswordLen.MIN_LENGTH) @Max(PasswordLen.MAX_LENGTH) String confirmNewPassword) {
+    public void setConfirmNewPassword(@NotNull @Size(min = PasswordLen.MIN_LENGTH, max = PasswordLen.MAX_LENGTH) String confirmNewPassword) {
         this.confirmNewPassword = confirmNewPassword;
     }
 }

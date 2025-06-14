@@ -158,7 +158,29 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler
-    public ResponseEntity<ErrorResponse> handleCurrentPasswordMatchesNewPasswordException(CurrentPasswordMatchesNewPasswordException e, WebRequest request) {
+    public ResponseEntity<ErrorResponse> handleCurrentPasswordMatchesNewPasswordException(NewPasswordMatchesCurrentPasswordException e, WebRequest request) {
+        ErrorResponse errorResponse = new ErrorResponse();
+
+        errorResponse.setStatus(HttpStatus.FORBIDDEN.value());
+        errorResponse.setMessage(e.getMessage());
+        errorResponse.setTimestamp(new Date());
+
+        return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleInvalidEmailException(InvalidEmailException e, WebRequest request) {
+        ErrorResponse errorResponse = new ErrorResponse();
+
+        errorResponse.setStatus(HttpStatus.FORBIDDEN.value());
+        errorResponse.setMessage(e.getMessage());
+        errorResponse.setTimestamp(new Date());
+
+        return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleNewEmailMatchesCurrentEmailException(NewEmailMatchesCurrentEmailException e, WebRequest request) {
         ErrorResponse errorResponse = new ErrorResponse();
 
         errorResponse.setStatus(HttpStatus.FORBIDDEN.value());
