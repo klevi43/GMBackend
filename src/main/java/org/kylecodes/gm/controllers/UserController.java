@@ -56,7 +56,15 @@ public class UserController {
 
     }
     @DeleteMapping("/users/delete")
-    public void deleteUser() {
+    public void deleteUser(HttpServletResponse response) {
+        ResponseCookie cookie = ResponseCookie.from("jwtToken", "")
+                .httpOnly(true)
+                .secure(false)
+                .path("/")
+                .maxAge(0)
+                .sameSite("Strict")
+                .build();
+        response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
         userService.deleteUser();
     }
 
