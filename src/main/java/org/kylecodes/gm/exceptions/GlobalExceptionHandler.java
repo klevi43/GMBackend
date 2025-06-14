@@ -1,11 +1,13 @@
 package org.kylecodes.gm.exceptions;
 
+import org.kylecodes.gm.constants.InvalidCredentials;
 import org.kylecodes.gm.responses.ErrorResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -104,11 +106,21 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleUsernameNotFoundException(UsernameNotFoundException e, WebRequest webRequest) {
+        ErrorResponse errorResponse = new ErrorResponse();
+
+        errorResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
+        errorResponse.setMessage(e.getMessage());
+        errorResponse.setTimestamp(new Date());
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler
     public ResponseEntity<ErrorResponse> handleAuthenticationFailureException(BadCredentialsException e, WebRequest webRequest) {
         ErrorResponse errorResponse = new ErrorResponse();
 
         errorResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
-        errorResponse.setMessage("Invalid Email or Password");
+        errorResponse.setMessage(InvalidCredentials.INVALID_EMAIL_OR_PASSWORD_MSG);
         errorResponse.setTimestamp(new Date());
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }

@@ -1,6 +1,6 @@
 package org.kylecodes.gm.services;
 
-import org.kylecodes.gm.constants.NotFoundMsg;
+import org.kylecodes.gm.constants.InvalidCredentials;
 import org.kylecodes.gm.constants.Roles;
 import org.kylecodes.gm.dtos.EmailDto;
 import org.kylecodes.gm.dtos.PasswordDto;
@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserService {
             throw new InvalidPasswordException();
         }
 
-        if (passwordEncoder.matches(passwordDto.getCurrentPassword(), currentUser.getPassword())) {
+        if (passwordEncoder.matches(passwordDto.getNewPassword(), currentUser.getPassword())) {
             throw new NewPasswordMatchesCurrentPasswordException();
         }
 
@@ -109,7 +109,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException(email + NotFoundMsg.EMAIL_NOT_FOUND_MSG));
+                .orElseThrow(() -> new UsernameNotFoundException(InvalidCredentials.INVALID_EMAIL_OR_PASSWORD_MSG));
 
     }
 
