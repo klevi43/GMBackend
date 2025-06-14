@@ -1,6 +1,7 @@
 package org.kylecodes.gm.controllers;
 
 import jakarta.servlet.http.HttpServletResponse;
+import org.kylecodes.gm.dtos.EmailDto;
 import org.kylecodes.gm.dtos.PasswordDto;
 import org.kylecodes.gm.dtos.RegisterDto;
 import org.kylecodes.gm.dtos.UserDto;
@@ -40,6 +41,10 @@ public class UserController {
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
     }
 
+    @PutMapping("/users/email/update")
+    public void updateUserEmail(@RequestBody EmailDto emailDto, HttpServletResponse response) {
+
+    }
     @DeleteMapping("/users/delete")
     public void deleteUser() {
         userService.deleteUser();
