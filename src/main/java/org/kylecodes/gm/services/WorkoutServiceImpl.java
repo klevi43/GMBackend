@@ -93,13 +93,14 @@ public class WorkoutServiceImpl implements WorkoutService {
                 .orElseThrow(() -> new WorkoutNotFoundException(RequestFailure.PUT_REQUEST_FAILURE)));
 
         Workout updateWorkout = workout.get();
-        if (workoutDto.getName() != null) {
+
+        // Propogate workout name to all entries in DB
+        if (!updateWorkout.getName().equals(workoutDto.getName())) {
+            workoutRepository.updateAllByName(workoutDto.getName(), updateWorkout.getName());
             updateWorkout.setName(workoutDto.getName());
         }
-        if (workoutDto.getDate() != null) {
-            updateWorkout.setDate(workoutDto.getDate());
-        }
 
+        updateWorkout.setDate(workoutDto.getDate());
         Workout savedWorkout = workoutRepository.save(updateWorkout);
 
         return workoutMapper.mapToDto(savedWorkout);
