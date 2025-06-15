@@ -89,10 +89,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ErrorResponse> handleEmailAlreadyExistsException(EmailAlreadyExistsException e, WebRequest webRequest) {
         ErrorResponse errorResponse = new ErrorResponse();
 
-        errorResponse.setStatus(HttpStatus.FORBIDDEN.value());
+        errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
         errorResponse.setMessage(e.getMessage());
         errorResponse.setTimestamp(new Date());
-        return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler
@@ -130,6 +130,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             PasswordAndConfirmPasswordNotEqualException e, WebRequest webRequest
     ) {
         ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
         errorResponse.setMessage(e.getMessage());
         errorResponse.setTimestamp(new Date());
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
@@ -150,22 +151,22 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ErrorResponse> handleAlreadyAdminException(AlreadyAdminException e, WebRequest request) {
         ErrorResponse errorResponse = new ErrorResponse();
 
-        errorResponse.setStatus(HttpStatus.FORBIDDEN.value());
+        errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
         errorResponse.setMessage(e.getMessage());
         errorResponse.setTimestamp(new Date());
 
-        return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.FORBIDDEN);
+        return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler
     public ResponseEntity<ErrorResponse> handleInvalidPasswordException(InvalidPasswordException e, WebRequest request) {
         ErrorResponse errorResponse = new ErrorResponse();
 
-        errorResponse.setStatus(HttpStatus.FORBIDDEN.value());
+        errorResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
         errorResponse.setMessage(e.getMessage());
         errorResponse.setTimestamp(new Date());
 
-        return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.FORBIDDEN);
+        return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.UNAUTHORIZED);
 
     }
 
@@ -173,43 +174,43 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ErrorResponse> handleCurrentPasswordMatchesNewPasswordException(NewPasswordMatchesCurrentPasswordException e, WebRequest request) {
         ErrorResponse errorResponse = new ErrorResponse();
 
-        errorResponse.setStatus(HttpStatus.FORBIDDEN.value());
+        errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
         errorResponse.setMessage(e.getMessage());
         errorResponse.setTimestamp(new Date());
 
-        return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.FORBIDDEN);
+        return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler
     public ResponseEntity<ErrorResponse> handleInvalidEmailException(InvalidEmailException e, WebRequest request) {
         ErrorResponse errorResponse = new ErrorResponse();
 
-        errorResponse.setStatus(HttpStatus.FORBIDDEN.value());
+        errorResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
         errorResponse.setMessage(e.getMessage());
         errorResponse.setTimestamp(new Date());
 
-        return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.FORBIDDEN);
+        return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler
     public ResponseEntity<ErrorResponse> handleNewEmailMatchesCurrentEmailException(NewEmailMatchesCurrentEmailException e, WebRequest request) {
         ErrorResponse errorResponse = new ErrorResponse();
 
-        errorResponse.setStatus(HttpStatus.FORBIDDEN.value());
+        errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
         errorResponse.setMessage(e.getMessage());
         errorResponse.setTimestamp(new Date());
 
-        return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.FORBIDDEN);
+        return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler
     public ResponseEntity<ErrorResponse> handleAlreadyUserException(AlreadyUserException e, WebRequest request) {
         ErrorResponse errorResponse = new ErrorResponse();
 
-        errorResponse.setStatus(HttpStatus.FORBIDDEN.value());
+        errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
         errorResponse.setMessage(e.getMessage());
         errorResponse.setTimestamp(new Date());
 
-        return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.FORBIDDEN);
+        return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 }
