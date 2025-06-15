@@ -33,7 +33,7 @@ public class Workout {
     private LocalDate date;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn
     @NotNull(message = NotNullMsg.EMPTY_USER)
     private User user;
 

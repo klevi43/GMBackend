@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false) // circumvent spring sec so that we don't have to add tokens
 @Transactional
-@Sql(scripts = {"classpath:/insertWorkouts.sql", "classpath:/insertExercises.sql", "classpath:/insertSets.sql"})//  this removes the need for setup and teardown with jdbc
+@Sql(scripts = {"classpath:/insertUser.sql", "classpath:/insertWorkouts.sql", "classpath:/insertExercises.sql", "classpath:/insertSets.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)//  this removes the need for setup and teardown
 public class AuthServiceIntegrationTest {
 
     @Autowired

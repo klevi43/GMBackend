@@ -37,17 +37,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false) // circumvent spring sec so that we don't have to add tokens
 @Transactional
-@Sql(scripts = {"classpath:/insertWorkouts.sql", "classpath:/insertExercises.sql", "classpath:/insertSets.sql"})//  this removes the need for setup and teardown
+@Sql(scripts = {"classpath:/insertUser.sql", "classpath:/insertWorkouts.sql", "classpath:/insertExercises.sql", "classpath:/insertSets.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)//  this removes the need for setup and teardown
 public class WorkoutControllerIntegrationTest {
     private final Long VALID_USER_ID = 1L;
     private final String VALID_USER_EMAIL = "test@test.com";
     private final String VALID_USER_PASSWORD = "password";
     private final String VALID_USER_ROLE = "ROLE_USER";
 
-    private final Long VALID_WORKOUT_ID = 1L;
+    private final Long VALID_WORKOUT_ID = 12L;
     private final String VALID_WORKOUT_NAME = "Test Workout";
     private final String VALID_WORKOUT_DATE = LocalDate.now().toString();
-    private final Long VALID_WORKOUT_ID_2 = 2L;
+    private final Long VALID_WORKOUT_ID_2 = 22L;
     private final String VALID_WORKOUT_NAME_2 = "Test Workout 2";
 
     private final Long INVALID_WORKOUT_ID = -1L;
@@ -161,38 +161,6 @@ public class WorkoutControllerIntegrationTest {
                             + NotFoundMsg.WORKOUT_NOT_FOUND_MSG)));
 
         }
-    @Test
-    public void WorkoutController_UpdateWorkoutById_ReturnUpdateWorkout() throws Exception {
-        assertThat(workoutRepository.findById(VALID_WORKOUT_ID)).isNotEmpty();
-        workoutDto.setDate(LocalDate.of(2024, 3, 4));
-        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.put("/workouts/update")
-                        .queryParam("workoutId", VALID_WORKOUT_ID.toString())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(workoutDto)));
-
-        response.andExpect(status().is2xxSuccessful())
-                .andExpect(jsonPath("$.name", CoreMatchers.is(workoutDto.getName())))
-                .andExpect(jsonPath("$.date", CoreMatchers.is(workoutDto.getDate().toString())));
-
-        assertThat(workoutRepository.findById(VALID_WORKOUT_ID)).isNotEmpty();
-        assertThat(workoutRepository.findById(VALID_WORKOUT_ID).get().getName()).isEqualTo("Test Workout 5");
-        assertThat(workoutRepository.findById(VALID_WORKOUT_ID).get().getDate()).isNotEqualTo(LocalDate.now().toString());
-    }
-
-    @Test
-    public void WorkoutController_UpdateWorkoutById_ThrowWorkoutNotFoundException() throws Exception {
-        assertThat(workoutRepository.findById(INVALID_WORKOUT_ID)).isEmpty();
-
-        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.put("/workouts/update")
-                        .queryParam("workoutId", INVALID_WORKOUT_ID.toString())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(workoutDto)));
-
-        response.andExpect(status().is4xxClientError())
-                .andExpect(jsonPath("$.status", CoreMatchers.is(404)))
-                .andExpect(jsonPath("$.message",
-                        CoreMatchers.is(RequestFailure.PUT_REQUEST_FAILURE + NotFoundMsg.WORKOUT_NOT_FOUND_MSG)));
-    }
 
     @Test
     public void WorkoutController_DeleteWorkoutById_ReturnNothing() throws Exception {

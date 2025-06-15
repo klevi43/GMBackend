@@ -116,36 +116,7 @@ public class UserServiceUnitTest {
 
     }
 
-//
-//    @Test
-//    public void UserService_UpdateUserEmailAndPassword_ReturnUpdatedUserDto() {
-//        SecurityContextForTests context = new SecurityContextForTests();
-//        context.createSecurityContextToReturnAuthenticatedUser(user);
-//        when(userRepository.save(ArgumentMatchers.any())).thenReturn(user);
-//        authUserDto = new AuthUserDto();
-//        authUserDto.setEmail(VALID_USER_NEW_EMAIL);
-//        authUserDto.setPassword(VALID_USER_NEW_PASSWORD);
-//
-//        UserDto updatedUser = userService.updateUserPassword(authUserDto);
-//
-//        assertThat(updatedUser.getEmail()).isEqualTo(authUserDto.getEmail());
-//
-//    }
-//
-//    @Test
-//    public void UserService_UpdateUserEmail_ReturnUpdatedUserDto() {
-//        SecurityContextForTests context = new SecurityContextForTests();
-//        context.createSecurityContextToReturnAuthenticatedUser(user);
-//        when(userRepository.save(ArgumentMatchers.any())).thenReturn(user);
-//        authUserDto = new AuthUserDto();
-//        authUserDto.setEmail(VALID_USER_NEW_EMAIL);
-//
-//
-//        UserDto updatedUser = userService.updateUserPassword(authUserDto);
-//
-//        assertThat(updatedUser.getEmail()).isEqualTo(authUserDto.getEmail());
-//
-//    }
+
 
     @Test
     public void UserService_DeleteUser_ReturnNothing() {

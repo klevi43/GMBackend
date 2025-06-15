@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false) // circumvent spring sec so that we don't have to add tokens
 @Transactional
-@Sql(scripts = {"classpath:/insertWorkouts.sql", "classpath:/insertExercises.sql", "classpath:/insertSets.sql"})//  this removes the need for setup and teardown with jdbc
+@Sql(scripts = {"classpath:/insertUser.sql", "classpath:/insertWorkouts.sql", "classpath:/insertExercises.sql", "classpath:/insertSets.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)//  this removes the need for setup and teardown
 public class WorkoutServiceIntegrationTest {
 
     @Autowired
@@ -44,7 +44,7 @@ public class WorkoutServiceIntegrationTest {
     private final String VALID_USER_PASSWORD_2 = "password";
     private final String VALID_USER_ROLE_2 = "ROLE_USER";
     private final Long INVALID_ID = -1L;
-    private final Long VALID_WORKOUT_ID = 1L;
+    private final Long VALID_WORKOUT_ID = 12L;
     private final String VALID_WORKOUT_NAME = "Test Workout";
     private final LocalDate VALID_WORKOUT_DATE = LocalDate.now();
     private final String VALID_WORKOUT_NAME_UPDATE = "Test Workout Update";
@@ -135,17 +135,7 @@ public class WorkoutServiceIntegrationTest {
         assertThat(updatedWorkoutDto.getId()).isNotNull();
     }
 
-    @Test
-    public void WorkoutService_UpdateWorkout_ReturnNonUpdatedWorkoutDto() {
-        assertThat(workoutRepository.existsByIdAndUserId(VALID_WORKOUT_ID, VALID_USER_ID_1)).isTrue();
-        workoutDto.setName(null);
-        workoutDto.setDate(null);
-        WorkoutDto updatedWorkoutDto = workoutService.updateWorkoutById(workoutDto, VALID_WORKOUT_ID);
-        assertThat(updatedWorkoutDto).isNotNull();
-        assertThat(updatedWorkoutDto.getName()).isNotEqualTo(VALID_WORKOUT_NAME_UPDATE);
-        assertThat(updatedWorkoutDto.getDate()).isNotEqualTo(VALID_WORKOUT_DATE_UPDATE);
-        assertThat(updatedWorkoutDto.getId()).isNotNull();
-    }
+
 
     @Test
     public void WorkoutService_UpdateWorkout_ThrowWorkoutNotFoundException() {

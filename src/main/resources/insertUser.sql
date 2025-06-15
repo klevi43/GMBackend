@@ -1,0 +1,1 @@
+INSERT INTO user_tbl (id, email, password, role) VALUES (1, 'test1234@email.com', 'password123', 'ROLE_USER');

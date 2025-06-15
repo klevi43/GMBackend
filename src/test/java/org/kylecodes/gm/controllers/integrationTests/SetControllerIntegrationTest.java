@@ -37,17 +37,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false) // circumvent spring sec so that we don't have to add tokens
 @Transactional
-@Sql(scripts = {"classpath:/insertWorkouts.sql", "classpath:/insertExercises.sql", "classpath:/insertSets.sql"})//  this removes the need for setup and teardown
+@Sql(scripts = { "classpath:/insertUser.sql","classpath:/insertWorkouts.sql", "classpath:/insertExercises.sql", "classpath:/insertSets.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)//  this removes the need for setup and teardown
 public class SetControllerIntegrationTest {
     private final Long VALID_USER_ID = 1L;
     private final String VALID_USER_EMAIL = "test@test.com";
     private final String VALID_USER_PASSWORD = "password";
     private final String VALID_USER_ROLE = "ROLE_USER";
-    private final Long VALID_WORKOUT_ID = 1L;
+    private final Long VALID_WORKOUT_ID = 12L;
     private final String VALID_WORKOUT_NAME = "Test Workout";
     private final String VALID_EXERCISE_NAME = "Test Exercise";
-    private final Long VALID_EXERCISE_ID = 1L;
-    private final Long VALID_SET_ID = 1L;
+    private final Long VALID_EXERCISE_ID = 12L;
+    private final Long VALID_SET_ID = 12L;
     private final Long INVALID_ID = -1L;
 
     private static MockHttpServletRequest request;
@@ -123,42 +123,6 @@ public class SetControllerIntegrationTest {
                 .andExpect(jsonPath("$.exerciseId", CoreMatchers.is(setDto.getExerciseId().intValue())));
 
     }
-
-//    @Test
-//    public void SetController_CreateSetForExerciseInWorkout_ThrowMethodArgumentNotValidExceptionForInvalidReps() throws Exception {
-//        invalidSetDto = new SetDto();
-//        invalidSetDto.setReps(-15);
-//        invalidSetDto.setWeight(15);
-//        invalidSetDto.setExerciseId(VALID_EXERCISE_ID);
-//        ResultActions response = mockMvc.perform(post("/workouts/exercises/sets/create")
-//                .queryParam("workoutId", VALID_WORKOUT_ID.toString())
-//                .queryParam("exerciseId", VALID_EXERCISE_ID.toString())
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(objectMapper.writeValueAsString(invalidSetDto)));
-//
-//        response.andExpect(status().is4xxClientError());
-//        response.andExpect(jsonPath("$.message", CoreMatchers.is(InvalidSetData.INVALID_REPS_MSG)));
-//        response.andDo(MockMvcResultHandlers.print());
-//
-//
-//    }
-//
-//    @Test
-//    public void SetController_CreateSetForExerciseInWorkout_ThrowMethodArgumentNotValidExceptionForInvalidWeight() throws Exception {
-//        invalidSetDto = new SetDto();
-//        invalidSetDto.setReps(15);
-//        invalidSetDto.setWeight(-15);
-//        invalidSetDto.setExerciseId(VALID_EXERCISE_ID);
-//        ResultActions response = mockMvc.perform(post("/workouts/exercises/sets/create")
-//                .queryParam("workoutId", VALID_WORKOUT_ID.toString())
-//                .queryParam("exerciseId", VALID_EXERCISE_ID.toString())
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(objectMapper.writeValueAsString(invalidSetDto)));
-//
-//        response.andExpect(status().is4xxClientError());
-//        response.andExpect(jsonPath("$.message", CoreMatchers.is(InvalidSetData.INVALID_WEIGHT_MSG)));
-//        response.andDo(MockMvcResultHandlers.print());
-//    }
 
     @Test
     public void SetController_CreateSetForExerciseInWorkout_ThrowWorkoutNotFoundException() throws Exception {

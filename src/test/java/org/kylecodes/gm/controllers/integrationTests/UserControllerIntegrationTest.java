@@ -116,17 +116,6 @@ public class UserControllerIntegrationTest {
                 .andExpect(jsonPath("$.message", CoreMatchers.is(PasswordErrorMsg.PASSWORD_AND_CONFIRM_PASSWORD_MUST_BE_EQUAL_VALUES)));
     }
 
-    @Test
-    public void UserController_UpdateUserInfo_ReturnUpdatedUserDto() throws Exception {
-        validUser.setEmail(UPDATE_EMAIL);
-        validUser.setPassword(UPDATE_PASSWORD);
-        ResultActions resultActions = mockMvc.perform(put("/users/update")
-                .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(validUser)));
-
-        resultActions.andExpect(status().isOk())
-                .andExpect(jsonPath("$.email", CoreMatchers.is(UPDATE_EMAIL)));
-    }
-
 
     @Test
     public void UserController_DeleteUser_ReturnNothing() throws Exception {

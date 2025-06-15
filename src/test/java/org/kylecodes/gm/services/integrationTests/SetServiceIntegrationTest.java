@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false) // circumvent spring sec so that we don't have to add tokens
 @Transactional
-@Sql(scripts = {"classpath:/insertWorkouts.sql", "classpath:/insertExercises.sql", "classpath:/insertSets.sql"})//  this removes the need for setup and teardown
+@Sql(scripts = {"classpath:/insertUser.sql", "classpath:/insertWorkouts.sql", "classpath:/insertExercises.sql", "classpath:/insertSets.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)//  this removes the need for setup and teardown
 public class SetServiceIntegrationTest {
 
     @Autowired
@@ -43,9 +43,9 @@ public class SetServiceIntegrationTest {
     private final String VALID_USER_PASSWORD = "password";
     private final String VALID_USER_ROLE = "ROLE_USER";
 
-    private final Long VALID_WORKOUT_ID = 1L;
-    private final Long VALID_EXERCISE_ID = 1L;
-    private final Long VALID_SET_ID = 1L;
+    private final Long VALID_WORKOUT_ID = 12L;
+    private final Long VALID_EXERCISE_ID = 12L;
+    private final Long VALID_SET_ID = 12L;
     private final String VALID_WORKOUT_NAME = "Test Workout";
     private final String VALID_EXERCISE_NAME = "Test Exercise";
 
@@ -65,8 +65,8 @@ public class SetServiceIntegrationTest {
     private final Integer WEIGHT_2 = 40;
     private final Integer REPS_2 = 40;
 
-    private final Long VALID_ID = 1L;
-    private final Long VALID_ID_2 = 2L;
+    private final Long VALID_ID = 12L;
+    private final Long VALID_ID_2 = 22L;
     private final Long INVALID_ID = -1L;
     private SecurityContextForTests context = new SecurityContextForTests();
     @BeforeEach

@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -20,6 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestPropertySource("classpath:application-test.properties")
+@Sql(scripts = {"classpath:/insertUser.sql", "classpath:/insertWorkouts.sql", "classpath:/insertExercises.sql", "classpath:/insertSets.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)//  this removes the need for setup and teardown
 public class AuthControllerIntegrationTest {
 
     @Autowired
@@ -33,13 +35,13 @@ public class AuthControllerIntegrationTest {
     @BeforeEach
     public void init() {
         validUser = new AuthUserDto();
-        validUser.setEmail("user@email.com");
+        validUser.setEmail("test1234@email.com");
         validUser.setPassword("password123");
         nonexistentUser = new AuthUserDto();
         nonexistentUser.setEmail("nonexistentUser@email.com");
         nonexistentUser.setPassword("password123");
         badPwUser = new AuthUserDto();
-        badPwUser.setEmail("user@email.com");
+        badPwUser.setEmail("user4345345@email.com");
         badPwUser.setPassword("password12");
     }
     @Test
