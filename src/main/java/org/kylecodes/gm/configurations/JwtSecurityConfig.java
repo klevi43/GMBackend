@@ -35,11 +35,11 @@ public class JwtSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.cors(cors -> corsConfigurationSource());
-        http.csrf(AbstractHttpConfigurer::disable);
+
 
         http.authorizeHttpRequests(
                 auth -> {
-                    auth.requestMatchers( "/","/register", "/auth/login", "/auth/logout").permitAll()
+                    auth.requestMatchers("/register", "/auth/login", "/auth/logout").permitAll()
                             .requestMatchers("/admin/**").hasRole("ADMIN");
                     auth.anyRequest().authenticated();
                 });
@@ -54,7 +54,7 @@ public class JwtSecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.addAllowedOrigin("http://localhost:5173");
+        config.addAllowedOrigin(System.getenv("FRONTEND_URL"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowCredentials(true);
