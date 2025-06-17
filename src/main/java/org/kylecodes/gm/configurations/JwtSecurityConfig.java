@@ -43,7 +43,7 @@ public class JwtSecurityConfig {
                 .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()));
         http.authorizeHttpRequests(
                 auth -> {
-                    auth.requestMatchers("/register", "/auth/login", "/auth/logout").permitAll()
+                    auth.requestMatchers("/register", "/auth/login", "/auth/logout", "/auth/me").permitAll()
                             .requestMatchers("/admin/**").hasRole("ADMIN");
                     auth.anyRequest().authenticated();
                 });
