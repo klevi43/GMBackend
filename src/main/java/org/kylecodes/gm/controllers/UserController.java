@@ -7,6 +7,7 @@ import org.kylecodes.gm.dtos.PasswordDto;
 import org.kylecodes.gm.dtos.RegisterDto;
 import org.kylecodes.gm.dtos.UserDto;
 import org.kylecodes.gm.services.UserService;
+import org.kylecodes.gm.utils.HttpOnlyCookieHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -32,39 +33,21 @@ public class UserController {
     @PutMapping("/users/password/update")
     public void updateUserPassword(@RequestBody @Valid PasswordDto passwordDto, HttpServletResponse response) {
         userService.updateUserPassword(passwordDto);
-        ResponseCookie cookie = ResponseCookie.from("jwtToken", "")
-                .httpOnly(true)
-                .secure(false)
-                .path("/")
-                .maxAge(0)
-                .sameSite("Strict")
-                .build();
+        ResponseCookie cookie = HttpOnlyCookieHelper.removeJwtFromCookie();
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
     }
 
     @PutMapping("/users/email/update")
     public void updateUserEmail(@RequestBody @Valid EmailDto emailDto, HttpServletResponse response) {
         userService.updateUserEmail(emailDto);
-        ResponseCookie cookie = ResponseCookie.from("jwtToken", "")
-                .httpOnly(true)
-                .secure(false)
-                .path("/")
-                .maxAge(0)
-                .sameSite("Strict")
-                .build();
+        ResponseCookie cookie = HttpOnlyCookieHelper.removeJwtFromCookie();
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
 
     }
     @DeleteMapping("/users/delete")
     public void deleteUser(HttpServletResponse response) {
         userService.deleteUser();
-        ResponseCookie cookie = ResponseCookie.from("jwtToken", "")
-                .httpOnly(true)
-                .secure(false)
-                .path("/")
-                .maxAge(0)
-                .sameSite("Strict")
-                .build();
+        ResponseCookie cookie = HttpOnlyCookieHelper.removeJwtFromCookie();
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
 
     }

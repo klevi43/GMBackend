@@ -6,6 +6,7 @@ import org.kylecodes.gm.dtos.JwtDto;
 import org.kylecodes.gm.entities.User;
 import org.kylecodes.gm.responses.LoginResponse;
 import org.kylecodes.gm.services.AuthService;
+import org.kylecodes.gm.utils.HttpOnlyCookieHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.http.HttpHeaders;
@@ -27,13 +28,7 @@ public class AuthController {
 
     @PostMapping("/auth/logout")
     public void logout(HttpServletResponse response) {
-        ResponseCookie cookie = ResponseCookie.from("jwtToken", "")
-                .httpOnly(true)
-                .secure(false)
-                .path("/")
-                .maxAge(0)
-                .sameSite("Strict")
-                .build();
+        ResponseCookie cookie = HttpOnlyCookieHelper.removeJwtFromCookie();
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
     }
     @PostMapping(value = "/auth/login")
@@ -42,13 +37,7 @@ public class AuthController {
         JwtDto jwtDto = authService.verify(authUserDto);
         User authenticatedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        ResponseCookie cookie = ResponseCookie.from("jwtToken", jwtDto.getPayload())
-                .httpOnly(true)
-                .secure(false)
-                .path("/")
-                .maxAge(1800)
-                .sameSite("Strict")
-                .build();
+        ResponseCookie cookie = HttpOnlyCookieHelper.addJwtToCookie(jwtDto);
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
 
         return ResponseEntity.ok(new LoginResponse(authenticatedUser.getUsername(), authenticatedUser.getRole(),
