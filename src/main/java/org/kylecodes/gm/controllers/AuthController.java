@@ -10,6 +10,7 @@ import org.kylecodes.gm.utils.HttpOnlyCookieHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -46,6 +47,9 @@ public class AuthController {
     @GetMapping("/auth/me")
     public ResponseEntity<?> getAuthenticatedUser(HttpServletResponse response) {
         User authenticatedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (authenticatedUser == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Not authenticated");
+        }
         LoginResponse res = new LoginResponse();
         res.setUserEmail(authenticatedUser.getUsername());
         res.setUserRole(authenticatedUser.getRole());
