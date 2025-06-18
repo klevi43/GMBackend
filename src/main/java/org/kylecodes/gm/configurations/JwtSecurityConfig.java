@@ -37,10 +37,7 @@ public class JwtSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.cors(cors -> corsConfigurationSource());
-        // Configure the CSRF token repository
-        CookieCsrfTokenRepository csrfTokenRepository = CookieCsrfTokenRepository.withHttpOnlyFalse();
-
-        // Set the Secure flag to true for the XSRF-TOKEN cookie
+         CookieCsrfTokenRepository csrfTokenRepository = CookieCsrfTokenRepository.withHttpOnlyFalse();
         csrfTokenRepository.setCookieCustomizer(cookieCustomizer -> cookieCustomizer.secure(true).sameSite("None"));
         http.csrf(csrf ->
                 csrf.csrfTokenRepository(csrfTokenRepository)
