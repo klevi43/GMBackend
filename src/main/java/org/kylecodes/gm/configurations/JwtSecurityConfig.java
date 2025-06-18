@@ -1,5 +1,6 @@
 package org.kylecodes.gm.configurations;
 
+import org.kylecodes.gm.filters.CsrfLoggingFilter;
 import org.kylecodes.gm.filters.JwtFilter;
 import org.kylecodes.gm.services.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -50,6 +52,9 @@ public class JwtSecurityConfig {
                     auth.anyRequest().authenticated();
                 });
         http.logout(AbstractHttpConfigurer::disable);
+
+        http.addFilterBefore(new CsrfLoggingFilter(), CsrfFilter.class);
+
         http.sessionManagement(
                 session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         ).addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
