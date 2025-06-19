@@ -8,7 +8,7 @@ This is the Spring Boot backend for **Growth Mindset**, a full-stack fitness tra
 - Full CRUD support for user profile management
 - Full CRUD support for workout management
 - JWT-based stateless auth
-- **CSRF protection enable for all authenticated routes**
+- **CSRF protection enable for all authenticated routes **
 - MySQL database integration
 - Efficient entity fetching for deeply nested entities (exercises, sets) with Blaze-Persistence, minimizing N+1 query problems
 - CORS support for frontend communication
