@@ -132,26 +132,6 @@ public class JwtSecurityConfig {
             }
         };
     }
-    /*
-    never store credentials in memory!!!
-    encoding vs hashing vs encryption
-
-    encoding: transform data from one form to another (usually more efficient) form. not used for securing data.
-    Typically used to compress or stream data. ex: base 64, WAV, Mp3
-
-    hashing: convert data into a hash
-        - one way process, not reversible
-        - use it to validate integrity of data
-    e.g. send request of data and hashed data. The recipient hashes the request's data, and them compares it
-    with the request's provided hashed data. if they are the same, then the data is valid and has not
-    been manipulated
-    ex: bcrypt, scrypt
-
-    encryption: encoding data using a key or password
-        - a key or password is necessary to decrypt
-        - used to safeguard data
-    ex: RSA (Rivest-Shamir-Adleman) public key cryptography system.
-    */
 
     @Bean
     public PasswordEncoder passwordEncoder() {
