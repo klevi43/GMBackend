@@ -85,6 +85,8 @@ public class JwtSecurityConfig {
              * Render the token value to a cookie by causing the deferred token to be loaded.
              */
             csrfToken.get();
+            System.out.println(csrfToken.get());
+            response.addHeader("X-CSRF-Debug-Handled", "true");
         }
 
         @Override
