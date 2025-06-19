@@ -46,10 +46,10 @@ public class JwtSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.cors(cors -> corsConfigurationSource());
         http.anonymous(AbstractHttpConfigurer::disable);
-        // CookieCsrfTokenRepository csrfTokenRepository = CookieCsrfTokenRepository.withHttpOnlyFalse();
-        //csrfTokenRepository.setCookieCustomizer(cookieCustomizer -> cookieCustomizer.secure(true).sameSite("None"));
+        CookieCsrfTokenRepository csrfTokenRepository = CookieCsrfTokenRepository.withHttpOnlyFalse();
+        csrfTokenRepository.setCookieCustomizer(cookieCustomizer -> cookieCustomizer.secure(true).sameSite("None"));
         http.csrf(csrf -> csrf
-                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                 .csrfTokenRepository(csrfTokenRepository)
                   .csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler()));
         http.authorizeHttpRequests(
                 auth -> {
