@@ -49,8 +49,12 @@ public class JwtSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
         CookieCsrfTokenRepository csrfTokenRepository = CookieCsrfTokenRepository.withHttpOnlyFalse();
-
-        csrfTokenRepository.setCookieCustomizer(csrfTokenRepo -> csrfTokenRepo.sameSite("None").secure(true).path("/").domain(System.getenv("DOMAIN_NAME")));
+        System.out.println("Domain name: " + System.getenv("DOMAIN_NAME"));
+        csrfTokenRepository.setCookieCustomizer(csrfTokenRepo -> csrfTokenRepo
+                .sameSite("None")
+                .secure(true)
+                .path("/")
+                .domain(System.getenv("DOMAIN_NAME")));
         csrfTokenRepository.setCookieName("XSRF-TOKEN");
         csrfTokenRepository.setCookiePath("/");
         http.csrf((csrf) -> csrf
