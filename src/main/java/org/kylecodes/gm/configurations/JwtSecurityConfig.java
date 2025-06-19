@@ -58,9 +58,9 @@ public class JwtSecurityConfig {
                         .httpOnly(false); // JS can read the cookie
             }
         });
-        http.csrf(csrf -> csrf
-                 .csrfTokenRepository(csrfTokenRepository)
-                  .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()));
+        //http.csrf(csrf -> csrf
+        //         .csrfTokenRepository(csrfTokenRepository)
+        //          .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()));
         http.authorizeHttpRequests(
                 auth -> {
                     auth.requestMatchers("/register", "/auth/login", "/auth/logout").permitAll()
