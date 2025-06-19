@@ -49,7 +49,7 @@ public class JwtSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
         CookieCsrfTokenRepository csrfTokenRepository = CookieCsrfTokenRepository.withHttpOnlyFalse();
-        csrfTokenRepository.setCookieCustomizer(csrfTokenRepo -> csrfTokenRepo.sameSite("None").secure(true));
+        csrfTokenRepository.setCookieCustomizer(csrfTokenRepo -> csrfTokenRepo.sameSite("None").secure(true).path("/").domain(".railway.app"));
         http.csrf((csrf) -> csrf
                 .csrfTokenRepository(csrfTokenRepository)
                 .csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler())
