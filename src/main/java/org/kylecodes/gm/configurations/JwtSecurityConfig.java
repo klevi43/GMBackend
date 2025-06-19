@@ -6,6 +6,7 @@ import org.kylecodes.gm.services.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -26,6 +27,8 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.csrf.CsrfTokenRequestHandler;
@@ -44,10 +47,17 @@ public class JwtSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.cors(cors -> corsConfigurationSource());
+        http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
         http.anonymous(AbstractHttpConfigurer::disable);
-        CookieCsrfTokenRepository csrfTokenRepository = CookieCsrfTokenRepository.withHttpOnlyFalse();
-        csrfTokenRepository.setCookieCustomizer(cookieCustomizer -> cookieCustomizer.secure(true).sameSite("None"));
+        CookieCsrfTokenRepository csrfTokenRepository = new CookieCsrfTokenRepository();
+        csrfTokenRepository.setCookieCustomizer(new Consumer<ResponseCookie.ResponseCookieBuilder>() {
+            @Override
+            public void accept(ResponseCookie.ResponseCookieBuilder responseCookieBuilder) {
+                responseCookieBuilder.sameSite("None") // SameSite attr set to None
+                        .secure(true) // Cookie is secure
+                        .httpOnly(false); // JS can read the cookie
+            }
+        });
         http.csrf(csrf -> csrf
                  .csrfTokenRepository(csrfTokenRepository)
                   .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()));
