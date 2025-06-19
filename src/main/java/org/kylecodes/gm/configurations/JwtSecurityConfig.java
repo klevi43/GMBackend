@@ -55,8 +55,6 @@ public class JwtSecurityConfig {
                 .secure(true)
                 .path("/")
                 .domain(System.getenv("DOMAIN_NAME")));
-        csrfTokenRepository.setCookieName("XSRF-TOKEN");
-        csrfTokenRepository.setCookiePath("/");
         http.csrf((csrf) -> csrf
                 .csrfTokenRepository(csrfTokenRepository)
                 .csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler())
