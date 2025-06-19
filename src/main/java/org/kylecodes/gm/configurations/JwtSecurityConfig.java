@@ -50,7 +50,7 @@ public class JwtSecurityConfig {
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
         CookieCsrfTokenRepository csrfTokenRepository = CookieCsrfTokenRepository.withHttpOnlyFalse();
 
-        csrfTokenRepository.setCookieCustomizer(csrfTokenRepo -> csrfTokenRepo.sameSite("None").secure(true).path("/").domain(".railway.app"));
+        csrfTokenRepository.setCookieCustomizer(csrfTokenRepo -> csrfTokenRepo.sameSite("None").secure(true).path("/").domain(System.getenv("DOMAIN_NAME")));
         csrfTokenRepository.setCookieName("XSRF-TOKEN");
         csrfTokenRepository.setCookiePath("/");
         http.csrf((csrf) -> csrf
