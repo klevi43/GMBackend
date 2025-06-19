@@ -49,18 +49,11 @@ public class JwtSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
         http.anonymous(AbstractHttpConfigurer::disable);
-        CookieCsrfTokenRepository csrfTokenRepository = new CookieCsrfTokenRepository();
-        csrfTokenRepository.setCookieCustomizer(new Consumer<ResponseCookie.ResponseCookieBuilder>() {
-            @Override
-            public void accept(ResponseCookie.ResponseCookieBuilder responseCookieBuilder) {
-                responseCookieBuilder.sameSite("None") // SameSite attr set to None
-                        .secure(true) // Cookie is secure
-                        .httpOnly(false); // JS can read the cookie
-            }
-        });
-        //http.csrf(csrf -> csrf
-        //         .csrfTokenRepository(csrfTokenRepository)
-        //          .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()));
+        CookieCsrfTokenRepository csrfTokenRepository = CookieCsrfTokenRepository.withHttpOnlyFalse();
+        csrfTokenRepository.setCookieCustomizer(cookieCustomizer -> cookieCustomizer.secure(true).sameSite("None"));
+        http.csrf(csrf ->
+                csrf.csrfTokenRepository(csrfTokenRepository)
+                        .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()));
         http.authorizeHttpRequests(
                 auth -> {
                     auth.requestMatchers("/register", "/auth/login", "/auth/logout").permitAll()
