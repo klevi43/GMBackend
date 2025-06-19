@@ -48,19 +48,21 @@ public class JwtSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
-
+        CookieCsrfTokenRepository csrfTokenRepository = CookieCsrfTokenRepository.withHttpOnlyFalse();
+        csrfTokenRepository.setCookieCustomizer(csrfTokenRepo -> csrfTokenRepo.sameSite("None").secure(true));
         http.csrf((csrf) -> csrf
-                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                .csrfTokenRepository(csrfTokenRepository)
                 .csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler())
-        );http.authorizeHttpRequests(
+        );
+        http.authorizeHttpRequests(
                 auth -> {
                     auth.requestMatchers("/register", "/auth/login", "/auth/logout", "/csrf-cookie").permitAll()
                             .requestMatchers("/admin/**").hasRole("ADMIN");
                     auth.anyRequest().authenticated();
                 });
         http.logout(AbstractHttpConfigurer::disable);
-
-        http.addFilterBefore(new CsrfLoggingFilter(), CsrfFilter.class);
+//
+//        http.addFilterBefore(new CsrfLoggingFilter(), CsrfFilter.class);
 
         http.sessionManagement(
                 session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
