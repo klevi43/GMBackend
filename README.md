@@ -7,7 +7,7 @@ You can visit the site here at [growthmindsetproject.com](https://growthmindsetp
 - User authentication, role-based authorization, & protected routes (User/Admin)
 - Full CRUD support for user profile management
 - Full CRUD support for workout management
-- JWT-based stateless auth
+- JWT-based stateless auth (1 hour token lifespan)
 - **CSRF protection enable for all authenticated routes**
 - MySQL database integration
 - Efficient entity fetching for deeply nested entities (exercises, sets) with Blaze-Persistence, minimizing N+1 query problems

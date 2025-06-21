@@ -42,7 +42,7 @@ public class JwtServiceImpl implements JwtService{
                 .add(claims)
                 .subject(email)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + TokenDuration.THREE_HOURS))
+                .expiration(new Date(System.currentTimeMillis() + TokenDuration.ONE_HOUR))
                 .and()
                 .signWith(getKey())
                 .compact();

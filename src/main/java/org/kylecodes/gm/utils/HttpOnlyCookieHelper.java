@@ -9,7 +9,7 @@ public final class HttpOnlyCookieHelper {
                 .httpOnly(true)
                 .secure(true)
                 .path("/")
-                .maxAge(10800)
+                .maxAge(3600)
                 .sameSite("None")
                 .build();
     }
