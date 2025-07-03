@@ -1,6 +1,6 @@
 # GMBackend
 
-This is the Spring Boot backend for **Growth Mindset**, a full-stack fitness tracking app. It provides RESTful endpoints for managing users, workouts, exercises, and sets. It also supports role-based authentication and secure session management via JWT.
+This is the Spring Boot backend for **Growth Mindset**, a full-stack fitness tracking app. It provides RESTful endpoints for managing users, workouts, exercises, and sets. It also supports role-based authentication and secure session management via HTTP-only cookie JWTs and CSRF tokens.
 You can visit the site here at [growthmindsetproject.com](https://growthmindsetproject.com/).
 ## Features
 
@@ -8,7 +8,7 @@ You can visit the site here at [growthmindsetproject.com](https://growthmindsetp
 - Full CRUD support for user profile management
 - Full CRUD support for workout management
 - JWT-based stateless auth (1 hour token lifespan)
-- **CSRF protection enable for all authenticated routes**
+- **CSRF protection enabled for all authenticated routes**
 - MySQL database integration
 - Efficient entity fetching for deeply nested entities (exercises, sets) with Blaze-Persistence, minimizing N+1 query problems
 - CORS support for frontend communication
@@ -81,7 +81,7 @@ All routes except for /auth/login and /auth/register require a valid JWT stored 
    GET    /auth/me                  // Get authenticated user (used to check if user is logged in)
     
 2. Workouts
-   GET    /workouts                 // Get recent workouts  
+   GET    /workouts                 // Get most recently completed workout entries  
    GET    /workouts/history         // Get full workout history  
    POST   /workouts/create  
    PUT    /workouts/update?workoutId={id}  
