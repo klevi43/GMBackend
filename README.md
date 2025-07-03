@@ -114,3 +114,9 @@ All routes except for /auth/login and /auth/register require a valid JWT stored 
 ## Frontend
 This backend connects to a React frontend. You can find the frontend repo here:
 [GMFrontend](https://github.com/klevi43/GMFrontend)
+
+## Known Issues
+
+- Currently there is no graceful handling of the token expiring after the 1 hour time limit has been reached. To resolve this, simply refresh your page on the frontend and go to the login screen to login again. Improved handling is planned for a future update.
+- Logging out removes the token from cookies subsequent requests; however, the token is not invalidated by the backend. This is not a security concern because the jwt is stored in an HTTP-only cookie and has a short lifespan (1 hour). A refresh token functionality is planned for a future update.
+- Thank you for your patience and understanding.
