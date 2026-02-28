@@ -14,7 +14,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-@Entity
+@Entity(name = "workout_tbl")
 public class Workout {
 
     @Id

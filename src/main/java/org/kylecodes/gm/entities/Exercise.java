@@ -11,7 +11,7 @@ import org.kylecodes.gm.constants.NotNullMsg;
 
 import java.util.List;
 
-@Entity
+@Entity(name = "exercise_tbl")
 public class Exercise {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

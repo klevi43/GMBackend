@@ -7,8 +7,7 @@ import org.kylecodes.gm.constants.InvalidInputData;
 import org.kylecodes.gm.constants.InvalidSetData;
 import org.kylecodes.gm.constants.NotNullMsg;
 
-@Entity
-@Table(name = "ex_set")
+@Entity(name = "set_tbl")
 public class Set {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -2,7 +2,6 @@ package org.kylecodes.gm.configurations;
 
 import org.kylecodes.gm.filters.JwtFilter;
 import org.kylecodes.gm.services.UserServiceImpl;
-import org.kylecodes.gm.utils.SpaCsrfTokenRequestHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,12 +10,12 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -37,18 +36,19 @@ public class JwtSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
-        CookieCsrfTokenRepository csrfTokenRepository = CookieCsrfTokenRepository.withHttpOnlyFalse();
-        csrfTokenRepository.setCookieCustomizer(csrfTokenRepo -> csrfTokenRepo
-                .sameSite("None")
-                .secure(true)
-                .path("/")
-                .domain(System.getenv("DOMAIN_NAME")));
-        csrfTokenRepository.setCookieName("XSRF-TOKEN");
-        csrfTokenRepository.setCookiePath("/");
-        http.csrf((csrf) -> csrf
-                .csrfTokenRepository(csrfTokenRepository)
-                .csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler())
-        );
+//        CookieCsrfTokenRepository csrfTokenRepository = CookieCsrfTokenRepository.withHttpOnlyFalse();
+//        csrfTokenRepository.setCookieCustomizer(csrfTokenRepo -> csrfTokenRepo
+//                .sameSite("None")
+//                .secure(true)
+//                .path("/")
+//                .domain(System.getenv("DOMAIN_NAME")));
+//        csrfTokenRepository.setCookieName("XSRF-TOKEN");
+//        csrfTokenRepository.setCookiePath("/");
+//        http.csrf((csrf) -> csrf
+//                .csrfTokenRepository(csrfTokenRepository)
+//                .csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler())
+//        );
+        http.csrf(CsrfConfigurer::disable);
         http.authorizeHttpRequests(
                 auth -> {
                     auth.requestMatchers("/register", "/auth/login", "/auth/logout", "/csrf-cookie").permitAll()
