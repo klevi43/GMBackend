@@ -1,6 +1,7 @@
 package org.kylecodes.gm.services;
 
 import org.kylecodes.gm.dtos.ExerciseDataDto;
+import org.kylecodes.gm.dtos.ExerciseDateRangeDto;
 import org.kylecodes.gm.entities.User;
 import org.kylecodes.gm.repositories.ExerciseStatRepository;
 import org.kylecodes.gm.utils.SecurityUtil;
@@ -16,9 +17,12 @@ public class ExerciseStatServiceImpl implements ExerciseStatService {
     private ExerciseStatRepository exerciseStatRepository;
 
     @Override
-    public List<ExerciseDataDto> getProgressForExercise(String exerciseName) {
+    public List<ExerciseDataDto> getProgressForExercise(ExerciseDateRangeDto exerciseDateRangeDto) {
         User user = SecurityUtil.getPrincipalFromSecurityContext();
-        List<ExerciseDataDto> exerciseDataDtos = exerciseStatRepository.findMaxWeightforExerciseForUser(user.getId(), exerciseName);
+        List<ExerciseDataDto> exerciseDataDtos = exerciseStatRepository.findMaxWeightforExerciseForUser(user.getId(),
+                exerciseDateRangeDto.getExerciseName(),
+                exerciseDateRangeDto.getStartDate(),
+                exerciseDateRangeDto.getEndDate());
         if (exerciseDataDtos.isEmpty()) {
             return new ArrayList<>();
         }
